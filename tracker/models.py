@@ -64,7 +64,7 @@ class Earning(models.Model):
     received_date = models.DateField(auto_now_add=False)
     monetary_value = models.DecimalField(
         max_digits=10, decimal_places=2, default=0)
-    member = models.OneToOneField(
+    member = models.ForeignKey(
         Member, on_delete=models.CASCADE, related_name='earning')
 
     def __str__(self) -> str:
@@ -88,7 +88,7 @@ class Expense(models.Model):
     paid_date = models.DateField(auto_now_add=False)
     monetary_value = models.DecimalField(
         max_digits=10, decimal_places=2, default=0)
-    member = models.OneToOneField(
+    member = models.ForeignKey(
         Member, on_delete=models.CASCADE, related_name='expense')
 
     def __str__(self) -> str:

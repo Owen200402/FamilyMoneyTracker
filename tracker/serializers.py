@@ -56,24 +56,55 @@ class AddMemberToFamilySerializer(serializers.ModelSerializer):
         return value
 
     def save(self, **kwargs):
-        family_id = self.context['family_id']
-        id = self.validated_data['id']
+        with transaction.atomic():
+            family_id = self.context['family_id']
+            id = self.validated_data['id']
 
-        try:
-            member = Member.objects.get(id=id)
-            if member.family_id == None:
-                member.family_id = family_id
-                member.save()
-                self.instance = member
-                return self.instance
-            else:
-                print("Wrong")
+            try:
+                member = Member.objects.get(id=id)
+                if member.family_id == None:
+                    member.family_id = family_id
+                    member.save()
+                    self.instance = member
+                    return self.instance
+                else:
+                    print("Wrong")
+                    raise serializers.ValidationError(
+                        f'Adding failed: {member.user.first_name} {member.user.last_name} has already been linked to a family')
+            except Member.DoesNotExist:
                 raise serializers.ValidationError(
-                    f'Adding failed: {member.user.first_name} {member.user.last_name} has already been linked to a family')
-        except Member.DoesNotExist:
-            raise serializers.ValidationError(
-                'Adding failed: Member with the given ID does not exist.')
+                    'Adding failed: Member with the given ID does not exist.')
 
     class Meta:
         model = Member
         fields = ['member_id']
+
+
+class UnlinkMemberSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Member
+        fields = ['id']
+
+
+class MemberEarningSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Earning
+        fields = ['id', 'title', 'received_from',
+                  'received_date', 'monetary_value']
+
+    def save(self, **kwargs):
+        earning = Earning.objects.create(
+            member_id=self.context['member_id'], **self.validated_data)
+        return earning
+
+
+class MemberExpenseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Expense
+        fields = ['id', 'title', 'paid_to',
+                  'paid_date', 'monetary_value']
+
+    def save(self, **kwargs):
+        earning = Expense.objects.create(
+            member_id=self.context['member_id'], **self.validated_data)
+        return earning

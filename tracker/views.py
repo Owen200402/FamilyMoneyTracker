@@ -1,3 +1,4 @@
+from urllib.error import HTTPError
 from django.shortcuts import render
 from rest_framework import status
 from rest_framework.decorators import action
@@ -7,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 
 from .models import Family, Member, Earning, Expense
-from .serializers import AddMemberToFamilySerializer, CreateFamilySerializer, MemberInfoSerializer, MemberSerializer, UpdateFamilySerializer
+from .serializers import AddMemberToFamilySerializer, CreateFamilySerializer, MemberEarningSerializer, MemberExpenseSerializer, MemberInfoSerializer, MemberSerializer, UpdateFamilySerializer, UnlinkMemberSerializer
 from tracker import serializers
 
 
@@ -27,6 +28,7 @@ class MemberInfoViewSet(CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, 
     http_method_names = ['get']
     serializer_class = MemberInfoSerializer
     queryset = Member.objects.all()
+    permission_classes = [IsAuthenticated]
 
     @action(detail=False, methods=['GET'], permission_classes=[IsAuthenticated])
     def me(self, request):
@@ -41,12 +43,14 @@ class MemberViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Member.objects.filter(family_id=self.kwargs['family_pk'])
+        return Member.objects.select_related('user').filter(family_id=self.kwargs['family_pk'])
 
     def get_serializer_class(self):
+        if self.action == 'unlink_member':
+            return UnlinkMemberSerializer
         if self.request.method == 'GET' or self.request.method == 'PUT':
             return MemberSerializer
-        if self.request.method == 'POST':
+        else:
             return AddMemberToFamilySerializer
 
     def create(self, request, *args, **kwargs):
@@ -67,5 +71,25 @@ class MemberViewSet(ModelViewSet):
         member.save()
 
         return Response({
-            'message': f'Member {member.user.first_name} {member.user.last_name} unlinked from the family.',
+            'message': f'Succesffuly unlinked Member {member.user.first_name} {member.user.last_name} from the family.',
         }, status=status.HTTP_200_OK)
+
+
+class MemberEarningViewSet(ModelViewSet):
+    serializer_class = MemberEarningSerializer
+
+    def get_queryset(self):
+        return Earning.objects.filter(member_id=self.kwargs['member_pk'])
+
+    def get_serializer_context(self):
+        return {'member_id': self.kwargs['member_pk']}
+
+
+class MemberExpenseViewSet(ModelViewSet):
+    serializer_class = MemberExpenseSerializer
+
+    def get_queryset(self):
+        return Expense.objects.filter(member_id=self.kwargs['member_pk'])
+
+    def get_serializer_context(self):
+        return {'member_id': self.kwargs['member_pk']}

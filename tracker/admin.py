@@ -2,7 +2,10 @@ from django.contrib import admin
 from django.db.models.aggregates import Count, Sum
 from django.utils.html import format_html, urlencode
 from django.urls import reverse
-from . import models, pagination
+from . import models
+
+# class MembersInline(admin.TabularInline):
+#     model = models.Member
 
 
 @admin.register(models.Family)
@@ -10,6 +13,7 @@ class FamilyAdmin(admin.ModelAdmin):
     list_display = ['name', 'members_count', 'family_size', 'date_created']
     list_per_page = 8
     search_fields = ['name']
+    # inlines = [MembersInline]
 
     @admin.display(ordering='members_count')
     def members_count(self, family):
