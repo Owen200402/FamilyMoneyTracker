@@ -16,5 +16,7 @@ member_router.register(
     'earnings', views.MemberEarningViewSet, basename='earning')
 member_router.register(
     'expenses', views.MemberExpenseViewSet, basename='expense')
+member_router.register(
+    'net', views.MemberNetViewSet, basename='net')
 
 urlpatterns = router.urls + family_router.urls + member_router.urls

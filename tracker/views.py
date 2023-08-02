@@ -1,14 +1,18 @@
 from urllib.error import HTTPError
 from django.shortcuts import render
 from rest_framework import status
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.decorators import action
+from rest_framework.filters import SearchFilter
 from rest_framework.mixins import CreateModelMixin, DestroyModelMixin, RetrieveModelMixin, UpdateModelMixin
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 
+from tracker.filters import EarningFilter, ExpenseFilter, NetFilter
+
 from .models import Family, Member, Earning, Expense
-from .serializers import AddMemberToFamilySerializer, CreateFamilySerializer, MemberEarningSerializer, MemberExpenseSerializer, MemberInfoSerializer, MemberSerializer, UpdateFamilySerializer, UnlinkMemberSerializer
+from .serializers import AddMemberToFamilySerializer, CreateFamilySerializer, MemberEarningSerializer, MemberExpenseSerializer, MemberInfoSerializer, MemberNetSerializer, MemberSerializer, UpdateFamilySerializer, UnlinkMemberSerializer
 from tracker import serializers
 
 
@@ -76,7 +80,10 @@ class MemberViewSet(ModelViewSet):
 
 
 class MemberEarningViewSet(ModelViewSet):
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_class = EarningFilter
     serializer_class = MemberEarningSerializer
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         return Earning.objects.filter(member_id=self.kwargs['member_pk'])
@@ -86,10 +93,29 @@ class MemberEarningViewSet(ModelViewSet):
 
 
 class MemberExpenseViewSet(ModelViewSet):
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_class = ExpenseFilter
     serializer_class = MemberExpenseSerializer
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         return Expense.objects.filter(member_id=self.kwargs['member_pk'])
 
     def get_serializer_context(self):
         return {'member_id': self.kwargs['member_pk']}
+
+
+class MemberNetViewSet(ModelViewSet):
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = NetFilter
+    filterset_fields = ['earning__received_date__year', 'earning__received_date__month',
+                        'expense__paid_date__year', 'expense__paid_date__month']
+    http_method_names = ['get']
+    serializer_class = MemberNetSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Member.objects.filter(id=self.kwargs['member_pk'])
+
+    def get_serializer_context(self):
+        return {'member_id': self.kwargs['member_pk'], 'request': self.request}
