@@ -1,5 +1,3 @@
-from urllib.error import HTTPError
-from django.shortcuts import render
 from rest_framework import status
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.decorators import action
@@ -7,13 +5,12 @@ from rest_framework.filters import SearchFilter
 from rest_framework.mixins import CreateModelMixin, DestroyModelMixin, RetrieveModelMixin, UpdateModelMixin
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet, GenericViewSet
+from rest_framework.viewsets import ModelViewSet, GenericViewSet, ReadOnlyModelViewSet
 
-from tracker.filters import EarningFilter, ExpenseFilter, NetFilter
+from tracker.filters import FamilyEarningFilter, FamilyExpenseFilter, MemberEarningFilter, MemberExpenseFilter
 
 from .models import Family, Member, Earning, Expense
-from .serializers import AddMemberToFamilySerializer, CreateFamilySerializer, MemberEarningSerializer, MemberExpenseSerializer, MemberInfoSerializer, MemberNetSerializer, MemberSerializer, UpdateFamilySerializer, UnlinkMemberSerializer
-from tracker import serializers
+from .serializers import AddMemberToFamilySerializer, CreateFamilySerializer, FamilyEarningSerializer, FamilyExpenseSerializer, FamilyRecordsSerializer, MemberEarningSerializer, MemberExpenseSerializer, MemberInfoSerializer, MemberRecordsSerializer, MemberSerializer, UpdateFamilySerializer, UnlinkMemberSerializer
 
 
 class FamilyViewSet(CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
@@ -81,7 +78,7 @@ class MemberViewSet(ModelViewSet):
 
 class MemberEarningViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend, SearchFilter]
-    filterset_class = EarningFilter
+    filterset_class = MemberEarningFilter
     serializer_class = MemberEarningSerializer
     permission_classes = [IsAuthenticated]
 
@@ -94,7 +91,7 @@ class MemberEarningViewSet(ModelViewSet):
 
 class MemberExpenseViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend, SearchFilter]
-    filterset_class = ExpenseFilter
+    filterset_class = MemberExpenseFilter
     serializer_class = MemberExpenseSerializer
     permission_classes = [IsAuthenticated]
 
@@ -105,17 +102,51 @@ class MemberExpenseViewSet(ModelViewSet):
         return {'member_id': self.kwargs['member_pk']}
 
 
-class MemberNetViewSet(ModelViewSet):
+# An example of manual filtering: ?earning__received_date__month=9&expense__paid_date__month=6
+class MemberRecordsViewSet(ReadOnlyModelViewSet):
     filter_backends = [DjangoFilterBackend]
-    filterset_class = NetFilter
-    filterset_fields = ['earning__received_date__year', 'earning__received_date__month',
-                        'expense__paid_date__year', 'expense__paid_date__month']
-    http_method_names = ['get']
-    serializer_class = MemberNetSerializer
+    serializer_class = MemberRecordsSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Member.objects.filter(id=self.kwargs['member_pk'])
+        member_id = self.kwargs['member_pk']
+        queryset = Member.objects.filter(id=member_id)
+
+        return queryset
 
     def get_serializer_context(self):
-        return {'member_id': self.kwargs['member_pk'], 'request': self.request}
+        return {'request': self.request}
+
+
+class FamilyEarningViewSet(ReadOnlyModelViewSet):
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_class = FamilyEarningFilter
+    serializer_class = FamilyEarningSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Earning.objects.filter(member__family_id=self.kwargs['family_pk'])
+
+
+class FamilyExpenseViewSet(ReadOnlyModelViewSet):
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_class = FamilyExpenseFilter
+    serializer_class = FamilyExpenseSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Expense.objects.filter(member__family_id=self.kwargs['family_pk'])
+
+# An example of manual filtering: ?earning__received_date__month=9&expense__paid_date__month=6
+class FamilyRecordsViewset(ReadOnlyModelViewSet):
+    filter_backends = [DjangoFilterBackend]
+    serializer_class = FamilyRecordsSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        queryset = Family.objects.filter(id=self.kwargs['family_pk'])
+
+        return queryset
+
+    def get_serializer_context(self):
+        return {'family_id': self.kwargs['family_pk'],'request': self.request}

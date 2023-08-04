@@ -110,19 +110,23 @@ class MemberExpenseSerializer(serializers.ModelSerializer):
         return earning
 
 
-class MemberNetSerializer(serializers.ModelSerializer):
+class MemberRecordsSerializer(serializers.ModelSerializer):
     member_id = serializers.IntegerField(source='id', read_only=True)
     first_name = serializers.SerializerMethodField()
     last_name = serializers.SerializerMethodField()
-    earning = serializers.SerializerMethodField()
-    expense = serializers.SerializerMethodField()
+    earning = serializers.SerializerMethodField(method_name='get_earning')
+    expense = serializers.SerializerMethodField(method_name='get_expense')
+    total_earning = serializers.SerializerMethodField(
+        method_name='calculate_total_earning')
+    total_expense = serializers.SerializerMethodField(
+        method_name='calculate_total_expense')
+    personal_net = serializers.SerializerMethodField(
+        method_name='calculate_net')
 
     class Meta:
         model = Member
         fields = ['member_id', 'first_name',
-                  'last_name', 'earning', 'expense', 'net']
-
-    net = serializers.SerializerMethodField(method_name='calculate_net')
+                  'last_name', 'earning', 'expense', 'total_earning', 'total_expense', 'personal_net']
 
     def first_name(self, member):
         return member.user.first_name
@@ -141,6 +145,7 @@ class MemberNetSerializer(serializers.ModelSerializer):
             queryset = queryset.filter(received_date__year=year)
         if month:
             queryset = queryset.filter(received_date__month=month)
+
         return MemberEarningSerializer(queryset, many=True).data
 
     def get_expense(self, member):
@@ -154,17 +159,85 @@ class MemberNetSerializer(serializers.ModelSerializer):
             queryset = queryset.filter(paid_date__year=year)
         if month:
             queryset = queryset.filter(paid_date__month=month)
+
         return MemberExpenseSerializer(queryset, many=True).data
+
+    def calculate_total_earning(self, member):
+        list_earned = self.get_earning(member=member)
+
+        net = sum([earning['monetary_value'] for earning in list_earned])
+
+        return net
+
+    def calculate_total_expense(self, member):
+        list_expense = self.get_expense(member=member)
+
+        net = sum([expense['monetary_value'] * -1 for expense in list_expense])
+
+        return net
 
     def calculate_net(self, member):
         list_earned = self.get_earning(member=member)
         list_expense = self.get_expense(member=member)
 
-        net = 0
-        for earning in list_earned:
-            net += earning['monetary_value']
-
-        for expense in list_expense:
-            net -= expense['monetary_value']
+        net = sum([earning['monetary_value'] for earning in list_earned]) + \
+            sum([expense['monetary_value'] * -1 for expense in list_expense])
 
         return net
+
+
+class FamilyEarningSerializer(serializers.ModelSerializer):
+    receiver = serializers.SerializerMethodField(source='first_name')
+
+    class Meta:
+        model = Earning
+        fields = ['id', 'title', 'receiver', 'received_from',
+                  'received_date', 'monetary_value']
+
+    def get_receiver(self, earning):
+        return f"{earning.member.user.first_name} {earning.member.user.last_name}"
+
+
+class FamilyExpenseSerializer(serializers.ModelSerializer):
+    sender = serializers.SerializerMethodField(source='first_name')
+
+    class Meta:
+        model = Expense
+        fields = ['id', 'title', 'sender', 'paid_to',
+                  'paid_date', 'monetary_value']
+
+    def get_sender(self, earning):
+        return f"{earning.member.user.first_name} {earning.member.user.last_name}"
+
+
+class FamilyRecordsSerializer(serializers.ModelSerializer):
+    total_earning = serializers.SerializerMethodField()
+    total_expense = serializers.SerializerMethodField()
+    total_net = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Family
+        fields = ['name', 'member', 'total_earning',
+                  'total_expense', 'total_net']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        family_pk = self.context.get('family_id')
+        if family_pk:
+            self.fields['member'] = MemberRecordsSerializer(
+                Member.objects.filter(family_id=family_pk), many=True)
+
+    def get_total_earning(self, family):
+        data = self.fields['member'].data
+
+        return sum([earning['total_earning'] for earning in data])
+
+    def get_total_expense(self, family):
+        data = self.fields['member'].data
+
+        return sum([earning['total_expense'] for earning in data])
+
+    def get_total_net(self, family):
+        data = self.fields['member'].data
+
+        return sum([earning['total_earning'] for earning in data]) + sum([earning['total_expense'] for earning in data])
