@@ -116,9 +116,9 @@ class MemberRecordsSerializer(serializers.ModelSerializer):
     last_name = serializers.SerializerMethodField()
     earning = serializers.SerializerMethodField(method_name='get_earning')
     expense = serializers.SerializerMethodField(method_name='get_expense')
-    total_earning = serializers.SerializerMethodField(
+    my_total_earning = serializers.SerializerMethodField(
         method_name='calculate_total_earning')
-    total_expense = serializers.SerializerMethodField(
+    my_total_expense = serializers.SerializerMethodField(
         method_name='calculate_total_expense')
     personal_net = serializers.SerializerMethodField(
         method_name='calculate_net')
@@ -126,7 +126,7 @@ class MemberRecordsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Member
         fields = ['member_id', 'first_name',
-                  'last_name', 'earning', 'expense', 'total_earning', 'total_expense', 'personal_net']
+                  'last_name', 'earning', 'expense', 'my_total_earning', 'my_total_expense', 'personal_net']
 
     def first_name(self, member):
         return member.user.first_name
@@ -225,19 +225,19 @@ class FamilyRecordsSerializer(serializers.ModelSerializer):
         family_pk = self.context.get('family_id')
         if family_pk:
             self.fields['member'] = MemberRecordsSerializer(
-                Member.objects.filter(family_id=family_pk), many=True)
+                Member.objects.select_related('user').prefetch_related('earning', 'expense').filter(family_id=family_pk), many=True)
 
     def get_total_earning(self, family):
         data = self.fields['member'].data
 
-        return sum([earning['total_earning'] for earning in data])
+        return sum([earning['my_total_earning'] for earning in data])
 
     def get_total_expense(self, family):
         data = self.fields['member'].data
 
-        return sum([earning['total_expense'] for earning in data])
+        return sum([earning['my_total_expense'] for earning in data])
 
     def get_total_net(self, family):
         data = self.fields['member'].data
 
-        return sum([earning['total_earning'] for earning in data]) + sum([earning['total_expense'] for earning in data])
+        return sum([earning['my_total_earning'] for earning in data]) + sum([earning['my_total_expense'] for earning in data])

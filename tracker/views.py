@@ -110,7 +110,8 @@ class MemberRecordsViewSet(ReadOnlyModelViewSet):
 
     def get_queryset(self):
         member_id = self.kwargs['member_pk']
-        queryset = Member.objects.filter(id=member_id)
+        queryset = Member.objects.prefetch_related(
+            'earning', 'expense').filter(id=member_id)
 
         return queryset
 
@@ -125,7 +126,7 @@ class FamilyEarningViewSet(ReadOnlyModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Earning.objects.filter(member__family_id=self.kwargs['family_pk'])
+        return Earning.objects.select_related('member').filter(member__family_id=self.kwargs['family_pk'])
 
 
 class FamilyExpenseViewSet(ReadOnlyModelViewSet):
@@ -135,7 +136,8 @@ class FamilyExpenseViewSet(ReadOnlyModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Expense.objects.filter(member__family_id=self.kwargs['family_pk'])
+        return Expense.objects.select_related('member').filter(member__family_id=self.kwargs['family_pk'])
+
 
 # An example of manual filtering: ?earning__received_date__month=9&expense__paid_date__month=6
 class FamilyRecordsViewset(ReadOnlyModelViewSet):
@@ -144,9 +146,9 @@ class FamilyRecordsViewset(ReadOnlyModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        queryset = Family.objects.filter(id=self.kwargs['family_pk'])
+        queryset = Family.objects.prefetch_related('member__earning', 'member__expense', 'member__user').filter(id=self.kwargs['family_pk'])
 
         return queryset
 
     def get_serializer_context(self):
-        return {'family_id': self.kwargs['family_pk'],'request': self.request}
+        return {'family_id': self.kwargs['family_pk'], 'request': self.request}
