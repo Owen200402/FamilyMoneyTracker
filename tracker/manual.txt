@@ -1,0 +1,1 @@
+An example of manual filtering: ?earning__received_date__month=9&expense__paid_date__month=6

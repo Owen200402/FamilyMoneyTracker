@@ -33,7 +33,7 @@ class Member(models.Model):
     ]
 
     user = models.OneToOneField(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='member')
     generation = models.CharField(
         max_length=1, choices=GENERATION_CHOICES, default=GENERATION_PARENT)
     family = models.ForeignKey(

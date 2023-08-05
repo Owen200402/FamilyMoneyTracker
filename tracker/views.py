@@ -10,6 +10,7 @@ from rest_framework.viewsets import ModelViewSet, GenericViewSet, ReadOnlyModelV
 from tracker.filters import FamilyEarningFilter, FamilyExpenseFilter, MemberEarningFilter, MemberExpenseFilter
 
 from .models import Family, Member, Earning, Expense
+from .permission import ViewItemInOwnFamilyOnly, ViewMembersInOwnFamilyOnly
 from .serializers import AddMemberToFamilySerializer, CreateFamilySerializer, FamilyEarningSerializer, FamilyExpenseSerializer, FamilyRecordsSerializer, MemberEarningSerializer, MemberExpenseSerializer, MemberInfoSerializer, MemberRecordsSerializer, MemberSerializer, UpdateFamilySerializer, UnlinkMemberSerializer
 
 
@@ -17,12 +18,24 @@ class FamilyViewSet(CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, Gene
     http_method_names = ['get', 'post', 'patch']
     serializer_class = CreateFamilySerializer
     queryset = Family.objects.all()
+    lookup_url_kwarg = 'pk'
 
     def get_serializer_class(self):
         if self.request.method == 'POST' or self.request.method == 'GET':
             return CreateFamilySerializer
         if self.request.method == 'PATCH':
             return UpdateFamilySerializer
+
+    def get_permissions(self):
+        if self.action in ['retrieve', 'update']:
+            permission_classes = [ViewMembersInOwnFamilyOnly]
+        else:
+            permission_classes = self.permission_classes
+
+        return [permission() for permission in permission_classes]
+
+    def get_permission_context(self):
+        return {'family_id': self.kwargs[self.lookup_url_kwarg]}
 
 
 class MemberInfoViewSet(CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
@@ -41,7 +54,7 @@ class MemberInfoViewSet(CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, 
 class MemberViewSet(ModelViewSet):
     http_method_names = ['get', 'put', 'post']
     serializer_class = MemberSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, ViewItemInOwnFamilyOnly]
 
     def get_queryset(self):
         return Member.objects.select_related('user').filter(family_id=self.kwargs['family_pk'])
@@ -102,7 +115,6 @@ class MemberExpenseViewSet(ModelViewSet):
         return {'member_id': self.kwargs['member_pk']}
 
 
-# An example of manual filtering: ?earning__received_date__month=9&expense__paid_date__month=6
 class MemberRecordsViewSet(ReadOnlyModelViewSet):
     filter_backends = [DjangoFilterBackend]
     serializer_class = MemberRecordsSerializer
@@ -123,7 +135,7 @@ class FamilyEarningViewSet(ReadOnlyModelViewSet):
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_class = FamilyEarningFilter
     serializer_class = FamilyEarningSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, ViewItemInOwnFamilyOnly]
 
     def get_queryset(self):
         return Earning.objects.select_related('member').filter(member__family_id=self.kwargs['family_pk'])
@@ -133,20 +145,20 @@ class FamilyExpenseViewSet(ReadOnlyModelViewSet):
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_class = FamilyExpenseFilter
     serializer_class = FamilyExpenseSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, ViewItemInOwnFamilyOnly]
 
     def get_queryset(self):
         return Expense.objects.select_related('member').filter(member__family_id=self.kwargs['family_pk'])
 
 
-# An example of manual filtering: ?earning__received_date__month=9&expense__paid_date__month=6
 class FamilyRecordsViewset(ReadOnlyModelViewSet):
     filter_backends = [DjangoFilterBackend]
     serializer_class = FamilyRecordsSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, ViewItemInOwnFamilyOnly]
 
     def get_queryset(self):
-        queryset = Family.objects.prefetch_related('member__earning', 'member__expense', 'member__user').filter(id=self.kwargs['family_pk'])
+        queryset = Family.objects.prefetch_related(
+            'member__earning', 'member__expense', 'member__user').filter(id=self.kwargs['family_pk'])
 
         return queryset
 

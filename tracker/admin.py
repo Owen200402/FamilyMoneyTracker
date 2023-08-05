@@ -13,7 +13,6 @@ class FamilyAdmin(admin.ModelAdmin):
     list_display = ['name', 'members_count', 'family_size', 'date_created']
     list_per_page = 8
     search_fields = ['name']
-    # inlines = [MembersInline]
 
     @admin.display(ordering='members_count')
     def members_count(self, family):
