@@ -1,7 +1,7 @@
 # Family Money Tracker
 
 ## Description: 
-A *back-end* management system with RESTful api to keep track with every family's income and expense.
+A back-end management system with RESTful api to keep track with every family's income and expense.
 ## Introduction:
 Tracking personal income and expense seems trivial; however, through time money flow shows more unexpected outcomes than expected
 if we do not record down how much money we have spent or earned. Many people in this world are classified as "moonlight clan", meaning
