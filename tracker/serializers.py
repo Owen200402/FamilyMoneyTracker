@@ -8,7 +8,7 @@ from .models import Family, Member, Earning, Expense
 class CreateFamilySerializer(serializers.ModelSerializer):
     id = serializers.UUIDField(read_only=True)
     password = serializers.CharField(write_only=True)
-    date_created = serializers.DateTimeField(read_only=True)
+    date_created = serializers.DateTimeField(read_only=True, format='%Y-%m-%d')
 
     class Meta:
         model = Family

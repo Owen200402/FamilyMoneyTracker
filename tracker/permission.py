@@ -11,9 +11,6 @@ class ViewMembersInOwnFamilyOnly(permissions.BasePermission):
         family_id = member.family.id
         provided_family_id = view.get_permission_context().get('family_id')
 
-        print(view.get_permission_context().get('family_id'))
-        print(family_id)
-
         return str(family_id).replace('-', '') == provided_family_id
 
 
@@ -25,8 +22,5 @@ class ViewItemInOwnFamilyOnly(permissions.BasePermission):
 
         member = request.user.member
         family_id = member.family.id
-
-        print(family_id)
-        print(view.kwargs['family_pk'])
 
         return str(family_id).replace('-', '') == view.kwargs['family_pk']
