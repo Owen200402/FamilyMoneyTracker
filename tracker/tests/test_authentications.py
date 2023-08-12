@@ -1,6 +1,4 @@
 from rest_framework import status
-import pytest
-from core.models import User
 
 
 class TestAuthentication:

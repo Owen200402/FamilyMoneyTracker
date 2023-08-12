@@ -1,8 +1,12 @@
 from django.db import transaction
-from django.utils import timezone
-
 from rest_framework import serializers
 from .models import Family, Member, Earning, Expense
+
+
+class EmptySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Family
+        fields = []
 
 
 class CreateFamilySerializer(serializers.ModelSerializer):

@@ -23,6 +23,7 @@ urllib3 = "==1.9"
 gunicorn = "*"
 dj-database-url = "*"
 django-redis = "*"
+pytz = "*"
 
 [dev-packages]
 pytest = "*"
