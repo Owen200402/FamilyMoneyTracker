@@ -1,13 +1,13 @@
-from rest_framework import status
 import pytest
+from rest_framework import status
+from model_bakery import baker
 from core.models import User
 
 
 @pytest.mark.django_db
 class TestCreateMember:
     def test_if_member_is_created_returns_200(self, api_client):
-        user = User.objects.create_user(
-            username='John', password='123', is_staff=False)
+        user = baker.make(User)
         api_client.force_authenticate(user=user)
 
         member_response = api_client.get('/tracker/my-profile/me/')
@@ -17,7 +17,7 @@ class TestCreateMember:
         assert member_response.data == {
             'family_id': None,
             'generation': 'P',
-            'member_id': 1
+            'member_id': user.member.id
         }
 
 

@@ -22,7 +22,7 @@ class FamilyViewSet(CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, Gene
     permission_classes = [IsAuthenticated]
 
     def get_serializer_class(self):
-        if self.request.user.member.family_id == None:
+        if self.request.user.member.family_id == None or self.request.user.member.family_id != self.kwargs[self.lookup_url_kwarg]:
             return EmptySerializer
 
         if self.request.method == 'POST' or self.request.method == 'GET':
