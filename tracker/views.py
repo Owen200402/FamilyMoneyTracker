@@ -11,7 +11,7 @@ from tracker.filters import FamilyEarningFilter, FamilyExpenseFilter, MemberEarn
 
 from .models import Family, Member, Earning, Expense
 from .permission import LinkMemberPermission, ViewItemInOwnFamilyOnly
-from .serializers import AddMemberToFamilySerializer, CreateFamilySerializer, EmptySerializer, FamilyEarningSerializer, FamilyExpenseSerializer, FamilyRecordsSerializer, MemberEarningSerializer, MemberExpenseSerializer, MemberInfoSerializer, MemberRecordsSerializer, MemberSerializer, UpdateFamilySerializer, UnlinkMemberSerializer
+from .serializers import AddMemberToFamilySerializer, CreateFamilySerializer, EmptySerializer, FamilyEarningSerializer, FamilyExpenseSerializer, FamilyRecordsSerializer, MemberEarningSerializer, MemberEarningUpdateSerializer, MemberExpenseSerializer, MemberExpenseUpdateSerializer, MemberInfoSerializer, MemberRecordsSerializer, MemberSerializer, UpdateFamilySerializer, UnlinkMemberSerializer
 
 
 class FamilyViewSet(CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
@@ -22,12 +22,11 @@ class FamilyViewSet(CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, Gene
     permission_classes = [IsAuthenticated]
 
     def get_serializer_class(self):
-        if self.request.user.member.family_id == None or self.request.user.member.family_id != self.kwargs[self.lookup_url_kwarg]:
-            return EmptySerializer
-
         if self.request.method == 'POST' or self.request.method == 'GET':
             return CreateFamilySerializer
         if self.request.method == 'PATCH':
+            if self.request.user.member.family_id == None or str(self.request.user.member.family_id) != str(self.kwargs[self.lookup_url_kwarg]):
+                return EmptySerializer
             return UpdateFamilySerializer
 
     def get_permission_context(self):
@@ -88,14 +87,21 @@ class MemberViewSet(ModelViewSet):
 class MemberEarningViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_class = MemberEarningFilter
+    http_method_names = ['get', 'delete', 'patch', 'post']
     serializer_class = MemberEarningSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         return Earning.objects.filter(member_id=self.kwargs['member_pk'])
 
+    def get_serializer_class(self):
+        if self.request.method == 'PATCH':
+            return MemberEarningUpdateSerializer
+        else:
+            return MemberEarningSerializer
+
     def get_permissions(self):
-        if self.action in ['list', 'create']:
+        if self.action in ['list', 'create', 'retrieve']:
             permission_classes = [LinkMemberPermission,
                                   IsAuthenticated, ViewItemInOwnFamilyOnly]
         else:
@@ -116,8 +122,14 @@ class MemberExpenseViewSet(ModelViewSet):
     def get_queryset(self):
         return Expense.objects.filter(member_id=self.kwargs['member_pk'])
 
+    def get_serializer_class(self):
+        if self.request.method == 'PATCH':
+            return MemberExpenseUpdateSerializer
+        else:
+            return MemberExpenseSerializer
+
     def get_permissions(self):
-        if self.action in ['list', 'create']:
+        if self.action in ['list', 'create', 'retrieve']:
             permission_classes = [LinkMemberPermission,
                                   IsAuthenticated, ViewItemInOwnFamilyOnly]
         else:
@@ -142,7 +154,7 @@ class MemberRecordsViewSet(ReadOnlyModelViewSet):
         return queryset
 
     def get_permissions(self):
-        if self.action in ['list', 'create']:
+        if self.action in ['list', 'create', 'retrieve']:
             permission_classes = [LinkMemberPermission,
                                   IsAuthenticated, ViewItemInOwnFamilyOnly]
         else:
@@ -164,7 +176,7 @@ class FamilyEarningViewSet(ReadOnlyModelViewSet):
         return Earning.objects.select_related('member').filter(member__family_id=self.kwargs['family_pk'])
 
     def get_permissions(self):
-        if self.action in ['list', 'create']:
+        if self.action in ['list', 'create', 'retrieve']:
             permission_classes = [LinkMemberPermission,
                                   IsAuthenticated, ViewItemInOwnFamilyOnly]
         else:
@@ -183,7 +195,7 @@ class FamilyExpenseViewSet(ReadOnlyModelViewSet):
         return Expense.objects.select_related('member').filter(member__family_id=self.kwargs['family_pk'])
 
     def get_permissions(self):
-        if self.action in ['list', 'create']:
+        if self.action in ['list', 'create', 'retrieve']:
             permission_classes = [LinkMemberPermission,
                                   IsAuthenticated, ViewItemInOwnFamilyOnly]
         else:
@@ -204,7 +216,7 @@ class FamilyRecordsViewset(ReadOnlyModelViewSet):
         return queryset
 
     def get_permissions(self):
-        if self.action in ['list', 'create']:
+        if self.action in ['list', 'create', 'retrieve']:
             permission_classes = [LinkMemberPermission,
                                   IsAuthenticated, ViewItemInOwnFamilyOnly]
         else:

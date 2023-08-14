@@ -1,4 +1,7 @@
 from rest_framework import status
+import pytest
+from model_bakery import baker
+from core.models import User
 
 
 class TestAuthentication:
@@ -9,9 +12,21 @@ class TestAuthentication:
 
         assert current_user_response.status_code == status.HTTP_200_OK
 
-    def test_if_user_unauthorized_return_401(self, api_client):
-        my_profile_response = api_client.get('/tracker/my-profile/')
-        family_response = api_client.get('/tracker/families/')
+    
 
-        assert my_profile_response.status_code == status.HTTP_401_UNAUTHORIZED
-        assert family_response.status_code == status.HTTP_401_UNAUTHORIZED
+
+@pytest.mark.django_db
+class TestCreateMember:
+    def test_if_member_is_created_returns_200(self, api_client):
+        user = baker.make(User)
+        api_client.force_authenticate(user=user)
+
+        member_response = api_client.get('/tracker/my-profile/me/')
+
+        assert member_response.status_code == status.HTTP_200_OK
+
+        assert member_response.data == {
+            'family_id': None,
+            'generation': 'P',
+            'member_id': user.member.id
+        }

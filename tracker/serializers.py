@@ -8,6 +8,10 @@ class EmptySerializer(serializers.ModelSerializer):
         model = Family
         fields = []
 
+    def save(self, **kwargs):
+        raise serializers.ValidationError(
+            "You are not a member in the family, link yourself first before gaining permission to modify info related to this family")
+
 
 class CreateFamilySerializer(serializers.ModelSerializer):
     id = serializers.UUIDField(read_only=True)
@@ -102,6 +106,13 @@ class MemberEarningSerializer(serializers.ModelSerializer):
         return earning
 
 
+class MemberEarningUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Earning
+        fields = ['id', 'title', 'received_from',
+                  'received_date', 'monetary_value']
+
+
 class MemberExpenseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Expense
@@ -112,6 +123,13 @@ class MemberExpenseSerializer(serializers.ModelSerializer):
         earning = Expense.objects.create(
             member_id=self.context['member_id'], **self.validated_data)
         return earning
+
+
+class MemberExpenseUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Expense
+        fields = ['id', 'title', 'paid_to',
+                  'paid_date', 'monetary_value']
 
 
 class MemberRecordsSerializer(serializers.ModelSerializer):
