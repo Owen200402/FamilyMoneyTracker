@@ -80,7 +80,6 @@ class AddMemberToFamilySerializer(serializers.ModelSerializer):
                     self.instance = member
                     return self.instance
                 else:
-                    print("Wrong")
                     raise serializers.ValidationError(
                         f'Adding failed: {member.user.first_name} {member.user.last_name} has already been linked to a family')
             except Member.DoesNotExist:
