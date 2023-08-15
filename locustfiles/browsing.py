@@ -20,10 +20,10 @@ class WebsiteUser(HttpUser):
         headers = {"Authorization": f"JWT {self.access_token}"}
         self.client.get(f'/tracker/families/{self.family_for_testing}/members',
                         headers=headers,
-                        name=f'/tracker/families/{self.family_for_testing}/members')
+                        name=f'/tracker/families/::id/members')
 
     @task(1)
-    def link_family_members(self):
+    def link_and_unlink_family_members(self):
         self.on_start()
         headers = {"Authorization": f"JWT {self.access_token}"}
         response = self.client.get('/tracker/my-profile/me/',
@@ -33,11 +33,133 @@ class WebsiteUser(HttpUser):
 
         self.client.post(f'/tracker/families/{self.family_for_testing}/members/',
                          headers=headers,
+                         name=f'Link /tracker/families/{self.family_for_testing}/members/',
                          json={
                              "member_id": response_json["member_id"]
                          })
-    
-    
+        self.client.put(f'/tracker/families/{self.family_for_testing}/members/{response_json["member_id"]}/',
+                        headers=headers,
+                        name=f'Unlink /tracker/families/::id/members/')
+
+    @task(3)
+    def view_member_earnings(self):
+        self.on_start()
+        headers = {"Authorization": f"JWT {self.access_token}"}
+        response = self.client.get('/tracker/my-profile/me/',
+                                   headers=headers)
+
+        response_json = response.json()
+
+        self.client.post(f'/tracker/families/{self.family_for_testing}/members/',
+                         headers=headers,
+                         name=f'Link /tracker/families/{self.family_for_testing}/members/',
+                         json={
+                             "member_id": response_json["member_id"]
+                         })
+
+        self.client.get(f'/tracker/families/{self.family_for_testing}/members/{response_json["member_id"]}/earnings/',
+                        headers=headers,
+                        name=f'/tracker/families/::id/members/::id/earnings/')
+
+    @task(3)
+    def view_member_expense(self):
+        self.on_start()
+        headers = {"Authorization": f"JWT {self.access_token}"}
+        response = self.client.get('/tracker/my-profile/me/',
+                                   headers=headers)
+
+        response_json = response.json()
+
+        self.client.post(f'/tracker/families/{self.family_for_testing}/members/',
+                         headers=headers,
+                         name=f'Link /tracker/families/{self.family_for_testing}/members/',
+                         json={
+                             "member_id": response_json["member_id"]
+                         })
+
+        self.client.get(f'/tracker/families/{self.family_for_testing}/members/{response_json["member_id"]}/expense/',
+                        headers=headers,
+                        name=f'/tracker/families/::id/members/::id/expense/')
+
+    @task(3)
+    def view_member_records(self):
+        self.on_start()
+        headers = {"Authorization": f"JWT {self.access_token}"}
+        response = self.client.get('/tracker/my-profile/me/',
+                                   headers=headers)
+
+        response_json = response.json()
+
+        self.client.post(f'/tracker/families/{self.family_for_testing}/members/',
+                         headers=headers,
+                         name=f'Link /tracker/families/{self.family_for_testing}/members/',
+                         json={
+                             "member_id": response_json["member_id"]
+                         })
+
+        self.client.get(f'/tracker/families/{self.family_for_testing}/members/{response_json["member_id"]}/records/',
+                        headers=headers,
+                        name=f'/tracker/families/::id/members/::id/records/')
+
+    @task
+    def view_family_earnings(self):
+        self.on_start()
+        headers = {"Authorization": f"JWT {self.access_token}"}
+        response = self.client.get('/tracker/my-profile/me/',
+                                   headers=headers)
+
+        response_json = response.json()
+
+        self.client.post(f'/tracker/families/{self.family_for_testing}/members/',
+                         headers=headers,
+                         name=f'Link /tracker/families/{self.family_for_testing}/members/',
+                         json={
+                             "member_id": response_json["member_id"]
+                         })
+
+        self.client.get(f'/tracker/families/{self.family_for_testing}/earnings/',
+                        headers=headers,
+                        name=f'/tracker/families/::id/earnings')
+
+    @task
+    def view_family_expenses(self):
+        self.on_start()
+        headers = {"Authorization": f"JWT {self.access_token}"}
+        response = self.client.get('/tracker/my-profile/me/',
+                                   headers=headers)
+
+        response_json = response.json()
+
+        self.client.post(f'/tracker/families/{self.family_for_testing}/members/',
+                         headers=headers,
+                         name=f'Link /tracker/families/{self.family_for_testing}/members/',
+                         json={
+                             "member_id": response_json["member_id"]
+                         })
+
+        self.client.get(f'/tracker/families/{self.family_for_testing}/expense/',
+                        headers=headers,
+                        name=f'/tracker/families/::id/expense')
+
+    @task
+    def view_family_records(self):
+        self.on_start()
+        headers = {"Authorization": f"JWT {self.access_token}"}
+        response = self.client.get('/tracker/my-profile/me/',
+                                   headers=headers)
+
+        response_json = response.json()
+
+        self.client.post(f'/tracker/families/{self.family_for_testing}/members/',
+                         headers=headers,
+                         name=f'Link /tracker/families/{self.family_for_testing}/members/',
+                         json={
+                             "member_id": response_json["member_id"]
+                         })
+
+        self.client.get(f'/tracker/families/{self.family_for_testing}/records/',
+                        headers=headers,
+                        name=f'/tracker/families/::id/records')
 
     def on_start(self):
         username = generate_random_string(10)
