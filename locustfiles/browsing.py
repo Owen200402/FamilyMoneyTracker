@@ -22,7 +22,7 @@ class WebsiteUser(HttpUser):
                         headers=headers,
                         name=f'/tracker/families/::id/members')
 
-    @task(1)
+    @task(2)
     def link_and_unlink_family_members(self):
         self.on_start()
         headers = {"Authorization": f"JWT {self.access_token}"}
@@ -101,7 +101,7 @@ class WebsiteUser(HttpUser):
                         headers=headers,
                         name=f'/tracker/families/::id/members/::id/records/')
 
-    @task
+    @task(3)
     def view_family_earnings(self):
         self.on_start()
         headers = {"Authorization": f"JWT {self.access_token}"}
@@ -121,7 +121,7 @@ class WebsiteUser(HttpUser):
                         headers=headers,
                         name=f'/tracker/families/::id/earnings')
 
-    @task
+    @task(3)
     def view_family_expenses(self):
         self.on_start()
         headers = {"Authorization": f"JWT {self.access_token}"}
@@ -141,7 +141,7 @@ class WebsiteUser(HttpUser):
                         headers=headers,
                         name=f'/tracker/families/::id/expense')
 
-    @task
+    @task(3)
     def view_family_records(self):
         self.on_start()
         headers = {"Authorization": f"JWT {self.access_token}"}
