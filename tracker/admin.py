@@ -3,9 +3,8 @@ from django.db.models.aggregates import Count, Sum
 from django.utils.html import format_html, urlencode
 from django.urls import reverse
 from . import models
-
-# class MembersInline(admin.TabularInline):
-#     model = models.Member
+from .models import Earning, Expense
+from django.db.models import OuterRef, Subquery
 
 
 @admin.register(models.Family)
@@ -86,15 +85,23 @@ class MemberAdmin(admin.ModelAdmin):
         return member.net_income
 
     def get_queryset(self, request):
-        return super().get_queryset(request).annotate(
-            earnings_count=Count('earning'),
-            expenses_count=Count('expense'),
-            total_earnings=Sum('earning__monetary_value', default=0),
-            total_expenses=Sum('expense__monetary_value', default=0),
-            net_income=Sum('earning__monetary_value', default=0) -
-            Sum('expense__monetary_value', default=0)
+        earning_subquery = Earning.objects.filter(member=OuterRef('id')).values('member_id').annotate(
+            total_earnings=Sum('monetary_value')
+        ).values('total_earnings')
+
+        expense_subquery = Expense.objects.filter(member=OuterRef('id')).values('member_id').annotate(
+            total_expenses=Sum('monetary_value')
+        ).values('total_expenses')
+
+        queryset = super().get_queryset(request).annotate(
+            earnings_count=Count('earning', distinct=True),
+            expenses_count=Count('expense', distinct=True),
+            total_earnings=Subquery(earning_subquery),
+            total_expenses=Subquery(expense_subquery),
+            net_income=Subquery(earning_subquery) - Subquery(expense_subquery)
         )
 
+        return queryset
 
 @admin.register(models.Earning)
 class EarningAdmin(admin.ModelAdmin):
