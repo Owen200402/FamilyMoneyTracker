@@ -1,6 +1,7 @@
 from django.db import transaction
 from rest_framework import serializers
 from .models import Family, Member, Earning, Expense
+from django.db.models import Sum
 
 
 class EmptySerializer(serializers.ModelSerializer):
@@ -249,16 +250,19 @@ class FamilyRecordsSerializer(serializers.ModelSerializer):
                 Member.objects.select_related('user').prefetch_related('earning', 'expense').filter(family_id=family_pk), many=True)
 
     def get_total_earning(self, family):
-        data = self.fields['member'].data
-
-        return sum([earning['my_total_earning'] for earning in data])
+        return family.member.aggregate(total_earning=Sum('earning__monetary_value')).get('total_earning', 0)
 
     def get_total_expense(self, family):
-        data = self.fields['member'].data
-
-        return sum([earning['my_total_expense'] for earning in data])
+        return family.member.aggregate(total_expense=Sum('expense__monetary_value')).get('total_expense', 0)
 
     def get_total_net(self, family):
-        data = self.fields['member'].data
+        total_earning = family.member.aggregate(total_earning=Sum(
+            'earning__monetary_value')).get('total_earning', 0)
+        total_expense = family.member.aggregate(total_expense=Sum(
+            'expense__monetary_value')).get('total_expense', 0)
 
-        return sum([earning['my_total_earning'] for earning in data]) + sum([earning['my_total_expense'] for earning in data])
+        if total_earning is None:
+            total_earning = 0
+        if total_expense is None:
+            total_expense = 0
+        return total_earning - total_expense

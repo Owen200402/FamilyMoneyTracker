@@ -4,6 +4,7 @@ from model_bakery import baker
 from core.models import User
 
 
+@pytest.mark.django_db
 class TestAuthentication:
     def test_if_user_is_created_returns_200(self, api_client, authenticate):
         authenticate()

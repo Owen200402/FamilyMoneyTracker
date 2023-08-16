@@ -48,8 +48,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # 'silk',
     'djoser',
+    'silk',
     'django_filters',
     'corsheaders',
     'rest_framework',
@@ -72,8 +72,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# if DEBUG:
-#     MIDDLEWARE += ['silk.middleware.SilkyMiddleware']
+if DEBUG:
+    MIDDLEWARE += ['silk.middleware.SilkyMiddleware']
 
 ROOT_URLCONF = 'moneykeeper.urls'
 
