@@ -25,7 +25,8 @@ class FamilyViewSet(CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, Gene
         if self.request.method == 'POST' or self.request.method == 'GET':
             return CreateFamilySerializer
         if self.request.method == 'PATCH':
-            if self.request.user.member.family_id == None or str(self.request.user.member.family_id) != str(self.kwargs[self.lookup_url_kwarg]):
+            current_family_id = self.request.user.member.family_id
+            if current_family_id == None or str(current_family_id) != self.kwargs[self.lookup_url_kwarg]:
                 return EmptySerializer
             return UpdateFamilySerializer
 
@@ -210,8 +211,9 @@ class FamilyRecordsViewset(ReadOnlyModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
+        family_id=self.kwargs['family_pk']
         queryset = Family.objects.prefetch_related(
-            'member__earning', 'member__expense', 'member__user').filter(id=self.kwargs['family_pk'])
+            'member__earning', 'member__expense', 'member__user').filter(id=family_id)
 
         return queryset
 
