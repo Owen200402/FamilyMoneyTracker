@@ -1,0 +1,97 @@
+@import "./normalize.css";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+.title1 {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.title2 {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: start;
+  gap: 1rem;
+}
+
+.title-blue {
+  background-color: #3079c3;
+}
+
+.title-white {
+  background-color: rgb(225, 195, 155);
+}
+
+.title1 > h2 {
+  font-size: 4rem;
+}
+
+.header {
+  font-family: "Roboto", sans-serif;
+}
+
+.card {
+  width: 370px;
+  background-color: antiquewhite;
+}
+
+.card-text p {
+  font-size: 1.2rem;
+}
+
+.fa-arrow-down {
+  position: absolute;
+  top: 90%;
+  animation: leftAndRight 3s ease-out 2s infinite normal;
+}
+
+.fa-arrow-down:hover {
+  cursor: pointer;
+}
+
+@keyframes leftAndRight {
+  25% {
+    transform: translateY(20px);
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .title1 > h2 {
+    font-size: 3rem;
+  }
+
+  .title1 > h3 {
+    font-size: 2rem;
+  }
+}
+
+@media screen and (max-width: 580px) {
+  .title1 > h2 {
+    font-size: 2.5rem;
+  }
+  .title1 > h3 {
+    font-size: 1.5rem;
+  }
+
+  .card {
+    width: 220px;
+  }
+}
+
+.title2 .header {
+  margin: 2rem;
+}

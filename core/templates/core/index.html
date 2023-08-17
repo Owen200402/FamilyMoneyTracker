@@ -1,0 +1,105 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+      crossorigin="anonymous"
+    />
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&family=Tilt+Prism&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+    <script
+      src="https://kit.fontawesome.com/9f0dc4de76.js"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="{% static 'core/styles.css' %}" />
+    <title>Family Money Tracker</title>
+  </head>
+  <body>
+    <div class="container-lg">
+      <div class="title1 title-blue">
+        <h2 class="header">Family Money Tracker Backend Server</h2>
+        <h3>&copy;Owen Zheng</h3>
+
+        <div class="card-group">
+          <div class="container">
+            <div class="d-flex align-items-stretch justify-content-center">
+              <div class="card">
+                <div class="card-body">
+                  <h3 class="card-title">Project Overview</h3>
+                  <div class="card-text">
+                    <p>
+                      A back-end management system with RESTful api to keep
+                      track with every family's income and expense.
+                    </p>
+                  </div>
+                  <img
+                    class="card-img-bottom"
+                    src="{% static 'core/calc.png' %}"
+                    alt="calculator"
+                    style="width: 300px; height: auto"
+                  />
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-body">
+                  <h3 class="card-title">Tech Stack</h3>
+                  <br />
+                  <h5 class="card-subtitle">
+                    <i
+                      >Major Technologies: Python, Django, RESTful API, MySQL,
+                      Locust, Pytest, JWT</i
+                    >
+                  </h5>
+                  <br />
+                  <div class="card-text">
+                    <p>
+                      Django includes an admin page serving as a service desk,
+                      aiding users in managing safety concerns and sensitive
+                      deletions. Built on Django's Rest Framework and Djoser JWT
+                      authentication, the platform ensures secure user access
+                      and data integrity. Unauthorized users are restricted from
+                      modifying records, with data isolation preventing users
+                      from accessing other family's information. Debug tools,
+                      along with optimized ORM, Python's automated and
+                      performance test (Locust) guarantee smooth performance
+                      under high user loads while minimize errors.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <i id="arrow" class="fa fa-2x fa-solid fa-arrow-down"></i>
+        </div>
+      </div>
+    </div>
+    <div class="container-lg">
+      <div class="title2 title-white">
+        <h1 class="header"><b>User Mannual:</b></h1>
+      </div>
+    </div>
+    <script src="{% static 'core/script.js' %}" defer></script>
+  </body>
+</html>
