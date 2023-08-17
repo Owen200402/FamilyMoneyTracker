@@ -53,10 +53,9 @@
                     </p>
                   </div>
                   <img
-                    class="card-img-bottom"
+                    class="calculator card-img-bottom"
                     src="{% static 'core/calc.png' %}"
                     alt="calculator"
-                    style="width: 300px; height: auto"
                   />
                 </div>
               </div>
@@ -76,11 +75,10 @@
                       Django includes an admin page serving as a service desk,
                       aiding users in managing safety concerns and sensitive
                       deletions. Built on Django's Rest Framework and Joser JWT
-                      authentication, the platform ensures secure user access
-                      and data integrity. Unauthorized users are restricted from
-                      modifying records, with data isolation preventing users
-                      from accessing other family's information. Debug tools,
-                      along with optimized ORM, Python's automated and
+                      authentication, the platform ensures secure user access.
+                      Unauthorized users are restricted from modifying records,
+                      with data isolation preventing users from accessing other
+                      family's information. ORM, Python's automated and
                       performance test (Locust) guarantee smooth performance
                       under high user loads while minimize errors.
                     </p>
@@ -97,7 +95,44 @@
     </div>
     <div class="container-lg">
       <div class="title2 title-white">
-        <h1 class="header"><b>User Mannual:</b></h1>
+        <h1 class="header"><b>User Mannual</b></h1>
+        <div class="body">
+          <h2>User Login and Authentication:</h2>
+          <ol>
+            <li>
+              <p>
+                Create a user through authentication endpoint by entering first
+                name, last name, password and email: /auth/user
+              </p>
+            </li>
+            <li>
+              <p>
+                After doing so, generate access token through /jwt/create/.
+                Remember to save the token locally through front-end (eg.
+                LocalStorage in Javascript) as it will be expired after a period
+                of time (30 days for development sake)
+              </p>
+            </li>
+            <p>
+              <i
+                >Note: Once a user is created, an associate member is created in
+                our database for tracking money, link your family or view
+                statistics</i
+              >
+            </p>
+          </ol>
+        </div>
+        <div class="body">
+          <h2>Family Creation:</h2>
+          <p>
+            Along with your JWT authentication header, you are autherized to
+            create a family through: /tracker/families enpoints. Imput the
+            family name for your family and a password. The password here is not
+            for accessing a family, but for our service desk to check your
+            identity. Instead, a family code will be generated and that will be
+            used for future secure access and management of your own family.
+          </p>
+        </div>
       </div>
     </div>
     <script src="{% static 'core/script.js' %}" defer></script>

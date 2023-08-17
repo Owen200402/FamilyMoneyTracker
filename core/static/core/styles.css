@@ -53,6 +53,12 @@ html {
   font-size: 1.2rem;
 }
 
+.calculator {
+  width: 250px;
+  height: auto;
+  transform: translateX(4rem);
+}
+
 .fa-arrow-down {
   position: absolute;
   top: 90%;
@@ -77,6 +83,12 @@ html {
   .title1 > h3 {
     font-size: 2rem;
   }
+
+  .calculator {
+    width: 200px;
+    height: auto;
+    transform: translateX(5rem) translateY(2rem);
+  }
 }
 
 @media screen and (max-width: 580px) {
@@ -90,8 +102,20 @@ html {
   .card {
     width: 220px;
   }
+
+  .calculator {
+    width: 200px;
+    height: auto;
+    transform: translateY(4rem);
+  }
 }
 
-.title2 .header {
-  margin: 2rem;
+.title2 .header,
+.body {
+  margin-left: 2rem;
+}
+
+.body p,
+.body ol {
+  font-size: 1.5rem;
 }
