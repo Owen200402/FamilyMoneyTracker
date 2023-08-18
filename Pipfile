@@ -24,6 +24,7 @@ gunicorn = "*"
 dj-database-url = "*"
 django-redis = "*"
 pytz = "*"
+django-silk = "*"
 
 [dev-packages]
 pytest = "*"
