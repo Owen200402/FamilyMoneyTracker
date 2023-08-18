@@ -53,7 +53,7 @@ INSTALLED_APPS = [
     'django_filters',
     'corsheaders',
     'rest_framework',
-    # 'debug_toolbar',
+    'debug_toolbar',
     'tracker',
     'core',
     'moneytracker'
@@ -62,7 +62,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
-    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -197,3 +197,6 @@ AUTH_USER_MODEL = 'core.User'
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
