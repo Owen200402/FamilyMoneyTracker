@@ -2,14 +2,14 @@
 
 ## Description:
 
-A back-end management system with RESTful api to keep track with every family's income and expense.
+A back-end management system with RESTful api to keep track with every family's earnings and expenses.
 
 ## Introduction:
 
-Tracking personal income and expense seems trivial; however, through time money flow shows more unexpected outcomes than expected
+Tracking personal earnings and expenses seems trivial; however, through time money flow shows more unexpected outcomes than expected
 if we do not record down how much money we have spent or earned. Many people in this world are classified as "moonlight clan", meaning
 they spend nearly all money every month to pay debts, cars and fulfill personal needs at the same time. However, we can be more clever
-than this. By setting up goals and using data to track a family's money flow, people could plan their future by minimizing their expense accordingly,
+than this. By setting up goals and using data to track a family's money flow, people could plan their future by minimizing their expenses accordingly,
 and Family Money Tracker comes into the rescue.
 
 With Family Money Tracker, users can register accounts and have their unique family associated with them with just an activation code.
@@ -56,7 +56,7 @@ You can create a family by sending a request to the endpoint `/tracker/families/
 
 ### Operating Family Member's Earnings & Expenses
 
-1. To view earnings, expenses, and net income, navigate to `/tracker/families/::family_id/members/::member_id/earnings/`. Replace `earnings/` with `expense/` or `records/` to view other data.
+1. To view earnings, expenses, and net income, navigate to `/tracker/families/::family_id/members/::member_id/earnings/`. Replace `earnings/` with `expenses/` or `records/` to view other data.
 
 2. To post new earnings or expenses, follow the instructions and hit POST. You can update or delete earnings/expenses by navigating to `/tracker/families/::family_id/members/::member_id/earnings/::earning_id/`.
 
