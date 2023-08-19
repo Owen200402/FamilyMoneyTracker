@@ -57,7 +57,7 @@ html {
 .calculator {
   width: 250px;
   height: auto;
-  transform: translasteX(4rem);
+  transform: translateX(4rem);
 }
 
 .fa-arrow-down {
@@ -112,7 +112,7 @@ a {
   .calculator {
     width: 200px;
     height: auto;
-    transform: translateX(5rem) translateY(2rem);
+    transform: translateX(4rem) translateY(1rem);
   }
 }
 
