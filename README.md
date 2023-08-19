@@ -27,3 +27,41 @@ longside with Python's performance test (Locust), its performance is ensured fla
 ## Usage:
 
 _Note: It is designed mostly for front-end developers who wish to request for data from various API endpoints._
+
+This README provides an overview of how to use the MoneyTracker application. It covers various features, such as user login and authentication, family creation, linking members to a family, managing earnings and expenses, and viewing family records.
+
+### Base URL
+
+Ensure that when sending HTTP requests, you refer to the base URL. For reference, the base URL is the same as the current page's URL:
+
+### User Login and Authentication
+
+1. Create a user through the authentication endpoint by providing first name, last name, password, and email. Append `/auth/users/` to the base URL.
+
+2. After user creation, generate an access token through `/jwt/create/`. Remember to save the token locally using front-end techniques like LocalStorage in JavaScript.
+
+   **IMPORTANT**: Unauthorized users cannot access certain endpoints. Authorized users can only access their own family and individual data.
+
+### Family Creation
+
+You can create a family by sending a request to the endpoint `/tracker/families/`. Provide the family name and a password. A family code will be generated for future secure access and management.
+
+### Linking Members to Family
+
+1. Extract the user's user ID by sending a request to `/tracker/my-profile/me/`.
+
+2. Once a member is created, navigate to `/tracker/families/::family_id/` to view the family profile or rename it. Then go to `/tracker/families/::family_id/members/` and provide your member ID to link yourself to the family.
+
+   **Note**: You can also unlink members by sending a POST request to `/tracker/families/::family_id/members/::member_id/unlink-member/`.
+
+### Operating Family Member's Earnings & Expenses
+
+1. To view earnings, expenses, and net income, navigate to `/tracker/families/::family_id/members/::member_id/earnings/`. Replace `earnings/` with `expense/` or `records/` to view other data.
+
+2. To post new earnings or expenses, follow the instructions and hit POST. You can update or delete earnings/expenses by navigating to `/tracker/families/::family_id/members/::member_id/earnings/::earning_id/`.
+
+3. View an individual's net income by navigating to `/tracker/families/::family_id/members/::member_id/records/`. Sorting is possible using query strings.
+
+### Viewing Family Records
+
+To view all family member's earnings and expenses, navigate to `/tracker/families/::family_id/records/`. The family's net income is calculated and can be filtered by years and months.
