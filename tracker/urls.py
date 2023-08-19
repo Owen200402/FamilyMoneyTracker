@@ -12,7 +12,7 @@ family_router.register('members', views.MemberViewSet, basename='member')
 family_router.register(
     'earnings', views.FamilyEarningViewSet, basename='earning')
 family_router.register(
-    'expense', views.FamilyExpenseViewSet, basename='expense')
+    'expenses', views.FamilyExpenseViewSet, basename='expense')
 family_router.register(
     'records', views.FamilyRecordsViewset, basename='record')
 
@@ -21,7 +21,7 @@ member_router = routers.NestedDefaultRouter(
 member_router.register(
     'earnings', views.MemberEarningViewSet, basename='earning')
 member_router.register(
-    'expense', views.MemberExpenseViewSet, basename='expense')
+    'expenses', views.MemberExpenseViewSet, basename='expense')
 member_router.register(
     'records', views.MemberRecordsViewSet, basename='record')
 
