@@ -1,17 +1,15 @@
 from django.conf import settings
-from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 import debug_toolbar
 from . import views
-
-from moneytracker.views import say_hello
 
 admin.site.site_header = 'Money Tracker Services'
 admin.site.index_title = 'Services'
 
 urlpatterns = [
     path('', include('core.urls')),
+    path('client/', include('client.urls')),
     path('admin/', admin.site.urls),
     path('tracker/', include('tracker.urls')),
     path('auth/', include('djoser.urls')),
@@ -22,5 +20,3 @@ urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns += [path('silk/', include('silk.urls', namespace='silk'))]
-    #     urlpatterns += static(settings.MEDIA_URL,
-    #                           document_root=settings.MEDIA_ROOT)

@@ -32,7 +32,8 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'tracker',
     'core',
-    'moneytracker'
+    'moneytracker',
+    'client'
 ]
 
 
@@ -71,7 +72,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'moneytracker.wsgi.application'
-
 
 
 AUTH_PASSWORD_VALIDATORS = [
