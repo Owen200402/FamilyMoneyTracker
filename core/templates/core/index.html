@@ -117,20 +117,15 @@
             <li>
               <p>
                 After doing so, generate access token through /jwt/create/.
-                Remember to save the token locally through front-end (eg.
-                LocalStorage in Javascript) as it will be expired after a period
-                of time (30 days for development sake).
+                Remember to save the token locally using front-end technologies
+                like LocalStorage in Javascript.
               </p>
             </li>
             <p>
               <b
-                >IMPORTANT: Unauthorized users have no access to any of the
-                following endpoints for operating on future data, so make sure
-                you authenticate yourself; authorized users can only access
-                their own family & individual's incomes, expenses and net income
-                after linking themselves to their specific family to ensure the
-                safety. Otherwise, 404 unauthorized or 403 forbidden response
-                will be returned.</b
+                >IMPORTANT: Unauthorized users cannot access certain endpoints.
+                Authorized users can only access their own family and individual
+                data.</b
               >
               <br />
             </p>
@@ -194,9 +189,9 @@
                 <a class="link--secondary"
                   >/tracker/families/::family_id/members/::
                   member_id/earnings/</a
-                >. Change earnings/ to expenses/ or records/ to view the rest. To
-                post new earnings or expenses, simply follow the instruction and
-                hit POST. However, we do not allow POST to records endpoint
+                >. Change earnings/ to expenses/ or records/ to view the rest.
+                To post new earnings or expenses, simply follow the instruction
+                and hit POST. However, we do not allow POST to records endpoint
                 directly. NOTE: Sorting is allowed through filter button
                 entering year and month to get a monthly report.
               </p>
@@ -210,8 +205,8 @@
                   member_id/earnings/::earning_id/</a
                 >. Similar than before, earnings can be substituded by expenses.
                 However, the record is one entity which does not come with
-                record_id. Delete the earnings or expenses by hitting sending the
-                delete request on the same url.
+                record_id. Delete the earnings or expenses by hitting sending
+                the delete request on the same url.
               </p>
             </li>
             <li>
@@ -243,9 +238,9 @@
             <br />
             <b>
               IMPORTANT: Again, all the info related to family or individual
-              earnings, expenses, and the net are hidden from people who have not
-              linked themselves to your family. Don't worry about the security
-              issue as we have taken care of that for you.
+              earnings, expenses, and the net are hidden from people who have
+              not linked themselves to your family. Don't worry about the
+              security issue as we have taken care of that for you.
             </b>
           </p>
         </div>

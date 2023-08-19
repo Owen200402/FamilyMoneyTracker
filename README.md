@@ -28,8 +28,6 @@ longside with Python's performance test (Locust), its performance is ensured fla
 
 _Note: It is designed mostly for front-end developers who wish to request for data from various API endpoints._
 
-This README provides an overview of how to use the MoneyTracker application. It covers various features, such as user login and authentication, family creation, linking members to a family, managing earnings and expenses, and viewing family records.
-
 ### Base URL
 
 Ensure that when sending HTTP requests, you refer to the base URL. For reference, the base URL is the same as the current page's URL:
