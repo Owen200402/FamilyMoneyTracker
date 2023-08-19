@@ -49,7 +49,7 @@
                   <div class="card-text">
                     <p>
                       A back-end management system with RESTful api to keep
-                      track with every family's income and expense.
+                      track with every family's income and expenses.
                     </p>
                   </div>
                   <img
@@ -127,7 +127,7 @@
                 >IMPORTANT: Unauthorized users have no access to any of the
                 following endpoints for operating on future data, so make sure
                 you authenticate yourself; authorized users can only access
-                their own family & individual's incomes, expense and net income
+                their own family & individual's incomes, expenses and net income
                 after linking themselves to their specific family to ensure the
                 safety. Otherwise, 404 unauthorized or 403 forbidden response
                 will be returned.</b
@@ -185,7 +185,7 @@
           </ol>
         </div>
         <div class="body">
-          <h2>Operating Family Member's Earnings & Expense:</h2>
+          <h2>Operating Family Member's Earnings & Expenses:</h2>
           <ol>
             <li>
               <p>
@@ -194,7 +194,7 @@
                 <a class="link--secondary"
                   >/tracker/families/::family_id/members/::
                   member_id/earnings/</a
-                >. Change earnings/ to expense/ or records/ to view the rest. To
+                >. Change earnings/ to expenses/ or records/ to view the rest. To
                 post new earnings or expenses, simply follow the instruction and
                 hit POST. However, we do not allow POST to records endpoint
                 directly. NOTE: Sorting is allowed through filter button
@@ -203,14 +203,14 @@
             </li>
             <li>
               <p>
-                To update or delete an earning or expense: append the base url
+                To update or delete an earning or expenses: append the base url
                 by
                 <a class="link--secondary"
                   >/tracker/families/::family_id/members/::
                   member_id/earnings/::earning_id/</a
                 >. Similar than before, earnings can be substituded by expenses.
                 However, the record is one entity which does not come with
-                record_id. Delete the earnings or expense by hitting sending the
+                record_id. Delete the earnings or expenses by hitting sending the
                 delete request on the same url.
               </p>
             </li>
@@ -232,7 +232,7 @@
           <h2>Viewing Family Records:</h2>
           <p>
             Similar to viewing individual member's record, it is also possible
-            to view a list of all member's earnings, expense in a family. The
+            to view a list of all member's earnings, expenses in a family. The
             BEAUTY here is that the family net income is calculated down below
             and can be filtered by entering years and months. Just start by
             appending the base url by
@@ -243,7 +243,7 @@
             <br />
             <b>
               IMPORTANT: Again, all the info related to family or individual
-              earnings, expense, and the net are hidden from people who have not
+              earnings, expenses, and the net are hidden from people who have not
               linked themselves to your family. Don't worry about the security
               issue as we have taken care of that for you.
             </b>
