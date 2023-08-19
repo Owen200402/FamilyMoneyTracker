@@ -99,7 +99,7 @@
             Base URL (MUST be refered to when sending http requests):
           </h2>
           <p style="color: rgb(0, 98, 255)">
-            Same as the current page's URL. As a reference:
+            It is the same as the current page's URL:
             https://moneytracker-prod-9941b1d428c3.herokuapp.com.
           </p>
         </div>
@@ -134,9 +134,8 @@
         <div class="body">
           <h2>Family Creation:</h2>
           <p>
-            Along with your JWT authentication header, you are autherized to
-            create a family through base url +
-            <a class="link--secondary">/tracker/families/</a>
+            Along with your JWT authentication header, you can create a family
+            by navigating to <a class="link--secondary">/tracker/families/</a>
             endpoint. Input the family name for your family and a password. The
             password here is not for accessing a family, but for our service
             desk to check your identity. Instead, a family code will be
@@ -150,16 +149,16 @@
             <li>
               <p>
                 Before linking the user with the family, we need to extract the
-                user's user id by entering base url +
+                user's user id by navigating to
                 <a class="link--secondary">/tracker/my-profile/me/</a>.
               </p>
             </li>
             <li>
               <p>
-                After a member is created, head over to base url +
+                After a member is created, head over to
                 <a class="link--secondary"> /tracker/families/::family_id/</a>
                 endpoint to view the family profile or rename the family. Once
-                checked, head over to base url +
+                checked, navigate to
                 <a class="link--secondary">
                   /tracker/families/::family_id/members/</a
                 >
@@ -170,11 +169,11 @@
             <p>
               <i
                 >Note: Unlinking members is also possible by sending a POST
-                request via base url +
-                <a class="link--secondary"
-                  >/tracker/families/::family_id/members/::
-                  member_id/unlink-member/</a
-                ></i
+                request via endpoint
+              </i>
+              <a class="link--secondary"
+                >/tracker/families/::family_id/members/::
+                member_id/unlink-member/</a
               >.
             </p>
           </ol>
@@ -198,8 +197,7 @@
             </li>
             <li>
               <p>
-                To update or delete an earning or expenses: append the base url
-                by
+                To update or delete an earning or expenses, navigate to
                 <a class="link--secondary"
                   >/tracker/families/::family_id/members/::
                   member_id/earnings/::earning_id/</a
@@ -229,8 +227,7 @@
             Similar to viewing individual member's record, it is also possible
             to view a list of all member's earnings, expenses in a family. The
             BEAUTY here is that the family net income is calculated down below
-            and can be filtered by entering years and months. Just start by
-            appending the base url by
+            and can be filtered by entering years and months. Just navigate to
             <a class="link--secondary"
               >tracker/families/::family_id/records/.</a
             >
@@ -240,7 +237,7 @@
               IMPORTANT: All the info related to family or individual earnings,
               expenses, and the net are hidden from people who have not linked
               themselves to your family. Don't worry about the security issue as
-              we have taken care of that for you.
+              it has been taken care of that for you.
             </b>
           </p>
         </div>

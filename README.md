@@ -30,7 +30,7 @@ _Note: It is designed mostly for front-end developers who wish to request for da
 
 ### Base URL
 
-Ensure that when sending HTTP requests, you refer to the base URL. For reference, the base URL is the same as the current page's URL:
+Ensure that when sending HTTP requests, you refer to the base URL. For reference, the base URL is the same as the home page's URL: https://moneytracker-prod-9941b1d428c3.herokuapp.com
 
 ### User Login and Authentication
 
