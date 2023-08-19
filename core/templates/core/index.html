@@ -66,7 +66,7 @@
                   <h5 class="card-subtitle">
                     <i
                       >Major Technologies: Python, Django, RESTful API, MySQL,
-                      Locust, Pytest, JWT</i
+                      Locust, Pytest, JWT Auth</i
                     >
                   </h5>
                   <br />
@@ -74,7 +74,7 @@
                     <p>
                       Django includes an admin page serving as a service desk,
                       aiding users in managing safety concerns and sensitive
-                      deletions. Built on Django's Rest Framework and Joser JWT
+                      deletions. Built on Django's Rest Framework and JWT
                       authentication, the platform ensures secure user access.
                       Unauthorized users are restricted from modifying records,
                       with data isolation preventing users from accessing other
@@ -95,14 +95,25 @@
     </div>
     <div class="container-xxl">
       <div class="title2 title-white">
-        <h1 class="header"><b>User Mannual</b></h1>
+        <h1 class="header"><b>Complete User Mannual</b></h1>
+        <div class="body">
+          <h2 style="color: red">
+            Base URL (MUST be refered to when sending http requests):
+          </h2>
+          <p style="color: rgb(0, 98, 255)">
+            Same as the current page's URL. As a reference:
+            https://moneytracker-prod-9941b1d428c3.herokuapp.com.
+          </p>
+        </div>
         <div class="body">
           <h2>User Login and Authentication:</h2>
           <ol>
             <li>
               <p>
                 Create a user through authentication endpoint by entering first
-                name, last name, password and email: /auth/user
+                name, last name, password and email by appending the following
+                to the base url:
+                <a class="link--secondary">/auth/users/</a>.
               </p>
             </li>
             <li>
@@ -110,15 +121,20 @@
                 After doing so, generate access token through /jwt/create/.
                 Remember to save the token locally through front-end (eg.
                 LocalStorage in Javascript) as it will be expired after a period
-                of time (30 days for development sake)
+                of time (30 days for development sake).
               </p>
             </li>
             <p>
-              <i
-                >Note: Once a user is created, an associate member is created in
-                our database for tracking money, link your family or view
-                statistics</i
+              <b
+                >IMPORTANT: Unauthorized users have no access to any of the
+                following endpoints for operating on future data, so make sure
+                you authenticate yourself; authorized users can only access
+                their own family & individual's incomes, expense and net income
+                after linking themselves to their specific family to ensure the
+                safety. Otherwise, 404 unauthorized or 403 forbidden response
+                will be returned.</b
               >
+              <br />
             </p>
           </ol>
         </div>
@@ -126,11 +142,111 @@
           <h2>Family Creation:</h2>
           <p>
             Along with your JWT authentication header, you are autherized to
-            create a family through: /tracker/families enpoints. Imput the
-            family name for your family and a password. The password here is not
-            for accessing a family, but for our service desk to check your
-            identity. Instead, a family code will be generated and that will be
-            used for future secure access and management of your own family.
+            create a family through base url +
+            <a class="link--secondary">/tracker/families/</a>
+            endpoint. Input the family name for your family and a password. The
+            password here is not for accessing a family, but for our service
+            desk to check your identity. Instead, a family code will be
+            generated and that will be used for future secure access and
+            management of your own family.
+          </p>
+        </div>
+        <div class="body">
+          <h2>Linking Members to Family:</h2>
+          <ol>
+            <li>
+              <p>
+                Before linking the user with the family, we need to extract the
+                user's user id by entering base url +
+                <a class="link--secondary">/tracker/my-profile/me/</a>.
+              </p>
+            </li>
+            <li>
+              <p>
+                After a member is created, head over to base url +
+                <a class="link--secondary"> /tracker/families/::family_id/</a>
+                endpoint to view the family profile or rename the family. Once
+                checked, head over to base url +
+                <a class="link--secondary">
+                  /tracker/families/::family_id/members/</a
+                >
+                endpoint; enter your member id in order to link yourself to the
+                family.
+              </p>
+            </li>
+            <p>
+              <i
+                >Note: Unlinking members is also possible by sending a POST
+                request via base url +
+                <a class="link--secondary"
+                  >/tracker/families/::family_id/members/::
+                  member_id/unlink-member/</a
+                ></i
+              >.
+            </p>
+          </ol>
+        </div>
+        <div class="body">
+          <h2>Operating Family Member's Earnings & Expense:</h2>
+          <ol>
+            <li>
+              <p>
+                To view earnings, expenses and net or post earnings and
+                expenses: append the base url by
+                <a class="link--secondary"
+                  >/tracker/families/::family_id/members/::
+                  member_id/earnings/</a
+                >. Change earnings/ to expense/ or records/ to view the rest. To
+                post new earnings or expenses, simply follow the instruction and
+                hit POST. However, we do not allow POST to records endpoint
+                directly. NOTE: Sorting is allowed through filter button
+                entering year and month to get a monthly report.
+              </p>
+            </li>
+            <li>
+              <p>
+                To update or delete an earning or expense: append the base url
+                by
+                <a class="link--secondary"
+                  >/tracker/families/::family_id/members/::
+                  member_id/earnings/::earning_id/</a
+                >. Similar than before, earnings can be substituded by expenses.
+                However, the record is one entity which does not come with
+                record_id. Delete the earnings or expense by hitting sending the
+                delete request on the same url.
+              </p>
+            </li>
+            <li>
+              <p>
+                To view the net income of this individual: append the base url
+                by
+                <a class="link--secondary"
+                  >/tracker/families/::family_id/members/::
+                  member_id/records/</a
+                >. NOTE: Sorting is allowed by appending querystrings to the
+                current url. (eg. ?earning__received_date__month=9
+                &expense__paid_date__month=6)
+              </p>
+            </li>
+          </ol>
+        </div>
+        <div class="body">
+          <h2>Viewing Family Records:</h2>
+          <p>
+            Similar to viewing individual member's record, it is also possible
+            to view a list of all member's earnings, expense in a family. The
+            BEAUTY here is that the family net income is calculated down below
+            and can be filtered by entering years and months. Just start by
+            appending the base url by
+            <a class="link--secondary">tracker/families/::family_id/records/</a>
+            <br />
+            <br />
+            <b>
+              IMPORTANT: Again, all the info related to family or individual
+              earnings, expense, and the net are hidden from people who have not
+              linked themselves to your family. Don't worry about the security
+              issue as we have taken care of that for you.
+            </b>
           </p>
         </div>
       </div>

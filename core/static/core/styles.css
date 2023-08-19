@@ -20,7 +20,8 @@ html {
 }
 
 .title2 {
-  height: 100vh;
+  height: auto;
+  padding-bottom: 2rem;
   display: flex;
   flex-direction: column;
   justify-content: start;
@@ -69,6 +70,30 @@ html {
   cursor: pointer;
 }
 
+.link {
+  color: rgb(109, 68, 10);
+}
+
+.link--secondary {
+  color: blue;
+}
+
+a {
+  text-decoration: none;
+}
+
+.title2 .header,
+.body {
+  margin-left: 2rem;
+  margin-right: 2rem;
+  font-size: 2.3rem;
+}
+
+.body p,
+.body ol {
+  font-size: 1.5rem;
+}
+
 @keyframes leftAndRight {
   25% {
     transform: translateY(20px);
@@ -110,12 +135,21 @@ html {
   }
 }
 
-.title2 .header,
-.body {
-  margin-left: 2rem;
-}
+@media screen and (max-width: 425px) {
+  .title1 > h2 {
+    font-size: 2rem;
+  }
+  .title1 > h3 {
+    font-size: 1rem;
+  }
 
-.body p,
-.body ol {
-  font-size: 1.5rem;
+  .card {
+    width: 170px;
+  }
+
+  .calculator {
+    width: 150px;
+    height: auto;
+    transform: translateY(6rem);
+  }
 }
