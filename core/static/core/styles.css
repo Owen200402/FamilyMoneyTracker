@@ -62,7 +62,7 @@ html {
 
 .fa-arrow-down {
   position: absolute;
-  top: 90%;
+  top: 94%;
   animation: leftAndRight 3s ease-out 2s infinite normal;
 }
 
