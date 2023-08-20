@@ -11,7 +11,7 @@ html {
 }
 
 .nav-pills li a:hover {
-  background-color: rgb(35, 142, 196);
+  background-color: rgb(0, 170, 255);
   cursor: pointer;
 }
 
