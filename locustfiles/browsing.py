@@ -38,12 +38,12 @@ class WebsiteUser(HttpUser):
                         name=f'/tracker/families/::id/members/::id/earnings/')
 
     @task(3)
-    def view_member_expense(self):
+    def view_member_expenses(self):
         response = self.link_member_with_family()
 
-        self.client.get(f'/tracker/families/{self.family_for_testing}/members/{response["response_json"]["member_id"]}/expense/',
+        self.client.get(f'/tracker/families/{self.family_for_testing}/members/{response["response_json"]["member_id"]}/expenses/',
                         headers=response["headers"],
-                        name=f'/tracker/families/::id/members/::id/expense/')
+                        name=f'/tracker/families/::id/members/::id/expenses/')
 
     @task(3)
     def view_member_records(self):
@@ -65,9 +65,9 @@ class WebsiteUser(HttpUser):
     def view_family_expenses(self):
         response = self.link_member_with_family()
 
-        self.client.get(f'/tracker/families/{self.family_for_testing}/expense/',
+        self.client.get(f'/tracker/families/{self.family_for_testing}/expenses/',
                         headers=response["headers"],
-                        name=f'/tracker/families/::id/expense')
+                        name=f'/tracker/families/::id/expenses')
 
     @task(3)
     def view_family_records(self):

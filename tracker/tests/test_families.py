@@ -315,33 +315,33 @@ class TestIndividualEarnings:
 
 
 @pytest.mark.django_db
-class TestIndividualExpense:
-    def test_authenticated_member_accessing_member_expense_returns_200(self, api_client, user, family):
+class TestIndividualExpenses:
+    def test_authenticated_member_accessing_member_expenses_returns_200(self, api_client, user, family):
         api_client.force_authenticate(user=user)
 
         api_client.post(
             f'/tracker/families/{family.id}/members/', {'member_id': user.member.id})
         user.member.refresh_from_db()
         response = api_client.get(
-            f'/tracker/families/{family.id}/members/{user.member.id}/expense/')
+            f'/tracker/families/{family.id}/members/{user.member.id}/expenses/')
 
         assert response.status_code == status.HTTP_200_OK
 
-    def test_authenticated_member_posting_member_expense_returns_201(self, api_client, user, family):
+    def test_authenticated_member_posting_member_expenses_returns_201(self, api_client, user, family):
         api_client.force_authenticate(user=user)
 
         api_client.post(
             f'/tracker/families/{family.id}/members/', {'member_id': user.member.id})
         user.member.refresh_from_db()
         response = api_client.post(
-            f'/tracker/families/{family.id}/members/{user.member.id}/expense/', {"title": "a",
+            f'/tracker/families/{family.id}/members/{user.member.id}/expenses/', {"title": "a",
                                                                                  "paid_to": "b",
                                                                                  "paid_date": "2023-08-14",
                                                                                  "monetary_value": 1})
 
         assert response.status_code == status.HTTP_201_CREATED
 
-    def test_authenticated_member_patching_member_expense_returns_200(self, api_client, user, family):
+    def test_authenticated_member_patching_member_expenses_returns_200(self, api_client, user, family):
         expense = baker.make(Expense, member=user.member)
         api_client.force_authenticate(user=user)
 
@@ -349,13 +349,13 @@ class TestIndividualExpense:
             f'/tracker/families/{family.id}/members/', {'member_id': user.member.id})
         user.member.refresh_from_db()
         response = api_client.patch(
-            f'/tracker/families/{family.id}/members/{user.member.id}/expense/{expense.id}/', {"title": "c",
+            f'/tracker/families/{family.id}/members/{user.member.id}/expenses/{expense.id}/', {"title": "c",
                                                                                               "paid_to": "b",
                                                                                               "paid_date": "2023-08-14",
                                                                                               "monetary_value": 1})
         assert response.status_code == status.HTTP_200_OK
 
-    def test_authenticated_member_deleting_member_expense_returns_204(self, api_client, user, family):
+    def test_authenticated_member_deleting_member_expenses_returns_204(self, api_client, user, family):
         api_client.force_authenticate(user=user)
         expense = baker.make(Expense, member=user.member)
 
@@ -363,56 +363,56 @@ class TestIndividualExpense:
             f'/tracker/families/{family.id}/members/', {'member_id': user.member.id})
         user.member.refresh_from_db()
         response = api_client.delete(
-            f'/tracker/families/{family.id}/members/{user.member.id}/expense/{expense.id}/')
+            f'/tracker/families/{family.id}/members/{user.member.id}/expenses/{expense.id}/')
 
         assert response.status_code == status.HTTP_204_NO_CONTENT
 
-    def test_unauthenticated_member_accessing_member_expense_returns_401(self, api_client, user, family):
+    def test_unauthenticated_member_accessing_member_expenses_returns_401(self, api_client, user, family):
         api_client.post(
             f'/tracker/families/{family.id}/members/', {'member_id': user.member.id})
         user.member.refresh_from_db()
         response = api_client.get(
-            f'/tracker/families/{family.id}/members/{user.member.id}/expense/')
+            f'/tracker/families/{family.id}/members/{user.member.id}/expenses/')
 
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
-    def test_unauthenticated_member_posting_member_expense_returns_401(self, api_client, user, family):
+    def test_unauthenticated_member_posting_member_expenses_returns_401(self, api_client, user, family):
         api_client.post(
             f'/tracker/families/{family.id}/members/', {'member_id': user.member.id})
         user.member.refresh_from_db()
         response = api_client.post(
-            f'/tracker/families/{family.id}/members/{user.member.id}/expense/', {"title": "a",
+            f'/tracker/families/{family.id}/members/{user.member.id}/expenses/', {"title": "a",
                                                                                  "paid_to": "b",
                                                                                  "paid_date": "2023-08-14",
                                                                                  "monetary_value": 1})
 
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
-    def test_unauthenticated_member_patching_member_expense_returns_401(self, api_client, user, family):
+    def test_unauthenticated_member_patching_member_expenses_returns_401(self, api_client, user, family):
         expense = baker.make(Expense, member=user.member)
 
         api_client.post(
             f'/tracker/families/{family.id}/members/', {'member_id': user.member.id})
         user.member.refresh_from_db()
         response = api_client.patch(
-            f'/tracker/families/{family.id}/members/{user.member.id}/expense/{expense.id}/', {"title": "c",
+            f'/tracker/families/{family.id}/members/{user.member.id}/expenses/{expense.id}/', {"title": "c",
                                                                                               "paid_to": "b",
                                                                                               "paid_date": "2023-08-14",
                                                                                               "monetary_value": 1})
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
-    def test_unauthenticated_member_deleting_member_expense_returns_401(self, api_client, user, family):
+    def test_unauthenticated_member_deleting_member_expenses_returns_401(self, api_client, user, family):
         expense = baker.make(Expense, member=user.member)
 
         api_client.post(
             f'/tracker/families/{family.id}/members/', {'member_id': user.member.id})
         user.member.refresh_from_db()
         response = api_client.delete(
-            f'/tracker/families/{family.id}/members/{user.member.id}/expense/{expense.id}/')
+            f'/tracker/families/{family.id}/members/{user.member.id}/expenses/{expense.id}/')
 
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
-    def test_other_member_accessing_member_expense_returns_403(self, api_client, user, family, user2):
+    def test_other_member_accessing_member_expenses_returns_403(self, api_client, user, family, user2):
         api_client.force_authenticate(user=user)
 
         api_client.post(
@@ -421,11 +421,11 @@ class TestIndividualExpense:
 
         api_client.force_authenticate(user=user2)
         response = api_client.get(
-            f'/tracker/families/{family.id}/members/{user.member.id}/expense/')
+            f'/tracker/families/{family.id}/members/{user.member.id}/expenses/')
 
         assert response.status_code == status.HTTP_403_FORBIDDEN
 
-    def test_other_member_posting_member_expense_returns_403(self, api_client, user, family, user2):
+    def test_other_member_posting_member_expenses_returns_403(self, api_client, user, family, user2):
         api_client.force_authenticate(user=user)
 
         api_client.post(
@@ -434,14 +434,14 @@ class TestIndividualExpense:
 
         api_client.force_authenticate(user=user2)
         response = api_client.post(
-            f'/tracker/families/{family.id}/members/{user.member.id}/expense/', {"title": "a",
+            f'/tracker/families/{family.id}/members/{user.member.id}/expenses/', {"title": "a",
                                                                                  "paid_to": "b",
                                                                                  "paid_date": "2023-08-14",
                                                                                  "monetary_value": 1})
 
         assert response.status_code == status.HTTP_403_FORBIDDEN
 
-    def test_other_member_putting_member_expense_returns_403(self, api_client, user, family, user2):
+    def test_other_member_putting_member_expenses_returns_403(self, api_client, user, family, user2):
         expense = baker.make(Expense, member=user.member)
         api_client.force_authenticate(user=user)
 
@@ -451,7 +451,7 @@ class TestIndividualExpense:
 
         api_client.force_authenticate(user=user2)
         response = api_client.patch(
-            f'/tracker/families/{family.id}/members/{user.member.id}/expense/{expense.id}/', {"title": "c",
+            f'/tracker/families/{family.id}/members/{user.member.id}/expenses/{expense.id}/', {"title": "c",
                                                                                               "paid_to": "b",
                                                                                               "paid_date": "2023-08-14",
                                                                                               "monetary_value": 1})
@@ -529,15 +529,15 @@ class TestFamilyEarnings:
 
 
 @pytest.mark.django_db
-class TestFamilyExpense:
-    def test_authenticated_member_accessing_family_expense_returns_200(self, api_client, user, family):
+class TestFamilyExpenses:
+    def test_authenticated_member_accessing_family_expenses_returns_200(self, api_client, user, family):
         api_client.force_authenticate(user=user)
 
         api_client.post(
             f'/tracker/families/{family.id}/members/', {'member_id': user.member.id})
         user.member.refresh_from_db()
         response = api_client.get(
-            f'/tracker/families/{family.id}/expense/')
+            f'/tracker/families/{family.id}/expenses/')
 
         assert response.status_code == status.HTTP_200_OK
 
@@ -546,7 +546,7 @@ class TestFamilyExpense:
             f'/tracker/families/{family.id}/members/', {'member_id': user.member.id})
         user.member.refresh_from_db()
         response = api_client.get(
-            f'/tracker/families/{family.id}/expense/')
+            f'/tracker/families/{family.id}/expenses/')
 
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
@@ -558,7 +558,7 @@ class TestFamilyExpense:
         user.member.refresh_from_db()
         api_client.force_authenticate(user=user2)
         response = api_client.get(
-            f'/tracker/families/{family.id}/expense/')
+            f'/tracker/families/{family.id}/expenses/')
 
         assert response.status_code == status.HTTP_403_FORBIDDEN
 
