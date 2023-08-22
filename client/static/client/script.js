@@ -1,4 +1,4 @@
-let isAuthenticated = true; // in the future, check to see if the token is set to render the page rather than boolean
+// Constants
 const family_register = document.querySelectorAll(".btn-family-register");
 const user_register = document.querySelectorAll(".btn-user-register");
 const user_login = document.querySelectorAll(".btn-user-login");
@@ -11,6 +11,9 @@ const user_login_close = document.querySelector(".user-login-close");
 const user_signup_close = document.querySelector(".user-signup-close");
 const family_signup_close = document.querySelector(".family-signup-close");
 
+let isAuthenticated = true; // in the future, check to see if the token is set to render the page rather than boolean
+
+// Cover Page Linking
 document.addEventListener("DOMContentLoaded", function () {
   family_register.forEach((button) => {
     button.addEventListener("click", function (e) {
