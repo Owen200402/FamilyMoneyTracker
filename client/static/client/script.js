@@ -11,7 +11,15 @@ const user_login_close = document.querySelector(".user-login-close");
 const user_signup_close = document.querySelector(".user-signup-close");
 const family_signup_close = document.querySelector(".family-signup-close");
 
-let isAuthenticated = true; // in the future, check to see if the token is set to render the page rather than boolean
+const username_register = document.querySelector("#username-register");
+const password_register = document.querySelector("#password-register");
+const email_register = document.querySelector("#email-register");
+const first_name_register = document.querySelector("#first-name-register");
+const last_name_register = document.querySelector("#last-name-register");
+
+const user_login_form = document.querySelector("#form-login-user");
+const user_signup_form = document.querySelector("#form-signup-user");
+const family_signup_form = document.querySelector("#form-signup-family");
 
 // Cover Page Linking
 document.addEventListener("DOMContentLoaded", function () {
@@ -35,19 +43,31 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-// Authorization Check for Main Page
-document.addEventListener("DOMContentLoaded", function () {
-  const main_page = document.querySelector("#authenticated");
+// User Creation POST Request
+async function userCreationPOST(event) {
+  event.preventDefault();
+  const form = event.target;
+  const formData = new FormData(form);
 
-  if (!isAuthenticated) {
-    main_page.style.display = "none";
-    console.log("User is not authenticated. Hiding main content.");
-  } else {
-    main_page.style.display = "block";
-    console.log("User is not authenticated. Hiding main content.");
+  try {
+    const response = await fetch("../auth/users/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(Object.fromEntries(formData)),
+    });
+
+    const responseData = await response.json();
+    console.log("User created: ", responseData);
+  } catch (error) {
+    console.error("Error: ", error);
   }
-});
+}
 
+user_signup_form.addEventListener("submit", userCreationPOST);
+
+// Hide All Modals for Front page
 function closeAllModals() {
   user_login_close.click();
   user_signup_close.click();

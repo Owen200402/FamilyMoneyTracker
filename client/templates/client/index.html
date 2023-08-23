@@ -62,7 +62,7 @@
               ></button>
             </div>
             <div class="modal-body">
-              <form autocomplete="off">
+              <form autocomplete="off" id="form-login-user">
                 <div class="mb-3">
                   <label for="username" class="form-label fs-4">Username</label>
                   <input
@@ -83,7 +83,13 @@
                     required
                   />
                 </div>
-                <button type="submit" class="btn btn-primary">Log In</button>
+                <button
+                  type="submit"
+                  id="user-log-in-submit"
+                  class="btn btn-primary"
+                >
+                  Log In
+                </button>
               </form>
             </div>
             <div class="modal-footer d-flex justify-content-start pt-0">
@@ -125,62 +131,74 @@
               ></button>
             </div>
             <div class="modal-body">
-              <form autocomplete="off">
+              <form autocomplete="off" id="form-signup-user">
                 <div class="mb-3">
-                  <label for="username" class="form-label fs-4">Username</label>
+                  <label for="username-register" class="form-label fs-4"
+                    >Username</label
+                  >
                   <input
                     type="text"
                     class="form-control"
-                    id="username"
+                    id="username-register"
                     name="username"
                     required
                   />
                 </div>
                 <div class="mb-3">
-                  <label for="password" class="form-label fs-4">Password</label>
+                  <label for="password-register" class="form-label fs-4"
+                    >Password</label
+                  >
                   <input
                     type="password"
                     class="form-control"
-                    id="password"
+                    id="password-register"
                     name="password"
                     required
                   />
                 </div>
                 <div class="mb-3">
-                  <label for="password" class="form-label fs-4">Email</label>
+                  <label for="email-register" class="form-label fs-4"
+                    >Email</label
+                  >
                   <input
-                    type="password"
+                    type="email"
                     class="form-control"
-                    id="password"
+                    id="email-register"
                     name="email"
                     required
                   />
                 </div>
                 <div class="mb-3">
-                  <label for="password" class="form-label fs-4"
+                  <label for="first-name-register" class="form-label fs-4"
                     >First Name</label
                   >
                   <input
-                    type="password"
+                    type="text"
                     class="form-control"
-                    id="password"
-                    name="first-name"
+                    id="first-name-register"
+                    name="first_name"
                     required
                   />
                 </div>
                 <div class="mb-3">
-                  <label for="password" class="form-label fs-4"
+                  <label for="last-name-register" class="form-label fs-4"
                     >Last Name</label
                   >
                   <input
-                    type="password"
+                    type="text"
                     class="form-control"
-                    id="password"
-                    name="last-name"
+                    id="last-name-register"
+                    name="last_name"
                     required
                   />
                 </div>
-                <button type="submit" class="btn btn-primary">Sign Up</button>
+                <button
+                  type="submit"
+                  id="user-sign-up-submit"
+                  class="btn btn-primary"
+                >
+                  Sign Up
+                </button>
               </form>
             </div>
             <div class="modal-footer d-flex justify-content-start pt-0">
@@ -200,7 +218,7 @@
       </div>
       <div class="mb-3">
         <button
-          class="btn btn-lg btn-outline-primary mb-3 btn-family-signup"
+          class="btn btn-lg btn-outline-secondary mb-3 btn-family-signup"
           data-bs-toggle="modal"
           data-bs-target="#family-signup"
         >
@@ -219,32 +237,38 @@
                 ></button>
               </div>
               <div class="modal-body">
-                <form autocomplete="off">
+                <form autocomplete="off" id="form-signup-family">
                   <div class="mb-3">
-                    <label for="username" class="form-label fs-4"
+                    <label for="family-name" class="form-label fs-4"
                       >Family Name</label
                     >
                     <input
                       type="text"
                       class="form-control"
-                      id="username"
-                      name="username"
+                      id="family-name"
+                      name="family-name"
                       required
                     />
                   </div>
                   <div class="mb-3">
-                    <label for="password" class="form-label fs-4"
+                    <label for="family-password" class="form-label fs-4"
                       >Password</label
                     >
                     <input
                       type="password"
                       class="form-control"
-                      id="password"
-                      name="password"
+                      id="family-password"
+                      name="family-password"
                       required
                     />
                   </div>
-                  <button type="submit" class="btn btn-primary">Log In</button>
+                  <button
+                    type="submit"
+                    id="family-sign-up-submit"
+                    class="btn btn-primary"
+                  >
+                    Sign Up
+                  </button>
                 </form>
               </div>
               <div class="modal-footer d-flex justify-content-start pt-0">
