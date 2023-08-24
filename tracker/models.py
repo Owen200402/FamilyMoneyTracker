@@ -58,6 +58,9 @@ class Member(models.Model):
     class Meta:
         ordering = ['user__first_name', 'user__last_name']
 
+class MemberImage(models.Model):
+    member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name='images')
+    image = models.ImageField(upload_to='tracker/images')
 
 class Earning(models.Model):
     title = models.CharField(max_length=40)
