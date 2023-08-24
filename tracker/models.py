@@ -4,6 +4,8 @@ from django.db import models
 from django.utils import timezone
 import uuid
 
+from tracker.validators import validate_file_size
+
 
 class Family(models.Model):
     id = models.UUIDField(
@@ -60,7 +62,7 @@ class Member(models.Model):
 
 class MemberImage(models.Model):
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name='images')
-    image = models.ImageField(upload_to='tracker/images')
+    image = models.ImageField(upload_to='tracker/images', validators=[validate_file_size])
 
 class Earning(models.Model):
     title = models.CharField(max_length=40)

@@ -87,7 +87,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const responseData = await response.json();
       user_validation_success.innerHTML = "";
       user_validation_failed.innerHTML = "";
-      messages = Object.values(responseData).flat();
+      const messages = Object.values(responseData).flat();
 
       messages.forEach((message) => {
         const messageElement = document.createElement("div");
@@ -123,7 +123,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const responseData = await response.json();
       family_validation_success.innerHTML = "";
       family_validation_failed.innerHTML = "";
-      messages = Object.values(responseData).flat();
+      const messages = Object.values(responseData).flat();
 
       messages.forEach((message) => {
         const messageElement = document.createElement("div");
@@ -140,7 +140,7 @@ document.addEventListener("DOMContentLoaded", function () {
         "Succcessful! Please Notes down your family id for future reference:";
       family_validation_success.appendChild(messageElement);
 
-      messages = Object.values(responseData).flat();
+      const messages = Object.values(responseData).flat();
 
       const messageElementId = document.createElement("div");
       messageElementId.textContent = responseData.id;
@@ -167,7 +167,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (statusCode >= 400 && statusCode <= 599) {
       user_login_failed.innerHTML = "";
       let messageElement = document.createElement("div");
-      messageElement.textContent = "Username or password incorrect.";
+      messageElement.textContent = "Your username or password is incorrect.";
       user_login_failed.appendChild(messageElement);
     } else {
       user_login_failed.innerHTML = "";
@@ -218,8 +218,6 @@ document.addEventListener("DOMContentLoaded", function () {
   async function linkFamily() {
     family_linking_form.addEventListener("submit", async function (event) {
       event.preventDefault();
-      const form = event.target;
-      const formData = new FormData(form);
 
       const family_id = document.querySelector("#family-id").value;
       let response = await fetch(`../tracker/families/${family_id}/members/`, {

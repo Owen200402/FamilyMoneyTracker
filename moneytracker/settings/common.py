@@ -24,10 +24,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
     'djoser',
     'silk',
     'django_filters',
-    'corsheaders',
     'rest_framework',
     'debug_toolbar',
     'tracker',
@@ -104,6 +104,11 @@ USE_TZ = True
 INTERNAL_IPS = [
     '127.0.0.1',
     'localhost',
+]
+
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:8001',
+    'http://127.0.0.1:8001',
 ]
 
 # Default primary key field type

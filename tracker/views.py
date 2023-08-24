@@ -51,7 +51,7 @@ class MemberViewSet(ModelViewSet):
     serializer_class = MemberSerializer
 
     def get_queryset(self):
-        return Member.objects.select_related('user').filter(family_id=self.kwargs['family_pk'])
+        return Member.objects.select_related('user').prefetch_related('images').filter(family_id=self.kwargs['family_pk'])
 
     def get_serializer_class(self):
         if self.action == 'unlink_member':

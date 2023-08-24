@@ -48,14 +48,25 @@ class MemberInfoSerializer(serializers.ModelSerializer):
         return member.user.last_name
 
 
+class MemberImageSerializer(serializers.ModelSerializer):
+    def create(self, validated_data):
+        member_id = self.context['member_id']
+        return MemberImage.objects.create(member_id=member_id, **validated_data)
+
+    class Meta:
+        model = MemberImage
+        fields = ['id', 'image']
+
+
 class MemberSerializer(serializers.ModelSerializer):
+    images = MemberImageSerializer(many=True, read_only=True)
     member_id = serializers.IntegerField(source='id', read_only=True)
     first_name = serializers.SerializerMethodField()
     last_name = serializers.SerializerMethodField()
 
     class Meta:
         model = Member
-        fields = ['member_id', 'first_name', 'last_name', 'generation']
+        fields = ['member_id', 'first_name', 'last_name', 'generation', 'images']
 
     def first_name(self, member):
         return member.user.first_name
@@ -275,13 +286,3 @@ class FamilyRecordsSerializer(serializers.ModelSerializer):
         if total_expense is None:
             total_expense = 0
         return total_earning - total_expense
-
-
-class MemberImageSerializer(serializers.ModelSerializer):
-    def create(self, validated_data):
-        member_id = self.context['member_id']
-        return MemberImage.objects.create(member_id=member_id, **validated_data)
-
-    class Meta:
-        model = MemberImage
-        fields = ['id', 'image']
