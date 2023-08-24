@@ -40,6 +40,16 @@ class FamilyAdmin(admin.ModelAdmin):
             return 'Large'
 
 
+class MemberImageInline(admin.TabularInline):
+    model = models.MemberImage
+    readonly_fields = ['thumbnail']
+
+    def thumbnail(self, instance):
+        if instance.image.name != '':
+            return format_html(f'<img src="{instance.image.url}" class="thumbnail" />')
+        return ''
+
+
 @admin.register(models.Member)
 class MemberAdmin(admin.ModelAdmin):
     autocomplete_fields = ['family', 'user']
@@ -49,6 +59,7 @@ class MemberAdmin(admin.ModelAdmin):
     list_select_related = ['user']
     search_fields = ['user__first_name', 'user__last_name']
     list_per_page = 8
+    inlines = [MemberImageInline]
 
     @admin.display(ordering='earnings_count')
     def earnings_count(self, member):
@@ -102,6 +113,12 @@ class MemberAdmin(admin.ModelAdmin):
         )
 
         return queryset
+
+    class Media:
+        css = {
+            'all': ['tracker/styles.css']
+        }
+
 
 @admin.register(models.Earning)
 class EarningAdmin(admin.ModelAdmin):
