@@ -18,7 +18,4 @@ def create_member_for_new_user(sender, **kwargs):
         from_email = 'zcc2280411284@gmail.com'
         recipient_list = [email]
 
-        try:
-            send_mail(subject, message, from_email, recipient_list)
-        except BadHeaderError:
-            pass
+        send_mail(subject, message, from_email, recipient_list)
