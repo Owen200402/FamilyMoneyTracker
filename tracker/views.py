@@ -19,7 +19,6 @@ class FamilyViewSet(CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, Gene
     serializer_class = CreateFamilySerializer
     queryset = Family.objects.all()
     lookup_url_kwarg = 'pk'
-    permission_classes = [IsAuthenticated]
 
     def get_serializer_class(self):
         if self.request.method == 'POST' or self.request.method == 'GET':
@@ -50,7 +49,6 @@ class MemberInfoViewSet(CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, 
 class MemberViewSet(ModelViewSet):
     http_method_names = ['get', 'put', 'post']
     serializer_class = MemberSerializer
-    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         return Member.objects.select_related('user').filter(family_id=self.kwargs['family_pk'])

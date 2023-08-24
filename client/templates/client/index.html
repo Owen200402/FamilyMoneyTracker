@@ -90,6 +90,11 @@
                 >
                   Log In
                 </button>
+                <div
+                  id="user-login-failed"
+                  class="mt-2"
+                  style="color: red"
+                ></div>
               </form>
             </div>
             <div class="modal-footer d-flex justify-content-start pt-0">
@@ -199,12 +204,21 @@
                 >
                   Sign Up
                 </button>
-                <div id="user-validation">hey</div>
+                <div
+                  id="user-validation-failed"
+                  class="mt-2"
+                  style="color: red"
+                ></div>
+                <div
+                  id="user-validation-success"
+                  class="mt-2"
+                  style="color: rgb(14, 196, 14)"
+                ></div>
               </form>
             </div>
             <div class="modal-footer d-flex justify-content-start pt-0">
               <h6 class="mt-3">
-                Don't have a family account? Sign it up with the first link!
+                Don't have a family id? Sign it up with the first link!
                 Otherwise proceed to log in.
               </h6>
               <div>
@@ -217,6 +231,8 @@
           </div>
         </div>
       </div>
+
+      <!-- Family Sign Up -->
       <div class="mb-3">
         <button
           class="btn btn-lg btn-outline-secondary mb-3 btn-family-signup"
@@ -247,7 +263,7 @@
                       type="text"
                       class="form-control"
                       id="family-name"
-                      name="family-name"
+                      name="name"
                       required
                     />
                   </div>
@@ -259,7 +275,7 @@
                       type="password"
                       class="form-control"
                       id="family-password"
-                      name="family-password"
+                      name="password"
                       required
                     />
                   </div>
@@ -270,6 +286,16 @@
                   >
                     Sign Up
                   </button>
+                  <div
+                    id="family-validation-failed"
+                    class="mt-2"
+                    style="color: red"
+                  ></div>
+                  <div
+                    id="family-validation-success"
+                    class="mt-2"
+                    style="color: rgb(14, 196, 14)"
+                  ></div>
                 </form>
               </div>
               <div class="modal-footer d-flex justify-content-start pt-0">
@@ -290,8 +316,67 @@
           </div>
         </div>
       </div>
-    </div>
 
+      <!-- Family Linking -->
+      <div class="modal fade" id="family-linking">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title fs-1">Family Sign Up</h4>
+              <button
+                class="btn-close family-linking-close"
+                data-bs-dismiss="modal"
+                data-bs-target="#family-signup"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <form autocomplete="off" id="form-linking-family">
+                <div class="mb-3">
+                  <h5 style="color: red">
+                    System detects that this user does not have an associated
+                    family. Link it with family by entering your family id.
+                  </h5>
+                  <label for="family-id" class="form-label fs-4"
+                    >Family ID</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="family-id"
+                    name="family_id"
+                    required
+                  />
+                </div>
+                <button
+                  type="submit"
+                  class="btn btn-primary family-linking-submit"
+                >
+                  Link
+                </button>
+                <div
+                  id="family-linking-failed"
+                  class="mt-2"
+                  style="color: red"
+                ></div>
+              </form>
+            </div>
+            <div class="modal-footer d-flex justify-content-start pt-0">
+              <h6 class="mt-3">
+                Don't have a user account? Sign it up with the first link!
+                Otherwise proceed to log in.
+              </h6>
+              <div>
+                <button class="btn btn-secondary btn-user-register">
+                  User Sign Up
+                </button>
+                <button class="btn btn-secondary btn-user-login">Log In</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <script src="{% static 'client/script.js' %}" defer></script>
   </body>
 </html>

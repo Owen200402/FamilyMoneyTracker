@@ -32,11 +32,19 @@ class UpdateFamilySerializer(serializers.ModelSerializer):
 
 class MemberInfoSerializer(serializers.ModelSerializer):
     member_id = serializers.IntegerField(source='id')
+    first_name = serializers.SerializerMethodField()
+    last_name = serializers.SerializerMethodField()
 
     class Meta:
         model = Member
-        fields = ['member_id', 'generation', 'family_id']
+        fields = ['member_id', 'generation', 'family_id', 'first_name', 'last_name']
         read_only_fields = ['member_id', 'family_id']
+
+    def first_name(self, member):
+        return member.user.first_name
+
+    def last_name(self, member):
+        return member.user.last_name
 
 
 class MemberSerializer(serializers.ModelSerializer):

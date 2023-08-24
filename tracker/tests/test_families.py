@@ -28,10 +28,10 @@ def family2():
 
 @pytest.mark.django_db
 class TestViewFamilies:
-    def test_if_user_unauthorized_return_401(self, api_client):
+    def test_if_user_unauthorized_return_405(self, api_client):
         family_response = api_client.get('/tracker/families/')
 
-        assert family_response.status_code == status.HTTP_401_UNAUTHORIZED
+        assert family_response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
 
     def test_if_method_not_allowed_returns_405(self, api_client, authenticate):
         authenticate()
@@ -43,7 +43,7 @@ class TestViewFamilies:
     def test_if_annonymous_user_returns_405(self, api_client):
         response = api_client.get('/tracker/families/')
 
-        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+        assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
 
     def test_if_no_family_id_accessing_other_family_profile(self, api_client, user, family):
         api_client.force_authenticate(user=user)
@@ -134,7 +134,7 @@ class TestMemberLinkage:
 
 @pytest.mark.django_db
 class TestMemberAccess:
-    def test_authenticated_member_accessing_member_returns_200(self, api_client, user, family):
+    def test_authenticated_member_accessing_member_with_family_id_returns_200(self, api_client, user, family):
         api_client.force_authenticate(user=user)
 
         api_client.post(
@@ -144,7 +144,7 @@ class TestMemberAccess:
 
         assert response.status_code == status.HTTP_200_OK
 
-    def test_unauthenticated_member_accessing_member_returns_401(self, api_client, user, family):
+    def test_unauthenticated_member_accessing_member_with_family_id_returns_200(self, api_client, user, family):
         api_client.force_authenticate(user=user)
 
         api_client.post(
@@ -154,7 +154,7 @@ class TestMemberAccess:
         response = api_client.get(
             f'/tracker/families/{family.id}/members/{user.member.id}/')
 
-        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+        assert response.status_code == status.HTTP_200_OK
 
     def test_member_registered_but_in_other_family_accessing_member_returns_200(self, api_client, user, user2, family):
         api_client.force_authenticate(user=user)
@@ -335,9 +335,9 @@ class TestIndividualExpenses:
         user.member.refresh_from_db()
         response = api_client.post(
             f'/tracker/families/{family.id}/members/{user.member.id}/expenses/', {"title": "a",
-                                                                                 "paid_to": "b",
-                                                                                 "paid_date": "2023-08-14",
-                                                                                 "monetary_value": 1})
+                                                                                  "paid_to": "b",
+                                                                                  "paid_date": "2023-08-14",
+                                                                                  "monetary_value": 1})
 
         assert response.status_code == status.HTTP_201_CREATED
 
@@ -350,9 +350,9 @@ class TestIndividualExpenses:
         user.member.refresh_from_db()
         response = api_client.patch(
             f'/tracker/families/{family.id}/members/{user.member.id}/expenses/{expense.id}/', {"title": "c",
-                                                                                              "paid_to": "b",
-                                                                                              "paid_date": "2023-08-14",
-                                                                                              "monetary_value": 1})
+                                                                                               "paid_to": "b",
+                                                                                               "paid_date": "2023-08-14",
+                                                                                               "monetary_value": 1})
         assert response.status_code == status.HTTP_200_OK
 
     def test_authenticated_member_deleting_member_expenses_returns_204(self, api_client, user, family):
@@ -382,9 +382,9 @@ class TestIndividualExpenses:
         user.member.refresh_from_db()
         response = api_client.post(
             f'/tracker/families/{family.id}/members/{user.member.id}/expenses/', {"title": "a",
-                                                                                 "paid_to": "b",
-                                                                                 "paid_date": "2023-08-14",
-                                                                                 "monetary_value": 1})
+                                                                                  "paid_to": "b",
+                                                                                  "paid_date": "2023-08-14",
+                                                                                  "monetary_value": 1})
 
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
@@ -396,9 +396,9 @@ class TestIndividualExpenses:
         user.member.refresh_from_db()
         response = api_client.patch(
             f'/tracker/families/{family.id}/members/{user.member.id}/expenses/{expense.id}/', {"title": "c",
-                                                                                              "paid_to": "b",
-                                                                                              "paid_date": "2023-08-14",
-                                                                                              "monetary_value": 1})
+                                                                                               "paid_to": "b",
+                                                                                               "paid_date": "2023-08-14",
+                                                                                               "monetary_value": 1})
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
     def test_unauthenticated_member_deleting_member_expenses_returns_401(self, api_client, user, family):
@@ -435,9 +435,9 @@ class TestIndividualExpenses:
         api_client.force_authenticate(user=user2)
         response = api_client.post(
             f'/tracker/families/{family.id}/members/{user.member.id}/expenses/', {"title": "a",
-                                                                                 "paid_to": "b",
-                                                                                 "paid_date": "2023-08-14",
-                                                                                 "monetary_value": 1})
+                                                                                  "paid_to": "b",
+                                                                                  "paid_date": "2023-08-14",
+                                                                                  "monetary_value": 1})
 
         assert response.status_code == status.HTTP_403_FORBIDDEN
 
@@ -452,9 +452,9 @@ class TestIndividualExpenses:
         api_client.force_authenticate(user=user2)
         response = api_client.patch(
             f'/tracker/families/{family.id}/members/{user.member.id}/expenses/{expense.id}/', {"title": "c",
-                                                                                              "paid_to": "b",
-                                                                                              "paid_date": "2023-08-14",
-                                                                                              "monetary_value": 1})
+                                                                                               "paid_to": "b",
+                                                                                               "paid_date": "2023-08-14",
+                                                                                               "monetary_value": 1})
         assert response.status_code == status.HTTP_200_OK
 
 
