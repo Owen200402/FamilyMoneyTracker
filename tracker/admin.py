@@ -103,7 +103,7 @@ class MemberAdmin(admin.ModelAdmin):
         expense_subquery = Expense.objects.filter(member=OuterRef('id')).values('member_id').annotate(
             total_expenses=Sum('monetary_value')
         ).values('total_expenses')
-
+ 
         queryset = super().get_queryset(request).annotate(
             earnings_count=Count('earning', distinct=True),
             expenses_count=Count('expense', distinct=True),

@@ -25,6 +25,7 @@ dj-database-url = "*"
 django-redis = "*"
 pytz = "*"
 django-silk = "*"
+python-decouple = "*"
 
 [dev-packages]
 pytest = "*"

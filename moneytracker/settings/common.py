@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 import os
+from decouple import config
 from pathlib import Path
 from datetime import timedelta
 
@@ -138,7 +139,6 @@ DJOSER = {
     }
 }
 
-DEFAULT_FROM_EMAIL = 'zcc2280411284@gmail.com'
 
 ADMINS = [
     ('Owen', 'zcc2280411284@gmail.com')
@@ -155,10 +155,7 @@ CACHES = {
     }
 }
 
-EMAIL_HOST = 'localhost'
-EMAIL_HOST_USER = ''
-EMAIL_HOST_PASSWORD = ''
-EMAIL_PORT = 2525
+DEFAULT_FROM_EMAIL = 'zcc2280411284@gmail.com'
 
 AUTH_USER_MODEL = 'core.User'
 
