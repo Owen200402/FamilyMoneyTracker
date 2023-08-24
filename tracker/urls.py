@@ -24,5 +24,7 @@ member_router.register(
     'expenses', views.MemberExpenseViewSet, basename='expense')
 member_router.register(
     'records', views.MemberRecordsViewSet, basename='record')
+member_router.register('images', views.MemberImageViewSet,
+                       basename='member-images')
 
 urlpatterns = router.urls + family_router.urls + member_router.urls

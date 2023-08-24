@@ -9,9 +9,9 @@ from rest_framework.viewsets import ModelViewSet, GenericViewSet, ReadOnlyModelV
 
 from tracker.filters import FamilyEarningFilter, FamilyExpenseFilter, MemberEarningFilter, MemberExpenseFilter
 
-from .models import Family, Member, Earning, Expense
+from .models import Family, Member, Earning, Expense, MemberImage
 from .permission import LinkMemberPermission, ViewItemInOwnFamilyOnly
-from .serializers import AddMemberToFamilySerializer, CreateFamilySerializer, EmptySerializer, FamilyEarningSerializer, FamilyExpenseSerializer, FamilyRecordsSerializer, MemberEarningSerializer, MemberEarningUpdateSerializer, MemberExpenseSerializer, MemberExpenseUpdateSerializer, MemberInfoSerializer, MemberRecordsSerializer, MemberSerializer, UpdateFamilySerializer, UnlinkMemberSerializer
+from .serializers import AddMemberToFamilySerializer, CreateFamilySerializer, EmptySerializer, FamilyEarningSerializer, FamilyExpenseSerializer, FamilyRecordsSerializer, MemberEarningSerializer, MemberEarningUpdateSerializer, MemberExpenseSerializer, MemberExpenseUpdateSerializer, MemberImageSerializer, MemberInfoSerializer, MemberRecordsSerializer, MemberSerializer, UpdateFamilySerializer, UnlinkMemberSerializer
 
 
 class FamilyViewSet(CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
@@ -226,3 +226,12 @@ class FamilyRecordsViewset(ReadOnlyModelViewSet):
 
     def get_serializer_context(self):
         return {'family_id': self.kwargs['family_pk'], 'request': self.request}
+
+class MemberImageViewSet(ModelViewSet):
+    serializer_class = MemberImageSerializer
+
+    def get_queryset(self):
+        return MemberImage.objects.filter(member_id=self.kwargs['member_pk'])
+    
+    def get_serializer_context(self):
+        return {'member_id': self.kwargs['member_pk']}

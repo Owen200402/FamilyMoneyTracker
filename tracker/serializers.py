@@ -1,6 +1,6 @@
 from django.db import transaction
 from rest_framework import serializers
-from .models import Family, Member, Earning, Expense
+from .models import Family, Member, Earning, Expense, MemberImage
 from django.db.models import Sum
 
 
@@ -37,7 +37,8 @@ class MemberInfoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Member
-        fields = ['member_id', 'generation', 'family_id', 'first_name', 'last_name']
+        fields = ['member_id', 'generation',
+                  'family_id', 'first_name', 'last_name']
         read_only_fields = ['member_id', 'family_id']
 
     def first_name(self, member):
@@ -274,3 +275,13 @@ class FamilyRecordsSerializer(serializers.ModelSerializer):
         if total_expense is None:
             total_expense = 0
         return total_earning - total_expense
+
+
+class MemberImageSerializer(serializers.ModelSerializer):
+    def create(self, validated_data):
+        member_id = self.context['member_id']
+        return MemberImage.objects.create(member_id=member_id, **validated_data)
+
+    class Meta:
+        model = MemberImage
+        fields = ['id', 'image']
