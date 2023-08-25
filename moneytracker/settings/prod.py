@@ -12,7 +12,10 @@ DATABASES = {
     'default': dj_database_url.config()
 }
 
-EMAIL_HOST = os.environ['MAILGUN_SMTP_SERVER']
-EMAIL_HOST_USER = os.environ['MAILGUN_SMTP_LOGIN']
-EMAIL_HOST_PASSWORD = os.environ['MAILGUN_SMTP_PASSWORD']
-EMAIL_PORT = os.environ['MAILGUN_SMTP_PORT']
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'zcc2280411284@gmail.com'
+EMAIL_HOST_PASSWORD = 'hpeseooouwprbged'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
