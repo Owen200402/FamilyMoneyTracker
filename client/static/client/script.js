@@ -98,7 +98,8 @@ document.addEventListener("DOMContentLoaded", function () {
       user_validation_failed.innerHTML = "";
       user_validation_success.innerHTML = "";
       const messageElement = document.createElement("div");
-      messageElement.textContent = "Successfully Created User!";
+      messageElement.textContent =
+        "Successfully Created User! An email has sent to your mail inbox.";
       user_validation_success.appendChild(messageElement);
     }
   }
