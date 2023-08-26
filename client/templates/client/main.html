@@ -5,6 +5,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <title>Client</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
@@ -112,11 +113,13 @@
           </div>
         </div>
         <!-- Main Content -->
-        <div>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis ut
-          quisquam, quia laboriosam, quis beatae deleniti architecto molestiae
-          dolorum neque commodi a voluptate nisi eveniet ratione facilis, animi
-          rerum culpa?
+        <div id="chart-container" style="width: 40%; height: 400px">
+          <h1>Earnings</h1>
+          <canvas id="chart-income"></canvas>
+        </div>
+        <div id="chart-container" style="width: 40%; height: 400px">
+          <h1>Expenses</h1>
+          <canvas id="chart-expenses"></canvas>
         </div>
       </div>
     </div>

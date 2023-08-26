@@ -64,8 +64,6 @@ document.addEventListener("DOMContentLoaded", function () {
   family_signup_form.addEventListener("submit", familyCreationPOST);
   user_login_form.addEventListener("submit", userLoginPOST);
 
-  setFamilyName(localStorage.getItem("family_id"));
-
   // Functions:
   // User Creation POST Request
   async function userCreationPOST(event) {
@@ -175,6 +173,7 @@ document.addEventListener("DOMContentLoaded", function () {
       let responseData = await response.json();
       localStorage.setItem("access_token", responseData.access);
 
+      // Fetch access_token member_id, name and family_id
       let IDResponse = await fetch("../tracker/my-profile/me/", {
         method: "GET",
         headers: {
@@ -183,7 +182,6 @@ document.addEventListener("DOMContentLoaded", function () {
       });
 
       let IDResponseData = await IDResponse.json();
-
       let family_id = IDResponseData.family_id;
       localStorage.setItem(
         "name",
@@ -200,6 +198,8 @@ document.addEventListener("DOMContentLoaded", function () {
         localStorage.setItem("family_id", family_id);
         window.location.assign("../client/main");
       }
+
+      setFamilyName(localStorage.getItem("family_id"));
     }
   }
 
@@ -268,6 +268,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // --------------------------------- Main Page ---------------------------------
+
 // Authorization Check for Main Page
 document.addEventListener("DOMContentLoaded", function () {
   const main_page = document.querySelector("#authenticated");
@@ -283,4 +284,162 @@ document.addEventListener("DOMContentLoaded", function () {
   } else {
     main_page.style.display = "block";
   }
+
+  // Graph.js
+
+  // Constants:
+  const dataFamilyIncomeByProduct = [];
+  const dataFamilyExpensesByProduct = [];
+
+  chartIncome();
+  chartExpenses();
+
+  async function chartIncome() {
+    await getFamilyIncomeByProduct();
+    const ctx = document.getElementById("chart-income");
+    const xlabels = [];
+    const chart = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: dataFamilyIncomeByProduct.map((item) => item.label),
+        datasets: [
+          {
+            label: "Family Income By Product",
+            data: dataFamilyIncomeByProduct.map((item) => item.value),
+            backgroundColor: "rgba(255, 99, 132, 0.2)",
+            borderColor: "rgba(255, 99, 132, 1)",
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        scales: {
+          y: {
+            ticks: {
+              // Include a dollar sign in the ticks
+              callback: function (value, index, ticks) {
+                return "$" + value;
+              },
+            },
+          },
+        },
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: function (context) {
+                var label = context.dataset.label || "";
+
+                if (label) {
+                  label += ": ";
+                }
+                if (context.parsed.y !== null) {
+                  label += "$" + context.parsed.y;
+                }
+
+                return label;
+              },
+            },
+          },
+        },
+      },
+    });
+  }
+
+  async function chartExpenses() {
+    await getFamilyExpensesByProduct();
+    const ctx = document.getElementById("chart-expenses");
+    const xlabels = [];
+    const chart = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: dataFamilyExpensesByProduct.map((item) => item.label),
+        datasets: [
+          {
+            label: "Family Expenses By Product",
+            data: dataFamilyExpensesByProduct.map((item) => item.value),
+            backgroundColor: "rgba(255, 99, 132, 0.2)",
+            borderColor: "rgba(255, 99, 132, 1)",
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        scales: {
+          y: {
+            ticks: {
+              // Include a dollar sign in the ticks
+              callback: function (value, index, ticks) {
+                return "$" + value;
+              },
+            },
+          },
+        },
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: function (context) {
+                var label = context.dataset.label || "";
+
+                if (label) {
+                  label += ": ";
+                }
+                if (context.parsed.y !== null) {
+                  label += "$" + context.parsed.y;
+                }
+
+                return label;
+              },
+            },
+          },
+        },
+      },
+    });
+  }
+
+  async function getFamilyIncomeByProduct() {
+    let response = await fetch(
+      `../../tracker/families/${localStorage.getItem("family_id")}/earnings/`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `JWT ${localStorage.getItem("access_token")}`,
+        },
+      }
+    );
+    const responseJson = await response.json();
+    const responseData = responseJson.results;
+
+    for (const item of responseData) {
+      let result = { label: item.received_from, value: item.monetary_value };
+      dataFamilyIncomeByProduct.push(result);
+    }
+  }
+
+  async function getFamilyExpensesByProduct() {
+    let response = await fetch(
+      `../../tracker/families/${localStorage.getItem("family_id")}/expenses/`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `JWT ${localStorage.getItem("access_token")}`,
+        },
+      }
+    );
+    const responseJson = await response.json();
+    const responseData = responseJson.results;
+
+    for (const item of responseData) {
+      let result = { label: item.paid_to, value: item.monetary_value };
+      dataFamilyExpensesByProduct.push(result);
+    }
+  }
+
+  // Notes:
+  // 1. Need to use parseFloat for converting a string got
+  // from the backend dictionary for graph to be based on
+  // 2. async function must have await function inside
+  // 3. remove [] on backgroundColor to apply color to everything
+  // 4. type from bar to line; add fill property to false in datasets
+  // 5. Usually we use a await getData() inside async chartIt()
+  // 6. Vertical values are called ticks: customize it in options down below
 });

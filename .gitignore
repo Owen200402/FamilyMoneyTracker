@@ -1,2 +1,4 @@
 /media/
 /static/
+/moneytracker/settings/dev.py
+/moneytracker/settings/prod.py

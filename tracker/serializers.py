@@ -66,7 +66,8 @@ class MemberSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Member
-        fields = ['member_id', 'first_name', 'last_name', 'generation', 'images']
+        fields = ['member_id', 'first_name',
+                  'last_name', 'generation', 'images']
 
     def first_name(self, member):
         return member.user.first_name
