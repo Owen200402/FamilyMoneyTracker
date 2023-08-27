@@ -118,6 +118,7 @@
             <div class="mb-3 me-2">
               <label for="yearSelect" class="form-label">Select Year</label>
               <select class="form-select" id="yearSelect">
+                <option value="">All</option>
                 <option value="2022">2022</option>
                 <option value="2023">2023</option>
                 <option value="2024">2024</option>
@@ -126,6 +127,7 @@
             <div class="mb-3 me-2">
               <label for="monthSelect" class="form-label">Select Month</label>
               <select class="form-select" id="monthSelect">
+                <option value="">All</option>
                 <option value="1">January</option>
                 <option value="2">February</option>
                 <option value="3">March</option>
@@ -149,16 +151,42 @@
           </form>
           <div
             id="chart-container"
-            style="width: 45%; height: 400px; margin-right: 1rem"
+            style="width: 45%; height: 35vh; margin-right: 1rem"
           >
-            <h1>Earnings</h1>
+            <h1>Earnings By Categories</h1>
             <canvas id="chart-income"></canvas>
             <h4 class="text-center" id="total-earnings"></h4>
           </div>
-          <div id="chart-container" style="width: 45%; height: 400px">
-            <h1>Expenses</h1>
+          <div id="chart-container" style="width: 45%; height: 35vh">
+            <h1>Expenses By Categories</h1>
             <canvas id="chart-expenses"></canvas>
             <h4 class="text-center" id="total-expenses"></h4>
+          </div>
+          <div
+            id="chart-container"
+            style="
+              width: 45%;
+              height: 35vh;
+              margin-right: 1rem;
+              padding-bottom: 1rem;
+            "
+          >
+            <h1>Earnings By Persons</h1>
+            <canvas id="chart-income-per-person"></canvas>
+            <h4 class="text-center" id="total-earnings-by-person"></h4>
+          </div>
+          <div
+            id="chart-container"
+            style="
+              width: 45%;
+              height: 35vh;
+              margin-right: 1rem;
+              padding-bottom: 1rem;
+            "
+          >
+            <h1>Expenses By Persons</h1>
+            <canvas id="chart-expenses-per-person"></canvas>
+            <h4 class="text-center" id="total-expenses-by-person"></h4>
           </div>
         </div>
       </div>

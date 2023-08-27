@@ -285,16 +285,23 @@ document.addEventListener("DOMContentLoaded", function () {
     main_page.style.display = "block";
   }
 
+  chartIncome();
+  chartExpenses();
+  chartIncomePerPerson();
+  chartExpensesPerPerson();
+
+  // Functions:
   // Graph.js
 
-  // Constants:
+  // Variables:
   const dataFamilyIncomeByProduct = [];
   let dataFamilyIncomeByProductValue = 0;
   const dataFamilyExpensesByProduct = [];
   let dataFamilyExpensesByProductValue = 0;
 
-  chartIncome();
-  chartExpenses();
+  let dataFamilyIncomeByPerson = [];
+  let dataFamilyExpensesByPerson = [];
+  let dataFamilyMembersByPerson = [];
 
   async function chartIncome() {
     await getFamilyIncomeByProduct();
@@ -306,7 +313,7 @@ document.addEventListener("DOMContentLoaded", function () {
         labels: dataFamilyIncomeByProduct.map((item) => item.label),
         datasets: [
           {
-            label: "Family Income By Product",
+            label: "Family Income",
             data: dataFamilyIncomeByProduct.map((item) => item.value),
             backgroundColor: "rgba(0, 244, 150, 0.5)",
             borderColor: "rgba(0, 244, 150, 1.3)",
@@ -360,7 +367,7 @@ document.addEventListener("DOMContentLoaded", function () {
         labels: dataFamilyExpensesByProduct.map((item) => item.label),
         datasets: [
           {
-            label: "Family Expenses By Product",
+            label: "Family Expenses",
             data: dataFamilyExpensesByProduct.map((item) => item.value),
             backgroundColor: "rgba(255, 99, 132, 0.2)",
             borderColor: "rgba(255, 99, 132, 1)",
@@ -404,6 +411,92 @@ document.addEventListener("DOMContentLoaded", function () {
     ).textContent = `Total Expenses: $${dataFamilyExpensesByProductValue}`;
   }
 
+  async function chartIncomePerPerson() {
+    await getFamilyIncomeByPerson();
+    const ctx = document.getElementById("chart-income-per-person");
+    const chart = new Chart(ctx, {
+      type: "doughnut",
+      data: {
+        labels: dataFamilyMembersByPerson,
+        datasets: [
+          {
+            label: "Family Income By Person",
+            data: dataFamilyIncomeByPerson,
+            backgroundColor: [
+              "rgb(255, 99, 132)",
+              "rgb(54, 162, 235)",
+              "rgb(255, 205, 86)",
+            ],
+            hoverOffset: 4,
+          },
+        ],
+      },
+      options: {
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: function (context) {
+                var label = context.dataset.label || "";
+
+                if (label) {
+                  label += ": ";
+                }
+                if (context.parsed.y !== null) {
+                  label += "$" + context.parsed.y;
+                }
+
+                return label;
+              },
+            },
+          },
+        },
+      },
+    });
+  }
+
+  async function chartExpensesPerPerson() {
+    await getFamilyExpensesByPerson();
+    const ctx = document.getElementById("chart-expenses-per-person");
+    const chart = new Chart(ctx, {
+      type: "doughnut",
+      data: {
+        labels: dataFamilyMembersByPerson,
+        datasets: [
+          {
+            label: "Family Expenses By Person",
+            data: dataFamilyExpensesByPerson,
+            backgroundColor: [
+              "rgb(255, 99, 132)",
+              "rgb(54, 162, 235)",
+              "rgb(255, 205, 86)",
+            ],
+            hoverOffset: 4,
+          },
+        ],
+      },
+      options: {
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: function (context) {
+                var label = context.dataset.label || "";
+
+                if (label) {
+                  label += ": ";
+                }
+                if (context.parsed.y !== null) {
+                  label += "$" + context.parsed.y;
+                }
+
+                return label;
+              },
+            },
+          },
+        },
+      },
+    });
+  }
+
   async function getFamilyIncomeByProduct() {
     let response = await fetch(
       `../../tracker/families/${localStorage.getItem("family_id")}/earnings/`,
@@ -441,6 +534,61 @@ document.addEventListener("DOMContentLoaded", function () {
       let result = { label: item.paid_to, value: item.monetary_value };
       dataFamilyExpensesByProductValue += item.monetary_value;
       dataFamilyExpensesByProduct.push(result);
+    }
+  }
+
+  async function getFamilyIncomeByPerson() {
+    let response = await fetch(
+      `../../tracker/families/${localStorage.getItem("family_id")}/earnings/`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `JWT ${localStorage.getItem("access_token")}`,
+        },
+      }
+    );
+    const responseJson = await response.json();
+    const responseData = responseJson.results;
+    let dictionary = {};
+
+    for (const item of responseData) {
+      if (item.receiver in dictionary) {
+        dictionary[item.receiver] += item.monetary_value;
+      } else {
+        dictionary[item.receiver] = item.monetary_value;
+      }
+    }
+
+    for (const item in dictionary) {
+      dataFamilyMembersByPerson.push(item);
+      dataFamilyIncomeByPerson.push(dictionary[item]);
+    }
+  }
+
+  async function getFamilyExpensesByPerson() {
+    let response = await fetch(
+      `../../tracker/families/${localStorage.getItem("family_id")}/expenses/`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `JWT ${localStorage.getItem("access_token")}`,
+        },
+      }
+    );
+    const responseJson = await response.json();
+    const responseData = responseJson.results;
+    let dictionary = {};
+
+    for (const item of responseData) {
+      if (item.sender in dictionary) {
+        dictionary[item.sender] += item.monetary_value;
+      } else {
+        dictionary[item.sender] = item.monetary_value;
+      }
+    }
+
+    for (const item in dictionary) {
+      dataFamilyExpensesByPerson.push(dictionary[item]);
     }
   }
 
