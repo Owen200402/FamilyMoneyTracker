@@ -442,7 +442,7 @@ document.addEventListener("DOMContentLoaded", function () {
                   label += ": ";
                 }
                 if (context.parsed.y !== null) {
-                  label += "$" + context.parsed.y;
+                  label += "$" + context.parsed;
                 }
 
                 return label;
@@ -485,7 +485,7 @@ document.addEventListener("DOMContentLoaded", function () {
                   label += ": ";
                 }
                 if (context.parsed.y !== null) {
-                  label += "$" + context.parsed.y;
+                  label += "$" + context.parsed;
                 }
 
                 return label;
