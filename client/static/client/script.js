@@ -588,6 +588,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     for (const item in dictionary) {
+      if (dataFamilyMembersByPerson === null) {
+        dataFamilyMembersByPerson.push(item);
+      }
       dataFamilyExpensesByPerson.push(dictionary[item]);
     }
   }
