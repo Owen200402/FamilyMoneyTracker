@@ -29,5 +29,7 @@ class TestCreateMember:
         assert member_response.data == {
             'family_id': None,
             'generation': 'P',
-            'member_id': user.member.id
+            'member_id': user.member.id,
+            'first_name': user.first_name,
+            'last_name': user.last_name
         }

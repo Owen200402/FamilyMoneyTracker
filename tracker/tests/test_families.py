@@ -28,10 +28,10 @@ def family2():
 
 @pytest.mark.django_db
 class TestViewFamilies:
-    def test_if_user_unauthorized_return_405(self, api_client):
+    def test_if_user_unauthorized_return_401(self, api_client):
         family_response = api_client.get('/tracker/families/')
 
-        assert family_response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+        assert family_response.status_code == status.HTTP_401_UNAUTHORIZED
 
     def test_if_method_not_allowed_returns_405(self, api_client, authenticate):
         authenticate()
@@ -40,10 +40,10 @@ class TestViewFamilies:
 
         assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
 
-    def test_if_annonymous_user_returns_405(self, api_client):
+    def test_if_annonymous_user_returns_401(self, api_client):
         response = api_client.get('/tracker/families/')
 
-        assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
     def test_if_no_family_id_accessing_other_family_profile(self, api_client, user, family):
         api_client.force_authenticate(user=user)
