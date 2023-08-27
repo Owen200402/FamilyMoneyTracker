@@ -33,7 +33,7 @@
       src="https://kit.fontawesome.com/9f0dc4de76.js"
       crossorigin="anonymous"
     ></script>
-    <link rel="stylesheet" href="{% static 'client/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'client/styles.css' %}" />
   </head>
   <body>
     <div id="authenticated" class="container-fluid">
@@ -113,13 +113,53 @@
           </div>
         </div>
         <!-- Main Content -->
-        <div id="chart-container" style="width: 40%; height: 400px">
-          <h1>Earnings</h1>
-          <canvas id="chart-income"></canvas>
-        </div>
-        <div id="chart-container" style="width: 40%; height: 400px">
-          <h1>Expenses</h1>
-          <canvas id="chart-expenses"></canvas>
+        <div id="right-screen" class="col-md-9 col-lg-10 p-0">
+          <form class="filtering d-flex flex-row">
+            <div class="mb-3 me-2">
+              <label for="yearSelect" class="form-label">Select Year</label>
+              <select class="form-select" id="yearSelect">
+                <option value="2022">2022</option>
+                <option value="2023">2023</option>
+                <option value="2024">2024</option>
+              </select>
+            </div>
+            <div class="mb-3 me-2">
+              <label for="monthSelect" class="form-label">Select Month</label>
+              <select class="form-select" id="monthSelect">
+                <option value="1">January</option>
+                <option value="2">February</option>
+                <option value="3">March</option>
+                <option value="4">Apirl</option>
+                <option value="5">May</option>
+                <option value="6">June</option>
+                <option value="7">July</option>
+                <option value="8">August</option>
+                <option value="9">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+                <!-- Add other months here -->
+              </select>
+            </div>
+            <div>
+              <button type="submit" class="btn btn-primary submit-filter">
+                Filter
+              </button>
+            </div>
+          </form>
+          <div
+            id="chart-container"
+            style="width: 45%; height: 400px; margin-right: 1rem"
+          >
+            <h1>Earnings</h1>
+            <canvas id="chart-income"></canvas>
+            <h4 class="text-center" id="total-earnings"></h4>
+          </div>
+          <div id="chart-container" style="width: 45%; height: 400px">
+            <h1>Expenses</h1>
+            <canvas id="chart-expenses"></canvas>
+            <h4 class="text-center" id="total-expenses"></h4>
+          </div>
         </div>
       </div>
     </div>

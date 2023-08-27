@@ -65,7 +65,7 @@ class MemberImage(models.Model):
     image = models.ImageField(upload_to='tracker/images', validators=[validate_file_size])
 
 class Earning(models.Model):
-    title = models.CharField(max_length=40)
+    title = models.CharField(max_length=30)
     received_from = models.CharField(max_length=40)
     received_date = models.DateField(auto_now_add=False)
     monetary_value = models.DecimalField(
@@ -89,7 +89,7 @@ class Earning(models.Model):
 
 
 class Expense(models.Model):
-    title = models.CharField(max_length=40)
+    title = models.CharField(max_length=30)
     paid_to = models.CharField(max_length=40)
     paid_date = models.DateField(auto_now_add=False)
     monetary_value = models.DecimalField(

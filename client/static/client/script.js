@@ -289,7 +289,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Constants:
   const dataFamilyIncomeByProduct = [];
+  let dataFamilyIncomeByProductValue = 0;
   const dataFamilyExpensesByProduct = [];
+  let dataFamilyExpensesByProductValue = 0;
 
   chartIncome();
   chartExpenses();
@@ -306,8 +308,8 @@ document.addEventListener("DOMContentLoaded", function () {
           {
             label: "Family Income By Product",
             data: dataFamilyIncomeByProduct.map((item) => item.value),
-            backgroundColor: "rgba(255, 99, 132, 0.2)",
-            borderColor: "rgba(255, 99, 132, 1)",
+            backgroundColor: "rgba(0, 244, 150, 0.5)",
+            borderColor: "rgba(0, 244, 150, 1.3)",
             borderWidth: 1,
           },
         ],
@@ -343,6 +345,9 @@ document.addEventListener("DOMContentLoaded", function () {
         },
       },
     });
+    document.querySelector(
+      "#total-earnings"
+    ).textContent = `Total Earning: $${dataFamilyIncomeByProductValue}`;
   }
 
   async function chartExpenses() {
@@ -394,6 +399,9 @@ document.addEventListener("DOMContentLoaded", function () {
         },
       },
     });
+    document.querySelector(
+      "#total-expenses"
+    ).textContent = `Total Expenses: $${dataFamilyExpensesByProductValue}`;
   }
 
   async function getFamilyIncomeByProduct() {
@@ -411,6 +419,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     for (const item of responseData) {
       let result = { label: item.received_from, value: item.monetary_value };
+      dataFamilyIncomeByProductValue += item.monetary_value;
       dataFamilyIncomeByProduct.push(result);
     }
   }
@@ -430,6 +439,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     for (const item of responseData) {
       let result = { label: item.paid_to, value: item.monetary_value };
+      dataFamilyExpensesByProductValue += item.monetary_value;
       dataFamilyExpensesByProduct.push(result);
     }
   }

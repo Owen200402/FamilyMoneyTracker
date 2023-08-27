@@ -18,3 +18,21 @@ html {
 .nav-bottom a:hover {
   background-color: rgb(60, 60, 73);
 }
+
+#right-screen {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.filtering {
+  position: absolute;
+  top: 1%;
+  right: 5%;
+}
+
+.submit-filter {
+  margin-top: 2rem;
+}
