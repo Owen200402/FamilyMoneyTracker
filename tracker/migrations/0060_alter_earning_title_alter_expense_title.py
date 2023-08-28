@@ -10,14 +10,14 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterField(
-            model_name='earning',
-            name='title',
-            field=models.CharField(max_length=25),
-        ),
-        migrations.AlterField(
-            model_name='expense',
-            name='title',
-            field=models.CharField(max_length=25),
-        ),
+        # migrations.AlterField(
+        #     model_name='earning',
+        #     name='title',
+        #     field=models.CharField(max_length=25),
+        # ),
+        # migrations.AlterField(
+        #     model_name='expense',
+        #     name='title',
+        #     field=models.CharField(max_length=25),
+        # ),
     ]

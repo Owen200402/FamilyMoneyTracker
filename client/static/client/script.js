@@ -292,7 +292,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
   let dataFamilyIncomeByPerson = [];
   let dataFamilyExpensesByPerson = [];
-  let dataFamilyMembersByPerson = [];
+  let familyMembersForEarnings = [];
+  let familyMembersForExpenses = [];
 
   name_header.textContent = localStorage.getItem("name");
   family_header.textContent = `@${localStorage.getItem("family_name")}`;
@@ -328,7 +329,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     dataFamilyIncomeByPerson = [];
     dataFamilyExpensesByPerson = [];
-    dataFamilyMembersByPerson = [];
+    familyMembersForEarnings = [];
+    familyMembersForExpenses = [];
 
     chartIncome();
     chartExpenses();
@@ -453,7 +455,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const chart = new Chart(ctx, {
       type: "doughnut",
       data: {
-        labels: dataFamilyMembersByPerson,
+        labels: familyMembersForEarnings,
         datasets: [
           {
             label: "Family Income By Person",
@@ -497,7 +499,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const chart = new Chart(ctx, {
       type: "doughnut",
       data: {
-        labels: dataFamilyMembersByPerson,
+        labels: familyMembersForExpenses,
         datasets: [
           {
             label: "Family Expenses By Person",
@@ -604,7 +606,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     for (const item in dictionary) {
-      dataFamilyMembersByPerson.push(item);
+      familyMembersForEarnings.push(item);
       dataFamilyIncomeByPerson.push(dictionary[item]);
     }
   }
@@ -634,19 +636,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     for (const item in dictionary) {
-      if (dataFamilyMembersByPerson === null) {
-        dataFamilyMembersByPerson.push(item);
-      }
+      familyMembersForExpenses.push(item);
       dataFamilyExpensesByPerson.push(dictionary[item]);
     }
   }
-
-  // Notes:
-  // 1. Need to use parseFloat for converting a string got
-  // from the backend dictionary for graph to be based on
-  // 2. async function must have await function inside
-  // 3. remove [] on backgroundColor to apply color to everything
-  // 4. type from bar to line; add fill property to false in datasets
-  // 5. Usually we use a await getData() inside async chartIt()
-  // 6. Vertical values are called ticks: customize it in options down below
 });
