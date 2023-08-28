@@ -333,8 +333,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     profile_button.style.backgroundColor = "";
   });
 
-  collective_report_button.click(); // Inital Set Up when page is loaded
-
   // Hide Page Content and Show Only Parts Necessary
   function showPage(page) {
     document.querySelectorAll(".right-screen").forEach((screen) => {
