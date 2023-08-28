@@ -272,7 +272,7 @@ document.addEventListener("DOMContentLoaded", function () {
 // --------------------------------- Main Page ---------------------------------
 
 // Authorization Check for Main Page
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", async function () {
   // Constants:
   const main_page = document.querySelector("#authenticated");
   const access_token = localStorage.getItem("access_token");
@@ -282,7 +282,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const yearSelect = document.getElementById("yearSelect");
   const monthSelect = document.getElementById("monthSelect");
 
-  // Variables:
+  // Global Variables:
   let year = "";
   let month = "";
   let chartList = [];
@@ -296,6 +296,8 @@ document.addEventListener("DOMContentLoaded", function () {
   let dataFamilyExpensesByPerson = [];
   let familyMembersForEarnings = [];
   let familyMembersForExpenses = [];
+
+  let memberCount = {};
 
   // Button Affects for nav bar
   const family_button = document.querySelector(".family");
@@ -363,44 +365,54 @@ document.addEventListener("DOMContentLoaded", function () {
     main_page.style.display = "block";
   }
 
-  chartIncome();
-  chartExpenses();
-  chartIncomePerPerson();
-  chartExpensesPerPerson();
+  await chartIncome();
+  console.log(dataFamilyIncomeByProductValue);
 
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
-    year = yearSelect.value;
-    month = monthSelect.value;
-    console.log(year);
-    console.log(month);
+  await chartExpenses();
+  await chartIncomePerPerson();
+  await chartExpensesPerPerson();
 
-    // Destory charts before redrawing them
-    for (let item of chartList) {
-      item.destroy();
-    }
-
-    // Also RESET all the variables
-    dataFamilyIncomeByProduct = [];
-    dataFamilyIncomeByProductValue = 0;
-    dataFamilyExpensesByProduct = [];
-    dataFamilyExpensesByProductValue = 0;
-
-    dataFamilyIncomeByPerson = [];
-    dataFamilyExpensesByPerson = [];
-    familyMembersForEarnings = [];
-    familyMembersForExpenses = [];
-
-    chartIncome();
-    chartExpenses();
-    chartIncomePerPerson();
-    chartExpensesPerPerson();
-  });
+  await formSubmit();
+  await setSummary();
 
   // Functions and Helpers:
 
   // Main Page
 
+  // Submit filtering affects
+  async function formSubmit() {
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      year = yearSelect.value;
+      month = monthSelect.value;
+
+      // Destory charts before redrawing them
+      for (let item of chartList) {
+        item.destroy();
+      }
+
+      // Also RESET all the variables
+      dataFamilyIncomeByProduct = [];
+      dataFamilyIncomeByProductValue = 0;
+      dataFamilyExpensesByProduct = [];
+      dataFamilyExpensesByProductValue = 0;
+
+      dataFamilyIncomeByPerson = [];
+      dataFamilyExpensesByPerson = [];
+      familyMembersForEarnings = [];
+      familyMembersForExpenses = [];
+
+      memberCount = [];
+
+      await chartIncome();
+      await chartExpenses();
+      await chartIncomePerPerson();
+      await chartExpensesPerPerson();
+      await setSummary();
+    });
+  }
+
+  // Graph Earnings per Categories Chart
   async function chartIncome() {
     await getFamilyIncomeByProduct();
     const ctx = document.getElementById("chart-income");
@@ -453,8 +465,10 @@ document.addEventListener("DOMContentLoaded", function () {
       "#total-earnings"
     ).textContent = `Total Earning: $${dataFamilyIncomeByProductValue}`;
     chartList.push(chart);
+    console.log(dataFamilyIncomeByProductValue);
   }
 
+  // Graph Expenses Per Categories Chart
   async function chartExpenses() {
     await getFamilyExpensesByProduct();
     const ctx = document.getElementById("chart-expenses");
@@ -509,6 +523,7 @@ document.addEventListener("DOMContentLoaded", function () {
     chartList.push(chart);
   }
 
+  // Graph Earnings Per Person Chart
   async function chartIncomePerPerson() {
     await getFamilyIncomeByPerson();
     const ctx = document.getElementById("chart-income-per-person");
@@ -553,6 +568,7 @@ document.addEventListener("DOMContentLoaded", function () {
     chartList.push(chart);
   }
 
+  // Graph Expense Per Person Chart
   async function chartExpensesPerPerson() {
     await getFamilyExpensesByPerson();
     const ctx = document.getElementById("chart-expenses-per-person");
@@ -597,6 +613,7 @@ document.addEventListener("DOMContentLoaded", function () {
     chartList.push(chart);
   }
 
+  // Getters and Setters
   async function getFamilyIncomeByProduct() {
     let response = await fetch(
       `../../tracker/families/${localStorage.getItem(
@@ -660,8 +677,10 @@ document.addEventListener("DOMContentLoaded", function () {
     for (const item of responseData) {
       if (item.receiver in dictionary) {
         dictionary[item.receiver] += item.monetary_value;
+        memberCount[item.receiver] += 1;
       } else {
         dictionary[item.receiver] = item.monetary_value;
+        memberCount[item.receiver] = 1;
       }
     }
 
@@ -690,8 +709,10 @@ document.addEventListener("DOMContentLoaded", function () {
     for (const item of responseData) {
       if (item.sender in dictionary) {
         dictionary[item.sender] += item.monetary_value;
+        memberCount[item.sender] += 1;
       } else {
         dictionary[item.sender] = item.monetary_value;
+        memberCount[item.sender] = 1;
       }
     }
 
@@ -699,5 +720,29 @@ document.addEventListener("DOMContentLoaded", function () {
       familyMembersForExpenses.push(item);
       dataFamilyExpensesByPerson.push(dictionary[item]);
     }
+  }
+
+  function setSummary() {
+    let net = dataFamilyIncomeByProductValue - dataFamilyExpensesByProductValue;
+    document.querySelector(".net-record").textContent = `Net Record: $${net}`;
+
+    let member = null;
+    let count = 0;
+    let sum = 0;
+    for (const m in memberCount) {
+      if (memberCount[m] > count) {
+        member = m;
+        count = memberCount[m];
+      }
+      sum++;
+    }
+
+    document.querySelector(
+      ".most-frequent-member"
+    ).textContent = `Most Frequent Contributor: ${member}`;
+
+    document.querySelector(
+      ".number-of-commits"
+    ).textContent = `Number of Members Contributed: ${sum}`;
   }
 });

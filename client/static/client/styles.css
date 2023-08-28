@@ -29,8 +29,8 @@ html {
 
 .filtering {
   position: absolute;
-  top: 1%;
-  right: 5%;
+  top: 0.5%;
+  right: 4%;
 }
 
 .submit-filter {
