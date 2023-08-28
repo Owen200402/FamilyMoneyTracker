@@ -19,7 +19,7 @@ html {
   background-color: rgb(60, 60, 73);
 }
 
-#right-screen {
+.right-screen {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;

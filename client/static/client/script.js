@@ -273,6 +273,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Authorization Check for Main Page
 document.addEventListener("DOMContentLoaded", function () {
+  // Constants:
   const main_page = document.querySelector("#authenticated");
   const access_token = localStorage.getItem("access_token");
   const name_header = document.querySelector(".name");
@@ -280,11 +281,12 @@ document.addEventListener("DOMContentLoaded", function () {
   const form = document.querySelector(".filtering");
   const yearSelect = document.getElementById("yearSelect");
   const monthSelect = document.getElementById("monthSelect");
+
+  // Variables:
   let year = "";
   let month = "";
   let chartList = [];
 
-  // Variables:
   let dataFamilyIncomeByProduct = [];
   let dataFamilyIncomeByProductValue = 0;
   let dataFamilyExpensesByProduct = [];
@@ -295,6 +297,63 @@ document.addEventListener("DOMContentLoaded", function () {
   let familyMembersForEarnings = [];
   let familyMembersForExpenses = [];
 
+  // Button Affects for nav bar
+  const family_button = document.querySelector(".family");
+  const profile_button = document.querySelector(".profile");
+  const collective_report_button = document.querySelector(".collective-report");
+  const individual_report_button = document.querySelector(".individual-report");
+
+  family_button.addEventListener("click", function () {
+    this.style.backgroundColor = "rgb(0, 170, 255)";
+    collective_report_button.style.backgroundColor = "";
+    individual_report_button.style.backgroundColor = "";
+    profile_button.style.backgroundColor = "";
+  });
+
+  profile_button.addEventListener("click", function () {
+    this.style.backgroundColor = "rgb(0, 170, 255)";
+    collective_report_button.style.backgroundColor = "";
+    individual_report_button.style.backgroundColor = "";
+    family_button.style.backgroundColor = "";
+  });
+
+  collective_report_button.addEventListener("click", function () {
+    this.style.backgroundColor = "rgb(0, 170, 255)";
+    individual_report_button.style.backgroundColor = "";
+    family_button.style.backgroundColor = "";
+    profile_button.style.backgroundColor = "";
+  });
+
+  individual_report_button.addEventListener("click", function () {
+    this.style.backgroundColor = "rgb(0, 170, 255)";
+    collective_report_button.style.backgroundColor = "";
+    family_button.style.backgroundColor = "";
+    profile_button.style.backgroundColor = "";
+  });
+
+  collective_report_button.click(); // Inital Set Up when page is loaded
+
+  // Hide Page Content and Show Only Parts Necessary
+  function showPage(page) {
+    document.querySelectorAll(".right-screen").forEach((screen) => {
+      screen.style.display = "none";
+    });
+
+    document.querySelector(`#${page}`).style.display = "flex";
+    document.querySelector(`#${page}`).style.flexDirection = "row";
+    document.querySelector(`#${page}`).style.flexWrap = "wrap";
+    document.querySelector(`#${page}`).style.justifyContent = "center";
+    document.querySelector(`#${page}`).style.alignItems = "center";
+    location.reload();
+  }
+
+  document.querySelectorAll("a").forEach((link) => {
+    link.onclick = function () {
+      showPage(this.dataset.page);
+    };
+  });
+
+  // Collective Report Page Rendering
   name_header.textContent = localStorage.getItem("name");
   family_header.textContent = `@${localStorage.getItem("family_name")}`;
 
@@ -338,8 +397,9 @@ document.addEventListener("DOMContentLoaded", function () {
     chartExpensesPerPerson();
   });
 
-  // Functions:
-  // Graph.js
+  // Functions and Helpers:
+
+  // Main Page
 
   async function chartIncome() {
     await getFamilyIncomeByProduct();
