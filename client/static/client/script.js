@@ -170,6 +170,7 @@ document.addEventListener("DOMContentLoaded", function () {
       user_login_failed.appendChild(messageElement);
     } else {
       user_login_failed.innerHTML = "";
+      console.log("Success!");
       let responseData = await response.json();
       localStorage.setItem("access_token", responseData.access);
 
@@ -196,10 +197,11 @@ document.addEventListener("DOMContentLoaded", function () {
         linkFamily();
       } else {
         localStorage.setItem("family_id", family_id);
+        await setFamilyName(localStorage.getItem("family_id"));
         window.location.assign("../client/main");
       }
 
-      setFamilyName(localStorage.getItem("family_id"));
+      await setFamilyName(localStorage.getItem("family_id"));
     }
   }
 
@@ -275,6 +277,22 @@ document.addEventListener("DOMContentLoaded", function () {
   const access_token = localStorage.getItem("access_token");
   const name_header = document.querySelector(".name");
   const family_header = document.querySelector(".subtitle");
+  const form = document.querySelector(".filtering");
+  const yearSelect = document.getElementById("yearSelect");
+  const monthSelect = document.getElementById("monthSelect");
+  let year = "";
+  let month = "";
+  let chartList = [];
+
+  // Variables:
+  let dataFamilyIncomeByProduct = [];
+  let dataFamilyIncomeByProductValue = 0;
+  let dataFamilyExpensesByProduct = [];
+  let dataFamilyExpensesByProductValue = 0;
+
+  let dataFamilyIncomeByPerson = [];
+  let dataFamilyExpensesByPerson = [];
+  let dataFamilyMembersByPerson = [];
 
   name_header.textContent = localStorage.getItem("name");
   family_header.textContent = `@${localStorage.getItem("family_name")}`;
@@ -290,18 +308,36 @@ document.addEventListener("DOMContentLoaded", function () {
   chartIncomePerPerson();
   chartExpensesPerPerson();
 
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    year = yearSelect.value;
+    month = monthSelect.value;
+    console.log(year);
+    console.log(month);
+
+    // Destory charts before redrawing them
+    for (let item of chartList) {
+      item.destroy();
+    }
+
+    // Also RESET all the variables
+    dataFamilyIncomeByProduct = [];
+    dataFamilyIncomeByProductValue = 0;
+    dataFamilyExpensesByProduct = [];
+    dataFamilyExpensesByProductValue = 0;
+
+    dataFamilyIncomeByPerson = [];
+    dataFamilyExpensesByPerson = [];
+    dataFamilyMembersByPerson = [];
+
+    chartIncome();
+    chartExpenses();
+    chartIncomePerPerson();
+    chartExpensesPerPerson();
+  });
+
   // Functions:
   // Graph.js
-
-  // Variables:
-  const dataFamilyIncomeByProduct = [];
-  let dataFamilyIncomeByProductValue = 0;
-  const dataFamilyExpensesByProduct = [];
-  let dataFamilyExpensesByProductValue = 0;
-
-  let dataFamilyIncomeByPerson = [];
-  let dataFamilyExpensesByPerson = [];
-  let dataFamilyMembersByPerson = [];
 
   async function chartIncome() {
     await getFamilyIncomeByProduct();
@@ -325,7 +361,6 @@ document.addEventListener("DOMContentLoaded", function () {
         scales: {
           y: {
             ticks: {
-              // Include a dollar sign in the ticks
               callback: function (value, index, ticks) {
                 return "$" + value;
               },
@@ -355,6 +390,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelector(
       "#total-earnings"
     ).textContent = `Total Earning: $${dataFamilyIncomeByProductValue}`;
+    chartList.push(chart);
   }
 
   async function chartExpenses() {
@@ -379,7 +415,6 @@ document.addEventListener("DOMContentLoaded", function () {
         scales: {
           y: {
             ticks: {
-              // Include a dollar sign in the ticks
               callback: function (value, index, ticks) {
                 return "$" + value;
               },
@@ -409,6 +444,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelector(
       "#total-expenses"
     ).textContent = `Total Expenses: $${dataFamilyExpensesByProductValue}`;
+    chartList.push(chart);
   }
 
   async function chartIncomePerPerson() {
@@ -452,6 +488,7 @@ document.addEventListener("DOMContentLoaded", function () {
         },
       },
     });
+    chartList.push(chart);
   }
 
   async function chartExpensesPerPerson() {
@@ -495,11 +532,14 @@ document.addEventListener("DOMContentLoaded", function () {
         },
       },
     });
+    chartList.push(chart);
   }
 
   async function getFamilyIncomeByProduct() {
     let response = await fetch(
-      `../../tracker/families/${localStorage.getItem("family_id")}/earnings/`,
+      `../../tracker/families/${localStorage.getItem(
+        "family_id"
+      )}/earnings/?year=${year}&month=${month}`,
       {
         method: "GET",
         headers: {
@@ -519,7 +559,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   async function getFamilyExpensesByProduct() {
     let response = await fetch(
-      `../../tracker/families/${localStorage.getItem("family_id")}/expenses/`,
+      `../../tracker/families/${localStorage.getItem(
+        "family_id"
+      )}/expenses/?year=${year}&month=${month}`,
       {
         method: "GET",
         headers: {
@@ -539,7 +581,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   async function getFamilyIncomeByPerson() {
     let response = await fetch(
-      `../../tracker/families/${localStorage.getItem("family_id")}/earnings/`,
+      `../../tracker/families/${localStorage.getItem(
+        "family_id"
+      )}/earnings/?year=${year}&month=${month}`,
       {
         method: "GET",
         headers: {
@@ -567,7 +611,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   async function getFamilyExpensesByPerson() {
     let response = await fetch(
-      `../../tracker/families/${localStorage.getItem("family_id")}/expenses/`,
+      `../../tracker/families/${localStorage.getItem(
+        "family_id"
+      )}/expenses/?year=${year}&month=${month}`,
       {
         method: "GET",
         headers: {

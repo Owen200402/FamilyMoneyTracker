@@ -9,7 +9,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'moneykeeper',
         'HOST': 'localhost',
-        'USER': 'root',
+        'USER': 'root'
     }
 }
 
