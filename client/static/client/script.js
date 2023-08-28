@@ -724,7 +724,11 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   function setSummary() {
     let net = dataFamilyIncomeByProductValue - dataFamilyExpensesByProductValue;
-    document.querySelector(".net-record").textContent = `Net Record: $${net}`;
+    let roundedNet = net.toFixed(2);
+    let roundedNetNumber = parseFloat(roundedNet);
+    document.querySelector(
+      ".net-record"
+    ).textContent = `Net Record: $${roundedNetNumber}`;
 
     let member = null;
     let count = 0;
