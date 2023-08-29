@@ -278,13 +278,22 @@ document.addEventListener("DOMContentLoaded", async function () {
   const access_token = localStorage.getItem("access_token");
   const name_header = document.querySelector(".name");
   const family_header = document.querySelector(".subtitle");
-  const form = document.querySelector(".filtering");
-  const yearSelect = document.getElementById("yearSelect");
-  const monthSelect = document.getElementById("monthSelect");
+  const formCollective = document.querySelector(".filtering-collective");
+  const formIndividual = document.querySelector(".filtering-individual");
+  const yearSelectCollective = document.getElementById("yearSelectCollective");
+  const monthSelectCollective = document.getElementById(
+    "monthSelectCollective"
+  );
+  const yearSelectIndividual = document.getElementById("yearSelectIndividual");
+  const monthSelectIndividual = document.getElementById(
+    "monthSelectIndividual"
+  );
 
   // Global Variables:
-  let year = "";
-  let month = "";
+  let yearCollective = "";
+  let monthCollective = "";
+  let yearIndividual = "";
+  let monthIndividual = "";
   let chartList = [];
 
   let dataFamilyIncomeByProduct = [];
@@ -400,17 +409,57 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   // Submit filtering affects
   async function formSubmit() {
-    form.addEventListener("submit", async (e) => {
+    formCollective.addEventListener("submit", async (e) => {
       e.preventDefault();
-      year = yearSelect.value;
-      month = monthSelect.value;
+      yearCollective = yearSelectCollective.value;
+      monthCollective = monthSelectCollective.value;
+      console.log(yearCollective);
+      console.log(monthCollective);
 
       // Destory charts before redrawing them
       for (let item of chartList) {
         item.destroy();
       }
 
-      // Also RESET all the variables
+      // Also reset all the variables
+      dataFamilyIncomeByProduct = [];
+      dataFamilyIncomeByProductValue = 0;
+      dataFamilyExpensesByProduct = [];
+      dataFamilyExpensesByProductValue = 0;
+
+      dataMemberIncomeByProduct = [];
+      dataMemberIncomeByProductValue = 0;
+      dataMemberExpensesByProduct = [];
+      dataMemberExpensesByProductValue = 0;
+
+      dataFamilyIncomeByPerson = [];
+      dataFamilyExpensesByPerson = [];
+      familyMembersForEarnings = [];
+      familyMembersForExpenses = [];
+
+      memberCount = [];
+
+      await chartIncome();
+      await chartExpenses();
+      await chartIncomePerPerson();
+      await chartExpensesPerPerson();
+      await personChartIncome();
+      await personChartExpenses();
+
+      await setSummary();
+    });
+
+    formIndividual.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      yearIndividual = yearSelectIndividual.value;
+      monthIndividual = monthSelectIndividual.value;
+
+      // Destory charts before redrawing them
+      for (let item of chartList) {
+        item.destroy();
+      }
+
+      // Also reset all the variables
       dataFamilyIncomeByProduct = [];
       dataFamilyIncomeByProductValue = 0;
       dataFamilyExpensesByProduct = [];
@@ -766,7 +815,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     let response = await fetch(
       `../../tracker/families/${localStorage.getItem(
         "family_id"
-      )}/earnings/?year=${year}&month=${month}`,
+      )}/earnings/?year=${yearCollective}&month=${monthCollective}`,
       {
         method: "GET",
         headers: {
@@ -788,7 +837,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     let response = await fetch(
       `../../tracker/families/${localStorage.getItem(
         "family_id"
-      )}/expenses/?year=${year}&month=${month}`,
+      )}/expenses/?year=${yearCollective}&month=${monthCollective}`,
       {
         method: "GET",
         headers: {
@@ -810,7 +859,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     let response = await fetch(
       `../../tracker/families/${localStorage.getItem(
         "family_id"
-      )}/earnings/?year=${year}&month=${month}`,
+      )}/earnings/?year=${yearCollective}&month=${monthCollective}`,
       {
         method: "GET",
         headers: {
@@ -842,7 +891,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     let response = await fetch(
       `../../tracker/families/${localStorage.getItem(
         "family_id"
-      )}/expenses/?year=${year}&month=${month}`,
+      )}/expenses/?year=${yearCollective}&month=${monthCollective}`,
       {
         method: "GET",
         headers: {
@@ -876,7 +925,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         "family_id"
       )}/members/${localStorage.getItem(
         "member_id"
-      )}/earnings/?year=${year}&month=${month}`,
+      )}/earnings/?year=${yearIndividual}&month=${monthIndividual}`,
       {
         method: "GET",
         headers: {
@@ -900,7 +949,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         "family_id"
       )}/members/${localStorage.getItem(
         "member_id"
-      )}/expenses/?year=${year}&month=${month}`,
+      )}/expenses/?year=${yearIndividual}&month=${monthIndividual}`,
       {
         method: "GET",
         headers: {
