@@ -313,6 +313,12 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   let memberCount = {};
 
+  let trendDates = [];
+  let incomeTrend = [];
+  let expensesTrend = [];
+  let queryStringForIncomeTrend = [];
+  let queryStringForExpensesTrend = [];
+
   // Button Affects for nav bar
   const family_button = document.querySelector(".family");
   const profile_button = document.querySelector(".profile");
@@ -400,6 +406,9 @@ document.addEventListener("DOMContentLoaded", async function () {
   await personChartIncome();
   await personChartExpenses();
 
+  await graphEarningsTrend();
+  await graphExpensesTrend();
+
   await formSubmit();
   await setSummary();
 
@@ -439,12 +448,20 @@ document.addEventListener("DOMContentLoaded", async function () {
 
       memberCount = [];
 
+      trendDates = [];
+      incomeTrend = [];
+      expensesTrend = [];
+      queryStringForIncomeTrend = [];
+      queryStringForExpensesTrend = [];
+
       await chartIncome();
       await chartExpenses();
       await chartIncomePerPerson();
       await chartExpensesPerPerson();
       await personChartIncome();
       await personChartExpenses();
+      await graphEarningsTrend();
+      await graphExpensesTrend();
 
       await setSummary();
     });
@@ -707,7 +724,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         labels: dataMemberIncomeByProduct.map((item) => item.label),
         datasets: [
           {
-            label: "Family Income",
+            label: "Member Income",
             data: dataMemberIncomeByProduct.map((item) => item.value),
             backgroundColor: "rgba(0, 244, 150, 0.5)",
             borderColor: "rgba(0, 244, 150, 1.3)",
@@ -764,7 +781,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         labels: dataMemberExpensesByProduct.map((item) => item.label),
         datasets: [
           {
-            label: "Family Income",
+            label: "Member Expenses",
             data: dataMemberExpensesByProduct.map((item) => item.value),
             backgroundColor: "rgba(255, 99, 132, 0.2)",
             borderColor: "rgba(255, 99, 132, 1)",
@@ -808,6 +825,107 @@ document.addEventListener("DOMContentLoaded", async function () {
       2
     )}`;
     chartList.push(chart);
+  }
+
+  // Earnings Trend for Persons
+  async function graphEarningsTrend() {
+    await getYearlyTrendData();
+    const ctx = document.getElementById("chart-earnings-trend");
+    const xlabels = [];
+    const chart = new Chart(ctx, {
+      type: "line",
+      data: {
+        labels: trendDates,
+        datasets: [
+          {
+            label: "Earnings Trend",
+            data: incomeTrend,
+            backgroundColor: "rgba(0, 244, 150, 0.5)",
+            borderColor: "rgba(0, 244, 150, 1.3)",
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        scales: {
+          y: {
+            ticks: {
+              callback: function (value, index, ticks) {
+                return "$" + value;
+              },
+            },
+          },
+        },
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: function (context) {
+                var label = context.dataset.label || "";
+
+                if (label) {
+                  label += ": ";
+                }
+                if (context.parsed.y !== null) {
+                  label += "$" + context.parsed.y;
+                }
+
+                return label;
+              },
+            },
+          },
+        },
+      },
+    });
+  }
+
+  // Expenses Trend for Persons
+  async function graphExpensesTrend() {
+    const ctx = document.getElementById("chart-expenses-trend");
+    const xlabels = [];
+    const chart = new Chart(ctx, {
+      type: "line",
+      data: {
+        labels: trendDates,
+        datasets: [
+          {
+            label: "Expenses Trend",
+            data: expensesTrend,
+            backgroundColor: "rgba(255, 99, 132, 0.2)",
+            borderColor: "rgba(255, 99, 132, 1)",
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        scales: {
+          y: {
+            ticks: {
+              callback: function (value, index, ticks) {
+                return "$" + value;
+              },
+            },
+          },
+        },
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: function (context) {
+                var label = context.dataset.label || "";
+
+                if (label) {
+                  label += ": ";
+                }
+                if (context.parsed.y !== null) {
+                  label += "$" + context.parsed.y;
+                }
+
+                return label;
+              },
+            },
+          },
+        },
+      },
+    });
   }
 
   // Getters and Setters
@@ -992,5 +1110,80 @@ document.addEventListener("DOMContentLoaded", async function () {
     document.querySelector(
       ".number-of-commits"
     ).textContent = `Number of Members Contributed: ${sum}`;
+  }
+
+  async function getYearlyTrendData() {
+    const date = new Date();
+    let lastMonth = date.getMonth() + 2;
+    let lastYear = date.getFullYear() - 1;
+
+    for (let i = 0; i < 12; i++) {
+      trendDates.push(`${lastYear}.${lastMonth}`);
+      queryStringForIncomeTrend.push(
+        `../../tracker/families/${localStorage.getItem(
+          "family_id"
+        )}/members/${localStorage.getItem(
+          "member_id"
+        )}/earnings/?year=${lastYear}&month=${lastMonth}`
+      );
+      queryStringForExpensesTrend.push(
+        `../../tracker/families/${localStorage.getItem(
+          "family_id"
+        )}/members/${localStorage.getItem(
+          "member_id"
+        )}/expenses/?year=${lastYear}&month=${lastMonth}`
+      );
+
+      if (lastMonth === 12) {
+        lastMonth = 1;
+        lastYear++;
+      } else {
+        lastMonth++;
+      }
+    }
+
+    for (const queryString of queryStringForIncomeTrend) {
+      let response = await fetch(queryString, {
+        method: "GET",
+        headers: {
+          Authorization: `JWT ${localStorage.getItem("access_token")}`,
+        },
+      });
+      const responseJson = await response.json();
+      const responseData = responseJson.results;
+
+      if (responseData.length === 0) {
+        incomeTrend.push(0);
+      } else {
+        let count = 0;
+
+        for (const item of responseData) {
+          count += item.monetary_value;
+        }
+        incomeTrend.push(count);
+      }
+    }
+
+    for (const queryString of queryStringForExpensesTrend) {
+      let response = await fetch(queryString, {
+        method: "GET",
+        headers: {
+          Authorization: `JWT ${localStorage.getItem("access_token")}`,
+        },
+      });
+      const responseJson = await response.json();
+      const responseData = responseJson.results;
+
+      if (responseData.length === 0) {
+        expensesTrend.push(0);
+      } else {
+        let count = 0;
+
+        for (const item of responseData) {
+          count += item.monetary_value;
+        }
+        expensesTrend.push(count);
+      }
+    }
   }
 });
