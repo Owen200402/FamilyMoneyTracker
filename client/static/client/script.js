@@ -382,7 +382,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     };
   });
 
-  // Collective Report Page Rendering
+  // Page Rendering
   name_header.textContent = localStorage.getItem("name");
   family_header.textContent = `@${localStorage.getItem("family_name")}`;
 
