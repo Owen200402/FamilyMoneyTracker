@@ -297,6 +297,11 @@ document.addEventListener("DOMContentLoaded", async function () {
   let familyMembersForEarnings = [];
   let familyMembersForExpenses = [];
 
+  let dataMemberIncomeByProduct = [];
+  let dataMemberIncomeByProductValue = 0;
+  let dataMemberExpensesByProduct = [];
+  let dataMemberExpensesByProductValue = 0;
+
   let memberCount = {};
 
   // Button Affects for nav bar
@@ -304,6 +309,21 @@ document.addEventListener("DOMContentLoaded", async function () {
   const profile_button = document.querySelector(".profile");
   const collective_report_button = document.querySelector(".collective-report");
   const individual_report_button = document.querySelector(".individual-report");
+
+  const activeSection = localStorage.getItem("activeSection");
+
+  if (activeSection) {
+    document.querySelectorAll("a").forEach((link) => {
+      if (link.dataset.page === activeSection) {
+        link.style.backgroundColor = "rgb(0, 170, 255)"; // Add a CSS class for active styling
+      } else {
+        link.style.backgroundColor = ""; // Remove the class for inactive styling
+      }
+    });
+    showPage(activeSection);
+  } else {
+    collective_report_button.style.backgroundColor = "rgb(0, 170, 255)";
+  }
 
   family_button.addEventListener("click", function () {
     this.style.backgroundColor = "rgb(0, 170, 255)";
@@ -333,8 +353,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     profile_button.style.backgroundColor = "";
   });
 
-  collective_report_button.click(); // Inital Set Up when page is loaded
-
   // Hide Page Content and Show Only Parts Necessary
   function showPage(page) {
     document.querySelectorAll(".right-screen").forEach((screen) => {
@@ -351,6 +369,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   document.querySelectorAll("a").forEach((link) => {
     link.onclick = function () {
       showPage(this.dataset.page);
+      localStorage.setItem("activeSection", this.dataset.page);
     };
   });
 
@@ -365,11 +384,12 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
 
   await chartIncome();
-  console.log(dataFamilyIncomeByProductValue);
 
   await chartExpenses();
   await chartIncomePerPerson();
   await chartExpensesPerPerson();
+  await personChartIncome();
+  await personChartExpenses();
 
   await formSubmit();
   await setSummary();
@@ -396,6 +416,11 @@ document.addEventListener("DOMContentLoaded", async function () {
       dataFamilyExpensesByProduct = [];
       dataFamilyExpensesByProductValue = 0;
 
+      dataMemberIncomeByProduct = [];
+      dataMemberIncomeByProductValue = 0;
+      dataMemberExpensesByProduct = [];
+      dataMemberExpensesByProductValue = 0;
+
       dataFamilyIncomeByPerson = [];
       dataFamilyExpensesByPerson = [];
       familyMembersForEarnings = [];
@@ -407,6 +432,9 @@ document.addEventListener("DOMContentLoaded", async function () {
       await chartExpenses();
       await chartIncomePerPerson();
       await chartExpensesPerPerson();
+      await personChartIncome();
+      await personChartExpenses();
+
       await setSummary();
     });
   }
@@ -462,9 +490,10 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
     document.querySelector(
       "#total-earnings"
-    ).textContent = `Total Earning: $${dataFamilyIncomeByProductValue}`;
+    ).textContent = `Total Earnings: $${dataFamilyIncomeByProductValue.toFixed(
+      2
+    )}`;
     chartList.push(chart);
-    console.log(dataFamilyIncomeByProductValue);
   }
 
   // Graph Expenses Per Categories Chart
@@ -518,7 +547,9 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
     document.querySelector(
       "#total-expenses"
-    ).textContent = `Total Expenses: $${dataFamilyExpensesByProductValue}`;
+    ).textContent = `Total Expenses: $${dataFamilyExpensesByProductValue.toFixed(
+      2
+    )}`;
     chartList.push(chart);
   }
 
@@ -538,6 +569,8 @@ document.addEventListener("DOMContentLoaded", async function () {
               "rgb(255, 99, 132)",
               "rgb(54, 162, 235)",
               "rgb(255, 205, 86)",
+              "rgb(245, 40, 226)",
+              "rgb(245, 226, 0)",
             ],
             hoverOffset: 4,
           },
@@ -583,6 +616,8 @@ document.addEventListener("DOMContentLoaded", async function () {
               "rgb(255, 99, 132)",
               "rgb(54, 162, 235)",
               "rgb(255, 205, 86)",
+              "rgb(245, 40, 226)",
+              "rgb(245, 226, 0)",
             ],
             hoverOffset: 4,
           },
@@ -609,6 +644,120 @@ document.addEventListener("DOMContentLoaded", async function () {
         },
       },
     });
+    chartList.push(chart);
+  }
+
+  // Graph Earnings By Categories For Person
+  async function personChartIncome() {
+    await getMemberIncomeByProduct();
+    const ctx = document.getElementById("individual-chart-income");
+    const xlabels = [];
+    const chart = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: dataMemberIncomeByProduct.map((item) => item.label),
+        datasets: [
+          {
+            label: "Family Income",
+            data: dataMemberIncomeByProduct.map((item) => item.value),
+            backgroundColor: "rgba(0, 244, 150, 0.5)",
+            borderColor: "rgba(0, 244, 150, 1.3)",
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        scales: {
+          y: {
+            ticks: {
+              callback: function (value, index, ticks) {
+                return "$" + value;
+              },
+            },
+          },
+        },
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: function (context) {
+                var label = context.dataset.label || "";
+
+                if (label) {
+                  label += ": ";
+                }
+                if (context.parsed.y !== null) {
+                  label += "$" + context.parsed.y;
+                }
+
+                return label;
+              },
+            },
+          },
+        },
+      },
+    });
+    document.querySelector(
+      "#individual-total-earnings"
+    ).textContent = `Total Earnings: $${dataMemberIncomeByProductValue.toFixed(
+      2
+    )}`;
+    chartList.push(chart);
+  }
+
+  // Graph Expenses By Categories For Person
+  async function personChartExpenses() {
+    await getMemberExpensesByProduct();
+    const ctx = document.getElementById("individual-chart-expenses");
+    const xlabels = [];
+    const chart = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: dataMemberExpensesByProduct.map((item) => item.label),
+        datasets: [
+          {
+            label: "Family Income",
+            data: dataMemberExpensesByProduct.map((item) => item.value),
+            backgroundColor: "rgba(255, 99, 132, 0.2)",
+            borderColor: "rgba(255, 99, 132, 1)",
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        scales: {
+          y: {
+            ticks: {
+              callback: function (value, index, ticks) {
+                return "$" + value;
+              },
+            },
+          },
+        },
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: function (context) {
+                var label = context.dataset.label || "";
+
+                if (label) {
+                  label += ": ";
+                }
+                if (context.parsed.y !== null) {
+                  label += "$" + context.parsed.y;
+                }
+
+                return label;
+              },
+            },
+          },
+        },
+      },
+    });
+    document.querySelector(
+      "#individual-total-expenses"
+    ).textContent = `Total Earnings: $${dataMemberExpensesByProductValue.toFixed(
+      2
+    )}`;
     chartList.push(chart);
   }
 
@@ -718,6 +867,54 @@ document.addEventListener("DOMContentLoaded", async function () {
     for (const item in dictionary) {
       familyMembersForExpenses.push(item);
       dataFamilyExpensesByPerson.push(dictionary[item]);
+    }
+  }
+
+  async function getMemberIncomeByProduct() {
+    let response = await fetch(
+      `../../tracker/families/${localStorage.getItem(
+        "family_id"
+      )}/members/${localStorage.getItem(
+        "member_id"
+      )}/earnings/?year=${year}&month=${month}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `JWT ${localStorage.getItem("access_token")}`,
+        },
+      }
+    );
+    const responseJson = await response.json();
+    const responseData = responseJson.results;
+
+    for (const item of responseData) {
+      let result = { label: item.received_from, value: item.monetary_value };
+      dataMemberIncomeByProductValue += item.monetary_value;
+      dataMemberIncomeByProduct.push(result);
+    }
+  }
+
+  async function getMemberExpensesByProduct() {
+    let response = await fetch(
+      `../../tracker/families/${localStorage.getItem(
+        "family_id"
+      )}/members/${localStorage.getItem(
+        "member_id"
+      )}/expenses/?year=${year}&month=${month}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `JWT ${localStorage.getItem("access_token")}`,
+        },
+      }
+    );
+    const responseJson = await response.json();
+    const responseData = responseJson.results;
+
+    for (const item of responseData) {
+      let result = { label: item.paid_to, value: item.monetary_value };
+      dataMemberExpensesByProductValue += item.monetary_value;
+      dataMemberExpensesByProduct.push(result);
     }
   }
 
