@@ -342,6 +342,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     showPage(activeSection);
   } else {
     collective_report_button.style.backgroundColor = "rgb(0, 170, 255)";
+    showPage(this.dataset.page);
   }
 
   family_button.addEventListener("click", function () {
