@@ -1210,9 +1210,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       )}/members/${localStorage.getItem("member_id")}/images/`,
       {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: {},
         body: formData,
       }
     );
