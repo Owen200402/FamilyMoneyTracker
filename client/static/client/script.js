@@ -276,9 +276,9 @@ document.addEventListener("DOMContentLoaded", function () {
 // Authorization Check for Main Page
 document.addEventListener("DOMContentLoaded", async function () {
   // set profile photo everytime page reloads
-  document
-    .querySelector(".profile-image")
-    .setAttribute("src", localStorage.getItem("image-path"));
+  // document
+  //   .querySelector(".profile-image")
+  //   .setAttribute("src", localStorage.getItem("image-path"));
   // Constants:
   const main_page = document.querySelector("#authenticated");
   const access_token = localStorage.getItem("access_token");
@@ -405,8 +405,10 @@ document.addEventListener("DOMContentLoaded", async function () {
     main_page.style.display = "block";
   }
 
-  await chartIncome();
+  await setProfileInfo();
+  await getImage();
 
+  await chartIncome();
   await chartExpenses();
   await chartIncomePerPerson();
   await chartExpensesPerPerson();
@@ -418,8 +420,6 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   await formSubmit();
   await setSummary();
-
-  await setProfileInfo();
 
   // Functions and Helpers:
 
@@ -463,10 +463,14 @@ document.addEventListener("DOMContentLoaded", async function () {
       queryStringForIncomeTrend = [];
       queryStringForExpensesTrend = [];
 
+      await setProfileInfo();
+      await getImage();
+
       await chartIncome();
       await chartExpenses();
       await chartIncomePerPerson();
       await chartExpensesPerPerson();
+
       await personChartIncome();
       await personChartExpenses();
       await graphEarningsTrend();
@@ -1225,7 +1229,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     const responseData = await responsePost.json();
 
     if (statusCode >= 400 && statusCode <= 599) {
-      console.log(responseData);
       failed.innerHTML = "";
       succeeded.innerHTML = "";
       const messages = Object.values(responseData).flat();
@@ -1242,22 +1245,59 @@ document.addEventListener("DOMContentLoaded", async function () {
       messageElement.textContent = "Successfully uploaded image";
       succeeded.appendChild(messageElement);
 
-      localStorage.setItem("image-path", responseData.image);
+      getImage();
 
-      document
-        .querySelector(".profile-image")
-        .setAttribute("src", localStorage.getItem("image-path"));
+      // let imageId = responseData.id;
+
+      // let imageResponse = await fetch(
+      //   `../../tracker/families/${localStorage.getItem(
+      //     "family_id"
+      //   )}/members/${localStorage.getItem("member_id")}/images/${imageId}/`,
+      //   {
+      //     method: "GET",
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //   }
+      // );
+
+      // let imageResponseData = await imageResponse.json();
+
+      // document
+      //   .querySelector(".profile-image")
+      //   .setAttribute("src", imageResponseData.image);
     }
   }
 
   // Getters and Setters
+  async function getImage() {
+    let imageResponse = await fetch(
+      `../../tracker/families/${localStorage.getItem(
+        "family_id"
+      )}/members/${localStorage.getItem("member_id")}/images/`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    let imageResponseData = await imageResponse.json();
+    let mostCurrentImage =
+      imageResponseData[imageResponseData.length - 1].image;
+
+    document
+      .querySelector(".profile-image")
+      .setAttribute("src", mostCurrentImage);
+  }
+
   async function setProfileInfo() {
     let email = document.querySelector("#email");
     let name = document.querySelector("#name");
     let generation = document.querySelector("#generation");
-    // let family_members = document.querySelector("#members");
-    // let total_earnings = document.querySelector("#total-earnings");
-    // let total_expenses = document.querySelector("#total-expenses");
+    let total_earnings = document.querySelector("#total-earnings");
+    let total_expenses = document.querySelector("#total-expenses");
 
     email.innerHTML += ` <b style="color: rgb(125, 34, 34)">${localStorage.getItem(
       "email"
