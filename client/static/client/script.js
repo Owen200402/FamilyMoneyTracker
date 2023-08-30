@@ -1211,7 +1211,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       {
         method: "POST",
         headers: {
-          Authorization: `JWT ${localStorage.getItem("access_token")}`,
+          "Content-Type": "application/json",
         },
         body: formData,
       }

@@ -210,7 +210,7 @@ class FamilyRecordsViewset(ReadOnlyModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        family_id=self.kwargs['family_pk']
+        family_id = self.kwargs['family_pk']
         queryset = Family.objects.prefetch_related(
             'member__earning', 'member__expense', 'member__user').filter(id=family_id)
 
@@ -228,12 +228,12 @@ class FamilyRecordsViewset(ReadOnlyModelViewSet):
     def get_serializer_context(self):
         return {'family_id': self.kwargs['family_pk'], 'request': self.request}
 
+
 class MemberImageViewSet(ModelViewSet):
     serializer_class = MemberImageSerializer
-    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         return MemberImage.objects.filter(member_id=self.kwargs['member_pk'])
-    
+
     def get_serializer_context(self):
         return {'member_id': self.kwargs['member_pk']}
