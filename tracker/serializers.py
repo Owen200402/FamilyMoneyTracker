@@ -34,11 +34,12 @@ class MemberInfoSerializer(serializers.ModelSerializer):
     member_id = serializers.IntegerField(source='id')
     first_name = serializers.SerializerMethodField()
     last_name = serializers.SerializerMethodField()
+    email = serializers.SerializerMethodField()
 
     class Meta:
         model = Member
         fields = ['member_id', 'generation',
-                  'family_id', 'first_name', 'last_name']
+                  'family_id', 'first_name', 'last_name', 'email']
         read_only_fields = ['member_id', 'family_id']
 
     def first_name(self, member):
@@ -46,6 +47,9 @@ class MemberInfoSerializer(serializers.ModelSerializer):
 
     def last_name(self, member):
         return member.user.last_name
+
+    def email(self, member):
+        return member.user.email
 
 
 class MemberImageSerializer(serializers.ModelSerializer):
@@ -63,7 +67,6 @@ class MemberSerializer(serializers.ModelSerializer):
     member_id = serializers.IntegerField(source='id', read_only=True)
     first_name = serializers.SerializerMethodField()
     last_name = serializers.SerializerMethodField()
-    
 
     class Meta:
         model = Member

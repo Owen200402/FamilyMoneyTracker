@@ -189,6 +189,8 @@ document.addEventListener("DOMContentLoaded", function () {
         `${IDResponseData.first_name} ${IDResponseData.last_name}`
       );
       localStorage.setItem("member_id", `${IDResponseData.member_id}`);
+      localStorage.setItem("email", `${IDResponseData.email}`);
+      localStorage.setItem("generation", `${IDResponseData.generation}`);
 
       if (family_id === null) {
         closeAllModals();
@@ -416,6 +418,8 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   await formSubmit();
   await setSummary();
+
+  await setProfileInfo();
 
   // Functions and Helpers:
 
@@ -1243,6 +1247,32 @@ document.addEventListener("DOMContentLoaded", async function () {
       document
         .querySelector(".profile-image")
         .setAttribute("src", localStorage.getItem("image-path"));
+    }
+  }
+
+  // Getters and Setters
+  async function setProfileInfo() {
+    let email = document.querySelector("#email");
+    let name = document.querySelector("#name");
+    let generation = document.querySelector("#generation");
+    // let family_members = document.querySelector("#members");
+    // let total_earnings = document.querySelector("#total-earnings");
+    // let total_expenses = document.querySelector("#total-expenses");
+
+    email.innerHTML += ` <b style="color: rgb(125, 34, 34)">${localStorage.getItem(
+      "email"
+    )}</b>`;
+    name.innerHTML += ` <b style="color: rgb(125, 34, 34)">${localStorage.getItem(
+      "name"
+    )}</b>`;
+
+    gen = localStorage.getItem("generation");
+    if (gen === "G") {
+      generation.innerHTML += ` <b style="color: rgb(125, 34, 34)">Grand Parent</b>`;
+    } else if (gen === "C") {
+      generation.innerHTML += ` <b style="color: rgb(125, 34, 34)">Child</b>`;
+    } else {
+      generation.innerHTML += ` <b style="color: rgb(125, 34, 34)">Parent</b>`;
     }
   }
 });
