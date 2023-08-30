@@ -63,6 +63,7 @@ class MemberSerializer(serializers.ModelSerializer):
     member_id = serializers.IntegerField(source='id', read_only=True)
     first_name = serializers.SerializerMethodField()
     last_name = serializers.SerializerMethodField()
+    
 
     class Meta:
         model = Member

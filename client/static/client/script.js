@@ -273,6 +273,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Authorization Check for Main Page
 document.addEventListener("DOMContentLoaded", async function () {
+  // set profile photo everytime page reloads
+  document
+    .querySelector(".profile-image")
+    .setAttribute("src", localStorage.getItem("image-path"));
   // Constants:
   const main_page = document.querySelector("#authenticated");
   const access_token = localStorage.getItem("access_token");
@@ -1184,6 +1188,62 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
         expensesTrend.push(count);
       }
+    }
+  }
+
+  // Tracker Page Render:
+  const image_uploading_form = document.querySelector("#form-image-modal");
+
+  image_uploading_form.addEventListener("submit", uploadProfileImage);
+
+  async function uploadProfileImage(event) {
+    const failed = document.querySelector("#upload-failed");
+    const succeeded = document.querySelector("#upload-succeeded");
+
+    event.preventDefault();
+    const form = event.target;
+    const formData = new FormData(form);
+
+    let responsePost = await fetch(
+      `../../tracker/families/${localStorage.getItem(
+        "family_id"
+      )}/members/${localStorage.getItem("member_id")}/images/`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `JWT ${localStorage.getItem("access_token")}`,
+        },
+        body: formData,
+      }
+    );
+
+    const statusCode = responsePost.status;
+
+    const responseData = await responsePost.json();
+
+    if (statusCode >= 400 && statusCode <= 599) {
+      console.log(responseData);
+      failed.innerHTML = "";
+      succeeded.innerHTML = "";
+      const messages = Object.values(responseData).flat();
+
+      messages.forEach((message) => {
+        const messageElement = document.createElement("div");
+        messageElement.textContent = message;
+        failed.appendChild(messageElement);
+      });
+    } else {
+      failed.innerHTML = "";
+      succeeded.innerHTML = "";
+      const messageElement = document.createElement("div");
+      messageElement.textContent = "Successfully uploaded image";
+      succeeded.appendChild(messageElement);
+
+      localStorage.setItem("image-path", responseData.image);
+
+      document
+        .querySelector(".profile-image")
+        .setAttribute("src", localStorage.getItem("image-path"));
     }
   }
 });

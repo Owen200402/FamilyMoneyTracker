@@ -230,6 +230,7 @@ class FamilyRecordsViewset(ReadOnlyModelViewSet):
 
 class MemberImageViewSet(ModelViewSet):
     serializer_class = MemberImageSerializer
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         return MemberImage.objects.filter(member_id=self.kwargs['member_pk'])

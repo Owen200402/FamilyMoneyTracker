@@ -36,3 +36,83 @@ html {
 .submit-filter {
   margin-top: 2rem;
 }
+
+.circle-container {
+  width: 200px;
+}
+
+.circle-container img {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.plus-icon {
+  width: 10px;
+  height: 20px;
+  border-style: solid;
+  border-radius: 50%;
+  translate: -20px;
+  background-color: rgb(207, 158, 238);
+}
+
+.intro-container {
+  background-color: rgb(149, 231, 205);
+}
+
+.intro-container p {
+  font-size: 1.25rem;
+}
+
+.box {
+  overflow: hidden;
+  background-color: lightgray;
+}
+
+.add-photo {
+  border: none;
+  outline: none;
+  background-color: transparent;
+  padding: 0;
+  margin: 0;
+}
+
+.image-input-container {
+  height: 7vh;
+}
+
+.modal-dialog {
+  width: fit-content;
+}
+
+@media screen and (max-width: 1024px) {
+  .intro-container h2 {
+    font-size: 0.8rem;
+  }
+
+  .intro-container p {
+    font-size: 0.75rem;
+  }
+
+  .circle-container {
+    width: 150px;
+  }
+
+  .circle-container img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+
+  .welcome-message {
+    font-size: 0.6rem;
+  }
+
+  .personal-info h5 {
+    font-size: 0.7rem;
+  }
+}

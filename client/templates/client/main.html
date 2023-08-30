@@ -56,7 +56,10 @@
             </a>
             <ul class="nav nav-pills flex-column mt-4">
               <li class="nav-item py-2 py-sm-1 ps-1">
-                <a class="nav-link text-white profile">
+                <a
+                  class="nav-link text-white profile"
+                  data-page="right-screen-your-tracker"
+                >
                   <i class="fa fas fa-user-tie fs-5">
                     <span class="fs-4 ms-3 d-none d-sm-inline">
                       Your Tracker</span
@@ -170,8 +173,8 @@
               width: 45%;
               height: 33vh;
               margin-right: 1rem;
-              margin-top: 1rem;
-              margin-bottom: 5rem;
+              margin-top: 3rem;
+              margin-bottom: 6rem;
             "
           >
             <h1>Earnings By Categories</h1>
@@ -183,8 +186,8 @@
             style="
               width: 45%;
               height: 33vh;
-              margin-top: 1rem;
-              margin-bottom: 5rem;
+              margin-top: 3rem;
+              margin-bottom: 6rem;
             "
           >
             <h1>Expenses By Categories</h1>
@@ -209,7 +212,6 @@
             style="
               width: 45%;
               height: 40vh;
-              margin-right: 1rem;
               margin-top: 1rem;
               padding-right: 0%;
             "
@@ -275,9 +277,8 @@
             id="chart-container"
             style="
               width: 45%;
-              height: 35vh;
+              height: 33vh;
               margin-right: 1rem;
-              margin-top: 1rem;
               margin-bottom: 5rem;
             "
           >
@@ -287,12 +288,7 @@
           </div>
           <div
             id="chart-container"
-            style="
-              width: 45%;
-              height: 35vh;
-              margin-top: 1rem;
-              margin-bottom: 5rem;
-            "
+            style="width: 45%; height: 33vh; margin-bottom: 5rem"
           >
             <h1>Expenses By Categories</h1>
             <canvas id="individual-chart-expenses"></canvas>
@@ -302,7 +298,7 @@
             id="chart-container"
             style="
               width: 45%;
-              height: 35vh;
+              height: 40vh;
               margin-right: 1rem;
               margin-top: 1rem;
               margin-bottom: 2rem;
@@ -315,7 +311,7 @@
             id="chart-container"
             style="
               width: 45%;
-              height: 35vh;
+              height: 40vh;
               margin-right: 1rem;
               margin-top: 1rem;
               margin-bottom: 2rem;
@@ -323,6 +319,113 @@
           >
             <h1>Yearly Expenses Trend</h1>
             <canvas id="chart-expenses-trend"></canvas>
+          </div>
+        </div>
+        <div
+          id="right-screen-your-tracker"
+          class="col-sm-10 col-lg-10 p-0 right-screen d-flex align-items-start align-items-stretch mt-5"
+        >
+          <div class="container d-flex flex-column">
+            <div class="row row-cols-3 g-3 flex-grow-1">
+              <div class="col-1">
+                <div class="container welcome-message m-1">
+                  <h1>Welcome To Money Tracker</h1>
+                </div>
+              </div>
+              <div class="col-7">
+                <div
+                  class="container d-flex flex-row align-items-start justify-content-start name-card"
+                >
+                  <div class="circle-container m-0 p-0">
+                    <img class="profile-image" alt="Image for testing" />
+                  </div>
+                  <div
+                    class="container plus-icon d-flex justify-content-center align-items-center me-2 ms-0"
+                  >
+                    <button
+                      class="add-photo"
+                      data-bs-toggle="modal"
+                      data-bs-target="#image-modal"
+                    >
+                      <i class="fa fa-solid fa-plus"> </i>
+                    </button>
+                  </div>
+                  <!-- Modal -->
+                  <div id="image-modal" class="modal">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <button
+                          class="btn-close image-modal-close"
+                          data-bs-dismiss="modal"
+                          data-bs-target="#image-modal"
+                          aria-label="Close"
+                        ></button>
+                        <div class="modal-body">
+                          <form autocomplete="off" id="form-image-modal">
+                            <div
+                              class="image-input-container d-flex justify-content-center align-items-center"
+                            >
+                              <input
+                                type="file"
+                                id="image-input"
+                                accept="image/*"
+                                name="image"
+                              />
+                            </div>
+                            <div
+                              id="upload-succeeded"
+                              style="color: green"
+                            ></div>
+                            <div id="upload-failed" style="color: red"></div>
+                            <button
+                              type="submit"
+                              id="upload-btn"
+                              class="btn btn-primary"
+                            >
+                              Upload File
+                            </button>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- End -->
+                  <div class="container ps-0 ms-0 pe-5 personal-info">
+                    <h5 style="margin-top: 1rem">Name:</h5>
+                    <h5>Email:</h5>
+                    <h5>Generation:</h5>
+                    <br />
+                    <br />
+                    <h5>2023 Total Earnings:</h5>
+                    <h5>2023 Total Expenses:</h5>
+                    <br /><br />
+                    <h5>Other Family Members:</h5>
+                  </div>
+                </div>
+              </div>
+              <div class="col-4 gap-3">
+                <div
+                  class="box intro-container container-fluid p-2 m-1 pb-0 mb-0 me-2"
+                >
+                  <h2>Instructions:</h2>
+                  <p>
+                    To use the money tracker, simply select from the
+                    <b>bottom-left</b> buttons for
+                    <b>adding, removing or modifying</b> records of your choice.
+                    Changes will be reflected at real time and you can view the
+                    most updated data in Individual Report and Family Report.
+                    Along with the <b>filtering</b> options, you will be able to
+                    track your money earned or spent as well as the family's
+                    money flow based on the selected year and month.
+                  </p>
+                </div>
+              </div>
+
+              <div class="col"><div class="box">4</div></div>
+              <div class="col-8"><div class="box">5</div></div>
+              <div class="col"><div class="box">6</div></div>
+              <div class="col-8"><div class="box">7</div></div>
+            </div>
           </div>
         </div>
       </div>
