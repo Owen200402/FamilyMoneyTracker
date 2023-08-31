@@ -428,71 +428,158 @@
               <div class="col-8">
                 <div class="container">
                   <h3>Add To Record</h3>
-                  <form novalidate>
+                  <form novalidate id="add-earnings" class="main-form">
                     <!-- Remember to delete novalidate -->
-                    <div class="form-floating">
+                    <div class="form-floating mb-2">
                       <input
                         type="text"
-                        id="email"
+                        id="title"
                         class="form-control"
-                        placeholder="please email here"
+                        placeholder="Place the title here"
+                        autocomplete="off"
                       />
-                      <label for="email">Email</label>
-                      <div class="invalid-feedback">Invalid Email</div>
-                      <div class="valid-feedback">Correct Email</div>
+                      <label for="title">Title</label>
+
+                      <div class="invalid-feedback">Invalid Title</div>
+                      <div class="valid-feedback">Valid Title</div>
                     </div>
 
-                    <button class="btn btn-primary">Submit</button>
+                    <div class="form-floating mb-2">
+                      <input
+                        type="text"
+                        id="receieved_from"
+                        class="form-control"
+                        placeholder="please enter who you receive the money from"
+                        autocomplete="off"
+                      />
+                      <label for="receieved_from">Received From</label>
+
+                      <div class="invalid-feedback">Invalid Field</div>
+                      <div class="valid-feedback">Valid Field</div>
+                    </div>
+
+                    <div class="form-floating mb-2">
+                      <input
+                        type="text"
+                        id="receieved_date"
+                        class="form-control"
+                        placeholder="please enter the date on which you received the money"
+                        autocomplete="off"
+                      />
+                      <label for="receieved_date">Received Date</label>
+
+                      <div class="invalid-feedback">Invalid Date Format</div>
+                      <div class="valid-feedback">Valid Date Format</div>
+                    </div>
+
+                    <div class="form-floating mb-2">
+                      <input
+                        type="text"
+                        id="monetary_value"
+                        class="form-control"
+                        placeholder="please enter the value of the money"
+                        autocomplete="off"
+                      />
+                      <label for="monetary_value">Monetary Value</label>
+
+                      <div class="invalid-feedback">Invalid Monetary Value</div>
+                      <div class="valid-feedback">Valid Monetary Value</div>
+                    </div>
+
+                    <button class="btn btn-lg btn-primary">Submit</button>
+                  </form>
+                  <form novalidate hidden id="add-expenses" class="main-form">
+                    <!-- Remember to delete novalidate -->
+                    <div class="form-floating mb-2">
+                      <input
+                        type="text"
+                        id="title"
+                        class="form-control"
+                        placeholder="Place the title here"
+                        autocomplete="off"
+                      />
+                      <label for="title">Title</label>
+
+                      <div class="invalid-feedback">Invalid Title</div>
+                      <div class="valid-feedback">Valid Title</div>
+                    </div>
                   </form>
                 </div>
               </div>
               <div class="col-3">
                 <div class="container">
-                  <h3 class="pb-2">Select Financial Type:</h3>
-                  <div>
-                    <button class="btn btn-outline-primary mb-2">
-                      Earnings
-                    </button>
-                  </div>
-                  <div>
-                    <button class="btn btn-outline-primary mb-5">
-                      Expenses
-                    </button>
+                  <div id="container select-top pb-2 m-0">
+                    <h3 class="pb-2 mt-2">Select Financial Type:</h3>
+                    <div class="form-check">
+                      <input
+                        class="form-check-input"
+                        type="radio"
+                        name="flexRadioDefault"
+                        id="earningsRadio"
+                        checked
+                      />
+                      <label class="form-check-label" for="earningsRadio">
+                        <h5>Earnings</h5>
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input
+                        class="form-check-input"
+                        type="radio"
+                        name="flexRadioDefault"
+                        id="expensesRadio"
+                      />
+                      <label class="form-check-label" for="expensesRadio">
+                        <h5>Expenses</h5>
+                      </label>
+                    </div>
                   </div>
 
-                  <h3 class="pb-2">Operations:</h3>
-                  <div class="form-check">
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      name="flexRadioDefault"
-                      id="flexRadioDefault1"
-                    />
-                    <label class="form-check-label" for="flexRadioDefault1">
-                      <h5>Add Item</h5>
-                    </label>
-                  </div>
-                  <div class="form-check">
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      name="flexRadioDefault"
-                      id="flexRadioDefault2"
-                    />
-                    <label class="form-check-label" for="flexRadioDefault2">
-                      <h5>Modify Item</h5>
-                    </label>
-                  </div>
-                  <div class="form-check">
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      name="flexRadioDefault"
-                      id="flexRadioDefault2"
-                    />
-                    <label class="form-check-label" for="flexRadioDefault2">
-                      <h5>Delete Item</h5>
-                    </label>
+                  <div class="container select-bottom m-0 ps-0 pt-3">
+                    <h3 class="pb-2">Operations:</h3>
+                    <div class="form-check">
+                      <input
+                        class="form-check-input"
+                        type="radio"
+                        name="flexRadioDefaultSecond"
+                        id="flexRadioDefault1Second"
+                        checked
+                      />
+                      <label
+                        class="form-check-label"
+                        for="flexRadioDefault1Second"
+                      >
+                        <h5>Add Item</h5>
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input
+                        class="form-check-input"
+                        type="radio"
+                        name="flexRadioDefaultSecond"
+                        id="flexRadioDefault2Second"
+                      />
+                      <label
+                        class="form-check-label"
+                        for="flexRadioDefault2Second"
+                      >
+                        <h5>Modify Item</h5>
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input
+                        class="form-check-input"
+                        type="radio"
+                        name="flexRadioDefaultSecond"
+                        id="flexRadioDefault2Second"
+                      />
+                      <label
+                        class="form-check-label"
+                        for="flexRadioDefault2Second"
+                      >
+                        <h5>Delete Item</h5>
+                      </label>
+                    </div>
                   </div>
                 </div>
               </div>

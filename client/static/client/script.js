@@ -275,10 +275,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Authorization Check for Main Page
 document.addEventListener("DOMContentLoaded", async function () {
-  // set profile photo everytime page reloads
-  // document
-  //   .querySelector(".profile-image")
-  //   .setAttribute("src", localStorage.getItem("image-path"));
   // Constants:
   const main_page = document.querySelector("#authenticated");
   const access_token = localStorage.getItem("access_token");
@@ -1215,6 +1211,36 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   image_uploading_form.addEventListener("submit", uploadProfileImage);
 
+  // Listening to events to open the right form:
+  const earningsRadio = document.querySelector("#earningsRadio");
+  const expensesRadio = document.querySelector("#expensesRadio");
+  const main_forms = document.querySelectorAll(".main-form");
+  const add_earnings_form = document.querySelector("#add-earnings");
+  const add_expenses_form = document.querySelector("#add-expenses");
+
+  expensesRadio.addEventListener("change", function () {
+    if (expensesRadio.checked) {
+      hideForms();
+      add_expenses_form.hidden = false;
+      console.log("expense radio checked");
+    }
+  });
+
+  earningsRadio.addEventListener("change", function () {
+    if (earningsRadio.checked) {
+      hideForms();
+      add_earnings_form.hidden = false;
+      console.log("earning radio checked");
+    }
+  });
+
+  function hideForms() {
+    main_forms.forEach((f) => {
+      f.hidden = true;
+    });
+  }
+
+  // Upload Profile Image Config with Amazon S3
   async function uploadProfileImage(event) {
     const failed = document.querySelector("#upload-failed");
     const succeeded = document.querySelector("#upload-succeeded");
