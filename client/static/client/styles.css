@@ -63,7 +63,7 @@ html {
 }
 
 .intro-container p {
-  font-size: 1.25rem;
+  font-size: 1.4rem;
 }
 
 .box {
@@ -89,11 +89,11 @@ html {
 
 @media screen and (max-width: 1024px) {
   .intro-container h2 {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
   }
 
   .intro-container p {
-    font-size: 0.75rem;
+    font-size: 0.8rem;
   }
 
   .circle-container {
@@ -115,4 +115,12 @@ html {
   .personal-info h5 {
     font-size: 0.7rem;
   }
+}
+
+.form-check label {
+  font-size: 2rem;
+}
+
+.first-row {
+  height: 30vh;
 }

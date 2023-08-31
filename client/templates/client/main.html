@@ -327,18 +327,18 @@
           class="right-screen col-sm-10 col-lg-10 p-0 align-items-start align-items-stretch mt-5"
         >
           <div class="container d-flex flex-column">
-            <div class="row row-cols-3 g-3 flex-grow-1">
-              <div class="col-1">
+            <div class="row row-cols-2 g-3 flex-grow-1">
+              <div class="col-1 first-row">
                 <div class="container welcome-message m-1">
                   <h1>Welcome To Money Tracker</h1>
                 </div>
               </div>
-              <div class="col-7">
+              <div class="col-7 first-row">
                 <div
                   class="container d-flex flex-row align-items-start justify-content-start name-card"
                 >
                   <div class="circle-container m-0 p-0">
-                    <img class="profile-image" alt="Image for testing" />
+                    <img class="profile-image" alt="Profile Image" />
                   </div>
                   <div
                     class="container plus-icon d-flex justify-content-center align-items-center me-2 ms-0"
@@ -402,28 +402,100 @@
                   </div>
                 </div>
               </div>
-              <div class="col-4 gap-3">
+              <div class="col-4 gap-3 first-row">
                 <div
                   class="box intro-container container-fluid p-2 m-1 pb-0 mb-0 me-2"
                 >
                   <h2>Instructions:</h2>
                   <p>
                     To use the money tracker, simply select from the
-                    <b>bottom-left</b> buttons for
-                    <b>adding, removing or modifying</b> records of your choice.
-                    Changes will be reflected at real time and you can view the
-                    most updated data in Individual Report and Family Report.
-                    Along with the <b>filtering</b> options, you will be able to
-                    track your money earned or spent as well as the family's
-                    money flow based on the selected year and month.
+                    bottom-right buttons for
+                    <b>adding, removing or modifying</b> the items associated
+                    with money. Changes will be reflected at real time and you
+                    can view the most updated data in Individual Report and
+                    Family Report. Please select the <b>Money Type</b> as it
+                    will prompts you the table on the left for the correct
+                    operation to the database. We strongly encourage you to
+                    review the data before deleting them as they will be deleted
+                    permanently without records kept on the database anymore.
+                    Changes will be reflected on your Individual Report and
+                    Family Report at real time. All members in your family will
+                    be able to see the updated graphs in the Family Report.
                   </p>
                 </div>
               </div>
 
-              <div class="col"><div class="box">4</div></div>
-              <div class="col-8"><div class="box">5</div></div>
-              <div class="col"><div class="box">6</div></div>
-              <div class="col-8"><div class="box">7</div></div>
+              <div class="col-8">
+                <div class="container">
+                  <h3>Add To Record</h3>
+                  <form novalidate>
+                    <!-- Remember to delete novalidate -->
+                    <div class="form-floating">
+                      <input
+                        type="text"
+                        id="email"
+                        class="form-control"
+                        placeholder="please email here"
+                      />
+                      <label for="email">Email</label>
+                      <div class="invalid-feedback">Invalid Email</div>
+                      <div class="valid-feedback">Correct Email</div>
+                    </div>
+
+                    <button class="btn btn-primary">Submit</button>
+                  </form>
+                </div>
+              </div>
+              <div class="col-3">
+                <div class="container">
+                  <h3 class="pb-2">Select Financial Type:</h3>
+                  <div>
+                    <button class="btn btn-outline-primary mb-2">
+                      Earnings
+                    </button>
+                  </div>
+                  <div>
+                    <button class="btn btn-outline-primary mb-5">
+                      Expenses
+                    </button>
+                  </div>
+
+                  <h3 class="pb-2">Operations:</h3>
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="flexRadioDefault"
+                      id="flexRadioDefault1"
+                    />
+                    <label class="form-check-label" for="flexRadioDefault1">
+                      <h5>Add Item</h5>
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="flexRadioDefault"
+                      id="flexRadioDefault2"
+                    />
+                    <label class="form-check-label" for="flexRadioDefault2">
+                      <h5>Modify Item</h5>
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="flexRadioDefault"
+                      id="flexRadioDefault2"
+                    />
+                    <label class="form-check-label" for="flexRadioDefault2">
+                      <h5>Delete Item</h5>
+                    </label>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
