@@ -1217,28 +1217,36 @@ document.addEventListener("DOMContentLoaded", async function () {
   const main_forms = document.querySelectorAll(".main-form");
   const add_earnings_form = document.querySelector("#add-earnings");
   const add_expenses_form = document.querySelector("#add-expenses");
+  const addItemRadio = document.querySelector("#add-item-btn");
+  const deleteItemRadio = document.querySelector("#delete-item-btn");
+  const modItemRadio = document.querySelector("#mod-item-btn");
 
-  expensesRadio.addEventListener("change", function () {
-    if (expensesRadio.checked) {
-      hideForms();
-      add_expenses_form.hidden = false;
-      console.log("expense radio checked");
-    }
-  });
+  const checkRadioButtonState = function () {
+    if (addItemRadio.checked) {
+      if (expensesRadio.checked) {
+        hideForms();
+        add_expenses_form.hidden = false;
+        console.log("expense radio checked");
+      }
 
-  earningsRadio.addEventListener("change", function () {
-    if (earningsRadio.checked) {
+      if (earningsRadio.checked) {
+        hideForms();
+        add_earnings_form.hidden = false;
+        console.log("earning radio checked");
+      }
+    } else {
+      // Other Operations
       hideForms();
-      add_earnings_form.hidden = false;
-      console.log("earning radio checked");
     }
-  });
+  };
 
   function hideForms() {
     main_forms.forEach((f) => {
       f.hidden = true;
     });
   }
+
+  setInterval(checkRadioButtonState, 10);
 
   // Upload Profile Image Config with Amazon S3
   async function uploadProfileImage(event) {
