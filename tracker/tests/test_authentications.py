@@ -13,8 +13,6 @@ class TestAuthentication:
 
         assert current_user_response.status_code == status.HTTP_200_OK
 
-    
-
 
 @pytest.mark.django_db
 class TestCreateMember:
@@ -31,5 +29,6 @@ class TestCreateMember:
             'generation': 'P',
             'member_id': user.member.id,
             'first_name': user.first_name,
-            'last_name': user.last_name
+            'last_name': user.last_name,
+            'email': user.email
         }

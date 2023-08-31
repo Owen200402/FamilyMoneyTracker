@@ -325,6 +325,11 @@ document.addEventListener("DOMContentLoaded", async function () {
   let queryStringForIncomeTrend = [];
   let queryStringForExpensesTrend = [];
 
+  let currentYearIncome = 0;
+  let currentYearExpenses = 0;
+  let queryStringForCurrentYearIncome = [];
+  let queryStringForCurrentYearExpenses = [];
+
   // Button Affects for nav bar
   const family_button = document.querySelector(".family");
   const profile_button = document.querySelector(".profile");
@@ -462,6 +467,11 @@ document.addEventListener("DOMContentLoaded", async function () {
       expensesTrend = [];
       queryStringForIncomeTrend = [];
       queryStringForExpensesTrend = [];
+
+      currentYearIncome = 0;
+      currentYearExpenses = 0;
+      queryStringForCurrentYearIncome = [];
+      queryStringForCurrentYearExpenses = [];
 
       await setProfileInfo();
       await getImage();
@@ -1246,26 +1256,6 @@ document.addEventListener("DOMContentLoaded", async function () {
       succeeded.appendChild(messageElement);
 
       getImage();
-
-      // let imageId = responseData.id;
-
-      // let imageResponse = await fetch(
-      //   `../../tracker/families/${localStorage.getItem(
-      //     "family_id"
-      //   )}/members/${localStorage.getItem("member_id")}/images/${imageId}/`,
-      //   {
-      //     method: "GET",
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //   }
-      // );
-
-      // let imageResponseData = await imageResponse.json();
-
-      // document
-      //   .querySelector(".profile-image")
-      //   .setAttribute("src", imageResponseData.image);
     }
   }
 
@@ -1296,8 +1286,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     let email = document.querySelector("#email");
     let name = document.querySelector("#name");
     let generation = document.querySelector("#generation");
-    let total_earnings = document.querySelector("#total-earnings");
-    let total_expenses = document.querySelector("#total-expenses");
+    let total_earnings = document.querySelector("#total-earnings-current-year");
+    let total_expenses = document.querySelector("#total-expenses-current-year");
 
     email.innerHTML += ` <b style="color: rgb(125, 34, 34)">${localStorage.getItem(
       "email"
@@ -1313,6 +1303,66 @@ document.addEventListener("DOMContentLoaded", async function () {
       generation.innerHTML += ` <b style="color: rgb(125, 34, 34)">Child</b>`;
     } else {
       generation.innerHTML += ` <b style="color: rgb(125, 34, 34)">Parent</b>`;
+    }
+    await getCurrentYearOverallData();
+    const date = new Date();
+    let currentYear = date.getFullYear();
+    total_earnings.innerHTML += ` ${currentYear} Total Earnings: <b style="color: rgb(125, 34, 34)">$${currentYearIncome}</b>`;
+    total_expenses.innerHTML += ` ${currentYear} Total Expenses: <b style="color: rgb(125, 34, 34)">$${currentYearExpenses}</b>`;
+  }
+
+  async function getCurrentYearOverallData() {
+    const date = new Date();
+    let currentMonth = date.getMonth() + 1;
+    let currentYear = date.getFullYear();
+    console.log(currentMonth);
+    console.log(currentYear);
+
+    for (let i = 1; i <= currentMonth; i++) {
+      queryStringForCurrentYearIncome.push(
+        `../../tracker/families/${localStorage.getItem(
+          "family_id"
+        )}/members/${localStorage.getItem(
+          "member_id"
+        )}/earnings/?year=${currentYear}&month=${i}`
+      );
+      queryStringForCurrentYearExpenses.push(
+        `../../tracker/families/${localStorage.getItem(
+          "family_id"
+        )}/members/${localStorage.getItem(
+          "member_id"
+        )}/expenses/?year=${currentYear}&month=${i}`
+      );
+    }
+
+    for (const queryString of queryStringForCurrentYearIncome) {
+      let response = await fetch(queryString, {
+        method: "GET",
+        headers: {
+          Authorization: `JWT ${localStorage.getItem("access_token")}`,
+        },
+      });
+      const responseJson = await response.json();
+      const responseData = responseJson.results;
+
+      for (const item of responseData) {
+        currentYearIncome += item.monetary_value;
+      }
+    }
+
+    for (const queryString of queryStringForCurrentYearExpenses) {
+      let response = await fetch(queryString, {
+        method: "GET",
+        headers: {
+          Authorization: `JWT ${localStorage.getItem("access_token")}`,
+        },
+      });
+      const responseJson = await response.json();
+      const responseData = responseJson.results;
+
+      for (const item of responseData) {
+        currentYearExpenses += item.monetary_value;
+      }
     }
   }
 });
