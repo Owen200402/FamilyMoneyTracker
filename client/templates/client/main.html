@@ -426,8 +426,9 @@
 
               <div class="col-8">
                 <div class="container">
-                  <h3>Money Tracking Form:</h3>
-                  <form novalidate id="add-earnings" class="main-form">
+                  <u><h3>Money Tracking Form</h3></u>
+                  <!-- Form for add items -->
+                  <form id="add-earnings" class="main-form">
                     <!-- Remember to delete novalidate -->
                     <div class="form-floating mb-2">
                       <input
@@ -436,6 +437,7 @@
                         class="form-control"
                         placeholder="Place the title here"
                         autocomplete="off"
+                        name="title"
                       />
                       <label for="title">Title</label>
 
@@ -446,12 +448,13 @@
                     <div class="form-floating mb-2">
                       <input
                         type="text"
-                        id="receieved_from"
+                        id="received_from"
                         class="form-control"
                         placeholder="please enter who you receive the money from"
                         autocomplete="off"
+                        name="received_from"
                       />
-                      <label for="receieved_from">Received From</label>
+                      <label for="received_from">Received From</label>
 
                       <div class="invalid-feedback">Invalid Field</div>
                       <div class="valid-feedback">Valid Field</div>
@@ -460,12 +463,13 @@
                     <div class="form-floating mb-2">
                       <input
                         type="date"
-                        id="receieved_date"
+                        id="received_date"
                         class="form-control"
                         placeholder="please enter the date on which you received the money"
                         autocomplete="off"
+                        name="received_date"
                       />
-                      <label for="receieved_date">Received Date</label>
+                      <label for="received_date">Received Date</label>
 
                       <div class="invalid-feedback">Invalid Date Format</div>
                       <div class="valid-feedback">Valid Date Format</div>
@@ -478,6 +482,7 @@
                         class="form-control"
                         placeholder="please enter the value of the money"
                         autocomplete="off"
+                        name="monetary_value"
                       />
                       <label for="monetary_value">Monetary Value</label>
 
@@ -485,9 +490,15 @@
                       <div class="valid-feedback">Valid Monetary Value</div>
                     </div>
 
+                    <div id="submit-earnings-failed" style="color: red"></div>
+                    <div
+                      id="submit-earnings-succeeded"
+                      style="color: green"
+                    ></div>
+
                     <button class="btn btn-lg btn-primary">Submit</button>
                   </form>
-                  <form novalidate hidden id="add-expenses" class="main-form">
+                  <form hidden id="add-expenses" class="main-form">
                     <!-- Remember to delete novalidate -->
                     <div class="form-floating mb-2">
                       <input
@@ -496,6 +507,7 @@
                         class="form-control"
                         placeholder="Place the title here"
                         autocomplete="off"
+                        name="title"
                       />
                       <label for="title">Title</label>
 
@@ -509,6 +521,7 @@
                         class="form-control"
                         placeholder="Place the person you paid your money to here"
                         autocomplete="off"
+                        name="paid_to"
                       />
                       <label for="paid_to">Paid To</label>
 
@@ -522,6 +535,7 @@
                         class="form-control"
                         placeholder="Place the time you paid your money here"
                         autocomplete="off"
+                        name="paid_date"
                       />
                       <label for="paid_date">Paid Date</label>
 
@@ -535,20 +549,29 @@
                         class="form-control"
                         placeholder="please enter the value of the money"
                         autocomplete="off"
+                        name="monetary_value"
                       />
                       <label for="monetary_value">Monetary Value</label>
 
                       <div class="invalid-feedback">Invalid Monetary Value</div>
                       <div class="valid-feedback">Valid Monetary Value</div>
                     </div>
+                    <div id="submit-expenses-failed" style="color: red"></div>
+                    <div
+                      id="submit-expenses-succeeded"
+                      style="color: green"
+                    ></div>
                     <button class="btn btn-lg btn-primary">Submit</button>
                   </form>
 
                   <!-- forms for Mod -->
-                  <form novalidate hidden id="mod-earnings" class="main-form">
+                  <form hidden id="mod-earnings" class="main-form">
                     <!-- Pick by user -->
-                    <div class="container earnings-collection"></div>
-                    <!-- Remember to delete novalidate -->
+                    <div class="container ps-0 earnings-collection">
+                      <h4 style="color: rgb(23, 34, 164)">
+                        Select Item to Modify:
+                      </h4>
+                    </div>
                     <div class="form-floating mb-2">
                       <input
                         type="text"
@@ -556,6 +579,7 @@
                         class="form-control"
                         placeholder="Place the title here"
                         autocomplete="off"
+                        name="title"
                       />
                       <label for="title">Title</label>
 
@@ -566,12 +590,13 @@
                     <div class="form-floating mb-2">
                       <input
                         type="text"
-                        id="receieved_from"
+                        id="received_from"
                         class="form-control"
                         placeholder="please enter who you receive the money from"
                         autocomplete="off"
+                        name="received_from"
                       />
-                      <label for="receieved_from">Received From</label>
+                      <label for="received_from">Received From</label>
 
                       <div class="invalid-feedback">Invalid Field</div>
                       <div class="valid-feedback">Valid Field</div>
@@ -580,12 +605,13 @@
                     <div class="form-floating mb-2">
                       <input
                         type="date"
-                        id="receieved_date"
+                        id="received_date"
                         class="form-control"
                         placeholder="please enter the date on which you received the money"
                         autocomplete="off"
+                        name="received_date"
                       />
-                      <label for="receieved_date">Received Date</label>
+                      <label for="received_date">Received Date</label>
 
                       <div class="invalid-feedback">Invalid Date Format</div>
                       <div class="valid-feedback">Valid Date Format</div>
@@ -598,6 +624,7 @@
                         class="form-control"
                         placeholder="please enter the value of the money"
                         autocomplete="off"
+                        name="monetary_value"
                       />
                       <label for="monetary_value">Monetary Value</label>
 
@@ -605,12 +632,18 @@
                       <div class="valid-feedback">Valid Monetary Value</div>
                     </div>
 
+                    <div id="mod-earnings-failed" style="color: red"></div>
+                    <div id="mod-earnings-succeeded" style="color: green"></div>
                     <button class="btn btn-lg btn-primary">Submit</button>
                   </form>
 
                   <form novalidate hidden id="mod-expenses" class="main-form">
                     <!-- Pick by users -->
-                    <div class="container expenses-collection"></div>
+                    <div class="container ps-0 expenses-collection">
+                      <h4 style="color: rgb(23, 34, 164)">
+                        Select Item to Delete:
+                      </h4>
+                    </div>
                     <!-- Remember to delete novalidate -->
                     <div class="form-floating mb-2">
                       <input
@@ -619,6 +652,7 @@
                         class="form-control"
                         placeholder="Place the title here"
                         autocomplete="off"
+                        name="title"
                       />
                       <label for="title">Title</label>
 
@@ -632,6 +666,7 @@
                         class="form-control"
                         placeholder="Place the person you paid your money to here"
                         autocomplete="off"
+                        name="paid_to"
                       />
                       <label for="paid_to">Paid To</label>
 
@@ -645,6 +680,7 @@
                         class="form-control"
                         placeholder="Place the time you paid your money here"
                         autocomplete="off"
+                        name="paid_date"
                       />
                       <label for="paid_date">Paid Date</label>
 
@@ -658,135 +694,47 @@
                         class="form-control"
                         placeholder="please enter the value of the money"
                         autocomplete="off"
+                        name="monetary_value"
                       />
                       <label for="monetary_value">Monetary Value</label>
 
                       <div class="invalid-feedback">Invalid Monetary Value</div>
                       <div class="valid-feedback">Valid Monetary Value</div>
                     </div>
+                    <div id="mod-expenses-failed" style="color: red"></div>
+                    <div id="mod-expenses-succeeded" style="color: green"></div>
                     <button class="btn btn-lg btn-primary">Submit</button>
                   </form>
 
                   <!-- Forms for Del -->
-                  <form novalidate hidden id="del-earnings" class="main-form">
-                    <!-- Pick by user -->
-                    <div class="container del-earnings-collection"></div>
-                    <!-- Remember to delete novalidate -->
-                    <div class="form-floating mb-2">
-                      <input
-                        type="text"
-                        id="title"
-                        class="form-control"
-                        placeholder="Place the title here"
-                        autocomplete="off"
-                      />
-                      <label for="title">Title</label>
-
-                      <div class="invalid-feedback">Invalid Title</div>
-                      <div class="valid-feedback">Valid Title</div>
+                  <form hidden id="del-earnings" class="main-form">
+                    <div class="container ps-0 del-earnings-collection">
+                      <h4 style="color: rgb(23, 34, 164)">
+                        Select Item to Delete:
+                      </h4>
                     </div>
-
-                    <div class="form-floating mb-2">
-                      <input
-                        type="text"
-                        id="receieved_from"
-                        class="form-control"
-                        placeholder="please enter who you receive the money from"
-                        autocomplete="off"
-                      />
-                      <label for="receieved_from">Received From</label>
-
-                      <div class="invalid-feedback">Invalid Field</div>
-                      <div class="valid-feedback">Valid Field</div>
-                    </div>
-
-                    <div class="form-floating mb-2">
-                      <input
-                        type="date"
-                        id="receieved_date"
-                        class="form-control"
-                        placeholder="please enter the date on which you received the money"
-                        autocomplete="off"
-                      />
-                      <label for="receieved_date">Received Date</label>
-
-                      <div class="invalid-feedback">Invalid Date Format</div>
-                      <div class="valid-feedback">Valid Date Format</div>
-                    </div>
-
-                    <div class="form-floating mb-2">
-                      <input
-                        type="text"
-                        id="monetary_value"
-                        class="form-control"
-                        placeholder="please enter the value of the money"
-                        autocomplete="off"
-                      />
-                      <label for="monetary_value">Monetary Value</label>
-
-                      <div class="invalid-feedback">Invalid Monetary Value</div>
-                      <div class="valid-feedback">Valid Monetary Value</div>
-                    </div>
+                    <h6 style="color: red">
+                      Be careful as the data cannot be found back after the
+                      deletion!
+                    </h6>
+                    <div id="del-earnings-failed" style="color: red"></div>
+                    <div id="del-earnings-succeeded" style="color: green"></div>
 
                     <button class="btn btn-lg btn-primary">Submit</button>
                   </form>
 
-                  <form novalidate hidden id="del-expenses" class="main-form">
-                    <!-- Pick by users -->
-                    <div class="container del-expenses-collection"></div>
-                    <!-- Remember to delete novalidate -->
-                    <div class="form-floating mb-2">
-                      <input
-                        type="text"
-                        id="title"
-                        class="form-control"
-                        placeholder="Place the title here"
-                        autocomplete="off"
-                      />
-                      <label for="title">Title</label>
-
-                      <div class="invalid-feedback">Invalid Title</div>
-                      <div class="valid-feedback">Valid Title</div>
+                  <form hidden id="del-expenses" class="main-form">
+                    <div class="container ps-0 del-expenses-collection">
+                      <h4 style="color: rgb(23, 34, 164)">
+                        Select Item to Delete:
+                      </h4>
                     </div>
-                    <div class="form-floating mb-2">
-                      <input
-                        type="text"
-                        id="paid_to"
-                        class="form-control"
-                        placeholder="Place the person you paid your money to here"
-                        autocomplete="off"
-                      />
-                      <label for="paid_to">Paid To</label>
-
-                      <div class="invalid-feedback">Invalid Field</div>
-                      <div class="valid-feedback">Valid Field</div>
-                    </div>
-                    <div class="form-floating mb-2">
-                      <input
-                        type="date"
-                        id="paid_date"
-                        class="form-control"
-                        placeholder="Place the time you paid your money here"
-                        autocomplete="off"
-                      />
-                      <label for="paid_date">Paid Date</label>
-
-                      <div class="invalid-feedback">Invalid Date Format</div>
-                      <div class="valid-feedback">Valid Date Format</div>
-                    </div>
-                    <div class="form-floating mb-2">
-                      <input
-                        type="text"
-                        id="monetary_value"
-                        class="form-control"
-                        placeholder="please enter the value of the money"
-                        autocomplete="off"
-                      />
-                      <label for="monetary_value">Monetary Value</label>
-
-                      <div class="invalid-feedback">Invalid Monetary Value</div>
-                      <div class="valid-feedback">Valid Monetary Value</div>
-                    </div>
+                    <h6 style="color: red">
+                      Be careful as the data cannot be found back after the
+                      deletion!
+                    </h6>
+                    <div id="del-expenses-failed" style="color: red"></div>
+                    <div id="del-expenses-succeeded" style="color: green"></div>
                     <button class="btn btn-lg btn-primary">Submit</button>
                   </form>
                 </div>

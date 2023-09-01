@@ -1228,7 +1228,6 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     const del_earnings_form = document.querySelector("#del-earnings");
     const del_expenses_form = document.querySelector("#del-expenses");
-
     const deleteItemRadio = document.querySelector("#delete-item-btn");
 
     const earnings_collection = document.querySelector(".earnings-collection");
@@ -1275,11 +1274,18 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
       }
     };
-
     setInterval(checkRadioButtonState, 10);
 
     await generatePersonalEarnings();
     await generatePersonalExpenses();
+
+    // Event Listeners for submit buttons
+    add_earnings_form.addEventListener("submit", postEarnings);
+    add_expenses_form.addEventListener("submit", postExpenses);
+    mod_earnings_form.addEventListener("submit", patchEarnings);
+    mod_expenses_form.addEventListener("submit", patchExpenses);
+    del_earnings_form.addEventListener("submit", delEarnings);
+    del_expenses_form.addEventListener("submit", delExpenses);
 
     // Helpers:
 
@@ -1288,6 +1294,340 @@ document.addEventListener("DOMContentLoaded", async function () {
       main_forms.forEach((f) => {
         f.hidden = true;
       });
+    }
+
+    // post the earning entered by the user to the server
+    async function postEarnings(event) {
+      const succeeded = document.querySelector("#submit-earnings-succeeded");
+      const failed = document.querySelector("#submit-earnings-failed");
+
+      event.preventDefault();
+      const form = event.target;
+      const formData = new FormData(form);
+
+      let response = await fetch(
+        `../../tracker/families/${localStorage.getItem(
+          "family_id"
+        )}/members/${localStorage.getItem("member_id")}/earnings/`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `JWT ${localStorage.getItem("access_token")}`,
+          },
+          body: formData,
+        }
+      );
+      const statusCode = response.status;
+
+      let responseData = await response.json();
+
+      if ((statusCode >= 400) & (statusCode <= 599)) {
+        failed.innerHTML = "";
+        succeeded.innerHTML = "";
+        const messages = responseData.results;
+
+        messages.forEach((message) => {
+          const messageElement = document.createElement("div");
+          messageElement.textContent = message;
+          failed.appendChild(messageElement);
+        });
+      } else {
+        failed.innerHTML = "";
+        succeeded.innerHTML = "";
+        const messageElement = document.createElement("div");
+        messageElement.textContent = "Successfully Added to Record";
+        succeeded.appendChild(messageElement);
+        setTimeout(() => {
+          location.reload();
+        }, 1500);
+      }
+    }
+
+    // post the earning entered by the user to the server
+    async function postExpenses(event) {
+      const succeeded = document.querySelector("#submit-expenses-succeeded");
+      const failed = document.querySelector("#submit-expenses-failed");
+
+      event.preventDefault();
+      const form = event.target;
+      const formData = new FormData(form);
+
+      let response = await fetch(
+        `../../tracker/families/${localStorage.getItem(
+          "family_id"
+        )}/members/${localStorage.getItem("member_id")}/expenses/`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `JWT ${localStorage.getItem("access_token")}`,
+          },
+          body: formData,
+        }
+      );
+      const statusCode = response.status;
+
+      let responseData = await response.json();
+      console.log(responseData);
+
+      if ((statusCode >= 400) & (statusCode <= 599)) {
+        failed.innerHTML = "";
+        succeeded.innerHTML = "";
+        const messages = responseData.results;
+
+        messages.forEach((message) => {
+          const messageElement = document.createElement("div");
+          messageElement.textContent = message;
+          failed.appendChild(messageElement);
+        });
+      } else {
+        failed.innerHTML = "";
+        succeeded.innerHTML = "";
+        const messageElement = document.createElement("div");
+        messageElement.textContent = "Successfully Added to Record";
+        succeeded.appendChild(messageElement);
+        setTimeout(() => {
+          location.reload();
+        }, 1500);
+      }
+    }
+
+    // put the earning entered by the user to the server
+    async function patchEarnings(event) {
+      const succeeded = document.querySelector("#mod-earnings-succeeded");
+      const failed = document.querySelector("#mod-earnings-failed");
+      const earnings = document.querySelectorAll(".form-check-earnings");
+      let itemId = 0;
+
+      event.preventDefault();
+      const form = event.target;
+      const formData = new FormData(form);
+
+      earnings.forEach((e) => {
+        if (e.checked) {
+          itemId = e.getAttribute("data-id");
+        }
+      });
+
+      if (itemId === 0) {
+        const messageElement = document.createElement("div");
+        messageElement.textContent = "Select an Item first!";
+        failed.appendChild(messageElement);
+        return;
+      }
+
+      let response = await fetch(
+        `../../tracker/families/${localStorage.getItem(
+          "family_id"
+        )}/members/${localStorage.getItem("member_id")}/earnings/${itemId}/`,
+        {
+          method: "PATCH",
+          headers: {
+            Authorization: `JWT ${localStorage.getItem("access_token")}`,
+          },
+          body: formData,
+        }
+      );
+      const statusCode = response.status;
+
+      let responseData = await response.json();
+
+      if ((statusCode >= 400) & (statusCode <= 599)) {
+        failed.innerHTML = "";
+        succeeded.innerHTML = "";
+        const messages = Object.values(responseData).flat();
+
+        messages.forEach((message) => {
+          const messageElement = document.createElement("div");
+          messageElement.textContent = message;
+          failed.appendChild(messageElement);
+        });
+      } else {
+        failed.innerHTML = "";
+        succeeded.innerHTML = "";
+        const messageElement = document.createElement("div");
+        messageElement.textContent = "Successfully Modified the Record";
+        succeeded.appendChild(messageElement);
+        setTimeout(() => {
+          location.reload();
+        }, 1500);
+      }
+    }
+
+    // put the expenses entered by the user to the server
+    async function patchExpenses(event) {
+      const succeeded = document.querySelector("#mod-expenses-succeeded");
+      const failed = document.querySelector("#mod-expenses-failed");
+      const expenses = document.querySelectorAll(".form-check-expenses");
+      let itemId = 0;
+
+      event.preventDefault();
+      const form = event.target;
+      const formData = new FormData(form);
+
+      expenses.forEach((e) => {
+        if (e.checked) {
+          itemId = e.getAttribute("data-id");
+        }
+      });
+
+      if (itemId === 0) {
+        const messageElement = document.createElement("div");
+        messageElement.textContent = "Select an Item first!";
+        failed.appendChild(messageElement);
+        return;
+      }
+
+      let response = await fetch(
+        `../../tracker/families/${localStorage.getItem(
+          "family_id"
+        )}/members/${localStorage.getItem("member_id")}/expenses/${itemId}/`,
+        {
+          method: "PATCH",
+          headers: {
+            Authorization: `JWT ${localStorage.getItem("access_token")}`,
+          },
+          body: formData,
+        }
+      );
+      const statusCode = response.status;
+
+      let responseData = await response.json();
+
+      if ((statusCode >= 400) & (statusCode <= 599)) {
+        failed.innerHTML = "";
+        succeeded.innerHTML = "";
+        const messages = Object.values(responseData).flat();
+
+        messages.forEach((message) => {
+          const messageElement = document.createElement("div");
+          messageElement.textContent = message;
+          failed.appendChild(messageElement);
+        });
+      } else {
+        failed.innerHTML = "";
+        succeeded.innerHTML = "";
+        const messageElement = document.createElement("div");
+        messageElement.textContent = "Successfully Modified the Record";
+        succeeded.appendChild(messageElement);
+        setTimeout(() => {
+          location.reload();
+        }, 1500);
+      }
+    }
+
+    // del the earnings
+    async function delEarnings(event) {
+      const succeeded = document.querySelector("#del-earnings-succeeded");
+      const failed = document.querySelector("#del-earnings-failed");
+      const earnings = document.querySelectorAll(".form-check-earnings");
+      let itemId = 0;
+
+      event.preventDefault();
+
+      earnings.forEach((e) => {
+        if (e.checked) {
+          itemId = e.getAttribute("data-id");
+        }
+      });
+
+      if (itemId === 0) {
+        const messageElement = document.createElement("div");
+        messageElement.textContent = "Select an Item first!";
+        failed.appendChild(messageElement);
+        return;
+      }
+
+      let response = await fetch(
+        `../../tracker/families/${localStorage.getItem(
+          "family_id"
+        )}/members/${localStorage.getItem("member_id")}/earnings/${itemId}/`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `JWT ${localStorage.getItem("access_token")}`,
+          },
+        }
+      );
+      const statusCode = response.status;
+      console.log(statusCode);
+
+      if ((statusCode >= 400) & (statusCode <= 599)) {
+        failed.innerHTML = "";
+        succeeded.innerHTML = "";
+        const messages = Object.values(responseData).flat();
+
+        messages.forEach((message) => {
+          const messageElement = document.createElement("div");
+          messageElement.textContent = message;
+          failed.appendChild(messageElement);
+        });
+      } else {
+        failed.innerHTML = "";
+        succeeded.innerHTML = "";
+        const messageElement = document.createElement("div");
+        messageElement.textContent = "Successfully Deleted from Record";
+        succeeded.appendChild(messageElement);
+        setTimeout(() => {
+          location.reload();
+        }, 1500);
+      }
+    }
+
+    // del the expenses
+    async function delExpenses(event) {
+      const succeeded = document.querySelector("#del-expenses-succeeded");
+      const failed = document.querySelector("#del-expenses-failed");
+      const earnings = document.querySelectorAll(".form-check-expenses");
+      let itemId = 0;
+
+      event.preventDefault();
+
+      earnings.forEach((e) => {
+        if (e.checked) {
+          itemId = e.getAttribute("data-id");
+        }
+      });
+
+      if (itemId === 0) {
+        const messageElement = document.createElement("div");
+        messageElement.textContent = "Select an Item first!";
+        failed.appendChild(messageElement);
+        return;
+      }
+
+      let response = await fetch(
+        `../../tracker/families/${localStorage.getItem(
+          "family_id"
+        )}/members/${localStorage.getItem("member_id")}/expenses/${itemId}/`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `JWT ${localStorage.getItem("access_token")}`,
+          },
+        }
+      );
+      const statusCode = response.status;
+
+      if ((statusCode >= 400) & (statusCode <= 599)) {
+        failed.innerHTML = "";
+        succeeded.innerHTML = "";
+        const messages = Object.values(responseData).flat();
+
+        messages.forEach((message) => {
+          const messageElement = document.createElement("div");
+          messageElement.textContent = message;
+          failed.appendChild(messageElement);
+        });
+      } else {
+        failed.innerHTML = "";
+        succeeded.innerHTML = "";
+        const messageElement = document.createElement("div");
+        messageElement.textContent = "Successfully Deleted from Record";
+        succeeded.appendChild(messageElement);
+        setTimeout(() => {
+          location.reload();
+        }, 1500);
+      }
     }
 
     // generate the earnings on page as radio buttons
@@ -1299,18 +1639,33 @@ document.addEventListener("DOMContentLoaded", async function () {
         div.classList.add("form-check");
         div.innerHTML = `
         <input
-          class="form-check-input"
+          class="form-check-input form-check-earnings"
           type="radio"
           name="flexRadioDefault"
           id="earnings${i}"
           data-id="${earningIds[i]}"
         />
         <label class="form-check-label" for="earnings${i}">
-          <h5>${earningTitles[i]}</h5>
+          <h5 style="color: rgb(23, 34, 164)">${earningTitles[i]}</h5>
         </label>
-    `;
-        earnings_collection.appendChild(div.cloneNode(true));
-        del_earnings_collection.appendChild(div.cloneNode(true));
+       `;
+
+        const div2 = document.createElement("div");
+        div2.classList.add("form-check");
+        div2.innerHTML = `
+        <input
+          class="form-check-input form-check-earnings"
+          type="radio"
+          name="flexRadioDefault"
+          id="earning${i}"
+          data-id="${earningIds[i]}"
+        />
+        <label class="form-check-label" for="earning${i}">
+          <h5 style="color: rgb(23, 34, 164)">${earningTitles[i]}</h5>
+        </label>
+       `;
+        earnings_collection.appendChild(div);
+        del_earnings_collection.appendChild(div2);
       }
     }
 
@@ -1323,18 +1678,32 @@ document.addEventListener("DOMContentLoaded", async function () {
         div.classList.add("form-check");
         div.innerHTML = `
         <input
-          class="form-check-input"
+          class="form-check-input form-check-expenses"
           type="radio"
           name="flexRadioDefault"
           id="expenses${i}"
           data-id="${expenseIds[i]}"
         />
         <label class="form-check-label" for="expenses${i}">
-          <h5>${expenseTitles[i]}</h5>
+          <h5 style="color: rgb(23, 34, 164)">${expenseTitles[i]}</h5>
         </label>
     `;
-        expenses_collection.appendChild(div.cloneNode(true));
-        del_expenses_collection.appendChild(div.cloneNode(true));
+        const div2 = document.createElement("div");
+        div2.classList.add("form-check");
+        div2.innerHTML = `
+        <input
+          class="form-check-input form-check-expenses"
+          type="radio"
+          name="flexRadioDefault"
+          id="expense${i}"
+          data-id="${expenseIds[i]}"
+        />
+        <label class="form-check-label" for="expense${i}">
+          <h5 style="color: rgb(23, 34, 164)">${expenseTitles[i]}</h5>
+        </label>
+    `;
+        expenses_collection.appendChild(div);
+        del_expenses_collection.appendChild(div2);
       }
     }
 
