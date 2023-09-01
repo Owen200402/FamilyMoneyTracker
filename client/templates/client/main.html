@@ -417,17 +417,16 @@
                     will prompts you the table on the left for the correct
                     operation to the database. We strongly encourage you to
                     review the data before deleting them as they will be deleted
-                    permanently without records kept on the database anymore.
-                    Changes will be reflected on your Individual Report and
-                    Family Report at real time. All members in your family will
-                    be able to see the updated graphs in the Family Report.
+                    permanently without records kept on the database. Changes
+                    will be reflected at real time and all members in the family
+                    will be able to see the updated graphs.
                   </p>
                 </div>
               </div>
 
               <div class="col-8">
                 <div class="container">
-                  <h3>Add To Record</h3>
+                  <h3>Money Tracking Form:</h3>
                   <form novalidate id="add-earnings" class="main-form">
                     <!-- Remember to delete novalidate -->
                     <div class="form-floating mb-2">
@@ -460,7 +459,7 @@
 
                     <div class="form-floating mb-2">
                       <input
-                        type="text"
+                        type="date"
                         id="receieved_date"
                         class="form-control"
                         placeholder="please enter the date on which you received the money"
@@ -503,6 +502,292 @@
                       <div class="invalid-feedback">Invalid Title</div>
                       <div class="valid-feedback">Valid Title</div>
                     </div>
+                    <div class="form-floating mb-2">
+                      <input
+                        type="text"
+                        id="paid_to"
+                        class="form-control"
+                        placeholder="Place the person you paid your money to here"
+                        autocomplete="off"
+                      />
+                      <label for="paid_to">Paid To</label>
+
+                      <div class="invalid-feedback">Invalid Field</div>
+                      <div class="valid-feedback">Valid Field</div>
+                    </div>
+                    <div class="form-floating mb-2">
+                      <input
+                        type="date"
+                        id="paid_date"
+                        class="form-control"
+                        placeholder="Place the time you paid your money here"
+                        autocomplete="off"
+                      />
+                      <label for="paid_date">Paid Date</label>
+
+                      <div class="invalid-feedback">Invalid Date Format</div>
+                      <div class="valid-feedback">Valid Date Format</div>
+                    </div>
+                    <div class="form-floating mb-2">
+                      <input
+                        type="text"
+                        id="monetary_value"
+                        class="form-control"
+                        placeholder="please enter the value of the money"
+                        autocomplete="off"
+                      />
+                      <label for="monetary_value">Monetary Value</label>
+
+                      <div class="invalid-feedback">Invalid Monetary Value</div>
+                      <div class="valid-feedback">Valid Monetary Value</div>
+                    </div>
+                    <button class="btn btn-lg btn-primary">Submit</button>
+                  </form>
+
+                  <!-- forms for Mod -->
+                  <form novalidate hidden id="mod-earnings" class="main-form">
+                    <!-- Pick by user -->
+                    <div class="container earnings-collection"></div>
+                    <!-- Remember to delete novalidate -->
+                    <div class="form-floating mb-2">
+                      <input
+                        type="text"
+                        id="title"
+                        class="form-control"
+                        placeholder="Place the title here"
+                        autocomplete="off"
+                      />
+                      <label for="title">Title</label>
+
+                      <div class="invalid-feedback">Invalid Title</div>
+                      <div class="valid-feedback">Valid Title</div>
+                    </div>
+
+                    <div class="form-floating mb-2">
+                      <input
+                        type="text"
+                        id="receieved_from"
+                        class="form-control"
+                        placeholder="please enter who you receive the money from"
+                        autocomplete="off"
+                      />
+                      <label for="receieved_from">Received From</label>
+
+                      <div class="invalid-feedback">Invalid Field</div>
+                      <div class="valid-feedback">Valid Field</div>
+                    </div>
+
+                    <div class="form-floating mb-2">
+                      <input
+                        type="date"
+                        id="receieved_date"
+                        class="form-control"
+                        placeholder="please enter the date on which you received the money"
+                        autocomplete="off"
+                      />
+                      <label for="receieved_date">Received Date</label>
+
+                      <div class="invalid-feedback">Invalid Date Format</div>
+                      <div class="valid-feedback">Valid Date Format</div>
+                    </div>
+
+                    <div class="form-floating mb-2">
+                      <input
+                        type="text"
+                        id="monetary_value"
+                        class="form-control"
+                        placeholder="please enter the value of the money"
+                        autocomplete="off"
+                      />
+                      <label for="monetary_value">Monetary Value</label>
+
+                      <div class="invalid-feedback">Invalid Monetary Value</div>
+                      <div class="valid-feedback">Valid Monetary Value</div>
+                    </div>
+
+                    <button class="btn btn-lg btn-primary">Submit</button>
+                  </form>
+
+                  <form novalidate hidden id="mod-expenses" class="main-form">
+                    <!-- Pick by users -->
+                    <div class="container expenses-collection"></div>
+                    <!-- Remember to delete novalidate -->
+                    <div class="form-floating mb-2">
+                      <input
+                        type="text"
+                        id="title"
+                        class="form-control"
+                        placeholder="Place the title here"
+                        autocomplete="off"
+                      />
+                      <label for="title">Title</label>
+
+                      <div class="invalid-feedback">Invalid Title</div>
+                      <div class="valid-feedback">Valid Title</div>
+                    </div>
+                    <div class="form-floating mb-2">
+                      <input
+                        type="text"
+                        id="paid_to"
+                        class="form-control"
+                        placeholder="Place the person you paid your money to here"
+                        autocomplete="off"
+                      />
+                      <label for="paid_to">Paid To</label>
+
+                      <div class="invalid-feedback">Invalid Field</div>
+                      <div class="valid-feedback">Valid Field</div>
+                    </div>
+                    <div class="form-floating mb-2">
+                      <input
+                        type="date"
+                        id="paid_date"
+                        class="form-control"
+                        placeholder="Place the time you paid your money here"
+                        autocomplete="off"
+                      />
+                      <label for="paid_date">Paid Date</label>
+
+                      <div class="invalid-feedback">Invalid Date Format</div>
+                      <div class="valid-feedback">Valid Date Format</div>
+                    </div>
+                    <div class="form-floating mb-2">
+                      <input
+                        type="text"
+                        id="monetary_value"
+                        class="form-control"
+                        placeholder="please enter the value of the money"
+                        autocomplete="off"
+                      />
+                      <label for="monetary_value">Monetary Value</label>
+
+                      <div class="invalid-feedback">Invalid Monetary Value</div>
+                      <div class="valid-feedback">Valid Monetary Value</div>
+                    </div>
+                    <button class="btn btn-lg btn-primary">Submit</button>
+                  </form>
+
+                  <!-- Forms for Del -->
+                  <form novalidate hidden id="del-earnings" class="main-form">
+                    <!-- Pick by user -->
+                    <div class="container del-earnings-collection"></div>
+                    <!-- Remember to delete novalidate -->
+                    <div class="form-floating mb-2">
+                      <input
+                        type="text"
+                        id="title"
+                        class="form-control"
+                        placeholder="Place the title here"
+                        autocomplete="off"
+                      />
+                      <label for="title">Title</label>
+
+                      <div class="invalid-feedback">Invalid Title</div>
+                      <div class="valid-feedback">Valid Title</div>
+                    </div>
+
+                    <div class="form-floating mb-2">
+                      <input
+                        type="text"
+                        id="receieved_from"
+                        class="form-control"
+                        placeholder="please enter who you receive the money from"
+                        autocomplete="off"
+                      />
+                      <label for="receieved_from">Received From</label>
+
+                      <div class="invalid-feedback">Invalid Field</div>
+                      <div class="valid-feedback">Valid Field</div>
+                    </div>
+
+                    <div class="form-floating mb-2">
+                      <input
+                        type="date"
+                        id="receieved_date"
+                        class="form-control"
+                        placeholder="please enter the date on which you received the money"
+                        autocomplete="off"
+                      />
+                      <label for="receieved_date">Received Date</label>
+
+                      <div class="invalid-feedback">Invalid Date Format</div>
+                      <div class="valid-feedback">Valid Date Format</div>
+                    </div>
+
+                    <div class="form-floating mb-2">
+                      <input
+                        type="text"
+                        id="monetary_value"
+                        class="form-control"
+                        placeholder="please enter the value of the money"
+                        autocomplete="off"
+                      />
+                      <label for="monetary_value">Monetary Value</label>
+
+                      <div class="invalid-feedback">Invalid Monetary Value</div>
+                      <div class="valid-feedback">Valid Monetary Value</div>
+                    </div>
+
+                    <button class="btn btn-lg btn-primary">Submit</button>
+                  </form>
+
+                  <form novalidate hidden id="del-expenses" class="main-form">
+                    <!-- Pick by users -->
+                    <div class="container del-expenses-collection"></div>
+                    <!-- Remember to delete novalidate -->
+                    <div class="form-floating mb-2">
+                      <input
+                        type="text"
+                        id="title"
+                        class="form-control"
+                        placeholder="Place the title here"
+                        autocomplete="off"
+                      />
+                      <label for="title">Title</label>
+
+                      <div class="invalid-feedback">Invalid Title</div>
+                      <div class="valid-feedback">Valid Title</div>
+                    </div>
+                    <div class="form-floating mb-2">
+                      <input
+                        type="text"
+                        id="paid_to"
+                        class="form-control"
+                        placeholder="Place the person you paid your money to here"
+                        autocomplete="off"
+                      />
+                      <label for="paid_to">Paid To</label>
+
+                      <div class="invalid-feedback">Invalid Field</div>
+                      <div class="valid-feedback">Valid Field</div>
+                    </div>
+                    <div class="form-floating mb-2">
+                      <input
+                        type="date"
+                        id="paid_date"
+                        class="form-control"
+                        placeholder="Place the time you paid your money here"
+                        autocomplete="off"
+                      />
+                      <label for="paid_date">Paid Date</label>
+
+                      <div class="invalid-feedback">Invalid Date Format</div>
+                      <div class="valid-feedback">Valid Date Format</div>
+                    </div>
+                    <div class="form-floating mb-2">
+                      <input
+                        type="text"
+                        id="monetary_value"
+                        class="form-control"
+                        placeholder="please enter the value of the money"
+                        autocomplete="off"
+                      />
+                      <label for="monetary_value">Monetary Value</label>
+
+                      <div class="invalid-feedback">Invalid Monetary Value</div>
+                      <div class="valid-feedback">Valid Monetary Value</div>
+                    </div>
+                    <button class="btn btn-lg btn-primary">Submit</button>
                   </form>
                 </div>
               </div>
@@ -560,6 +845,7 @@
                         <h5>Modify Item</h5>
                       </label>
                     </div>
+
                     <div class="form-check">
                       <input
                         class="form-check-input"
@@ -567,7 +853,7 @@
                         name="flexRadioDefaultSecond"
                         id="delete-item-btn"
                       />
-                      <label class="form-check-label" for="delete-itm-btn">
+                      <label class="form-check-label" for="delete-item-btn">
                         <h5>Delete Item</h5>
                       </label>
                     </div>

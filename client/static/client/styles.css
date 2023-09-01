@@ -87,7 +87,7 @@ html {
   width: fit-content;
 }
 
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1240px) {
   .intro-container h2 {
     font-size: 0.9rem;
   }

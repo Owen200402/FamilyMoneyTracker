@@ -170,7 +170,6 @@ document.addEventListener("DOMContentLoaded", function () {
       user_login_failed.appendChild(messageElement);
     } else {
       user_login_failed.innerHTML = "";
-      console.log("Success!");
       let responseData = await response.json();
       localStorage.setItem("access_token", responseData.access);
 
@@ -406,6 +405,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     main_page.style.display = "block";
   }
 
+  await setForm();
   await setProfileInfo();
   await getImage();
 
@@ -432,8 +432,6 @@ document.addEventListener("DOMContentLoaded", async function () {
       e.preventDefault();
       yearCollective = yearSelectCollective.value;
       monthCollective = monthSelectCollective.value;
-      console.log(yearCollective);
-      console.log(monthCollective);
 
       // Destory charts before redrawing them
       for (let item of chartList) {
@@ -469,7 +467,9 @@ document.addEventListener("DOMContentLoaded", async function () {
       queryStringForCurrentYearIncome = [];
       queryStringForCurrentYearExpenses = [];
 
+      await setForm();
       await setProfileInfo();
+
       await getImage();
 
       await chartIncome();
@@ -1211,42 +1211,179 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   image_uploading_form.addEventListener("submit", uploadProfileImage);
 
-  // Listening to events to open the right form:
-  const earningsRadio = document.querySelector("#earningsRadio");
-  const expensesRadio = document.querySelector("#expensesRadio");
-  const main_forms = document.querySelectorAll(".main-form");
-  const add_earnings_form = document.querySelector("#add-earnings");
-  const add_expenses_form = document.querySelector("#add-expenses");
-  const addItemRadio = document.querySelector("#add-item-btn");
-  const deleteItemRadio = document.querySelector("#delete-item-btn");
-  const modItemRadio = document.querySelector("#mod-item-btn");
+  // Set up the form
+  async function setForm() {
+    const main_forms = document.querySelectorAll(".main-form");
 
-  const checkRadioButtonState = function () {
-    if (addItemRadio.checked) {
-      if (expensesRadio.checked) {
-        hideForms();
-        add_expenses_form.hidden = false;
-        console.log("expense radio checked");
-      }
+    const earningsRadio = document.querySelector("#earningsRadio");
+    const expensesRadio = document.querySelector("#expensesRadio");
 
-      if (earningsRadio.checked) {
+    const add_earnings_form = document.querySelector("#add-earnings");
+    const add_expenses_form = document.querySelector("#add-expenses");
+    const addItemRadio = document.querySelector("#add-item-btn");
+
+    const mod_earnings_form = document.querySelector("#mod-earnings");
+    const mod_expenses_form = document.querySelector("#mod-expenses");
+    const modItemRadio = document.querySelector("#mod-item-btn");
+
+    const del_earnings_form = document.querySelector("#del-earnings");
+    const del_expenses_form = document.querySelector("#del-expenses");
+
+    const deleteItemRadio = document.querySelector("#delete-item-btn");
+
+    const earnings_collection = document.querySelector(".earnings-collection");
+    const expenses_collection = document.querySelector(".expenses-collection");
+    const del_earnings_collection = document.querySelector(
+      ".del-earnings-collection"
+    );
+    const del_expenses_collection = document.querySelector(
+      ".del-expenses-collection"
+    );
+
+    // parallel arrays for keeping track of ids and corresponding titles
+    const earningIds = [];
+    const earningTitles = [];
+    const expenseIds = [];
+    const expenseTitles = [];
+
+    // Listening to events to open the right form:
+    const checkRadioButtonState = async function () {
+      // add
+      if (addItemRadio.checked) {
         hideForms();
-        add_earnings_form.hidden = false;
-        console.log("earning radio checked");
+
+        if (earningsRadio.checked) {
+          add_earnings_form.hidden = false;
+        } else if (expensesRadio.checked) {
+          add_expenses_form.hidden = false;
+        }
+      } // mod
+      else if (modItemRadio.checked) {
+        hideForms();
+        if (earningsRadio.checked) {
+          mod_earnings_form.hidden = false;
+        } else if (expensesRadio.checked) {
+          mod_expenses_form.hidden = false;
+        }
+      } // delete
+      else if (deleteItemRadio.checked) {
+        hideForms();
+        if (earningsRadio.checked) {
+          del_earnings_form.hidden = false;
+        } else if (expensesRadio.checked) {
+          del_expenses_form.hidden = false;
+        }
       }
-    } else {
-      // Other Operations
-      hideForms();
+    };
+
+    setInterval(checkRadioButtonState, 10);
+
+    await generatePersonalEarnings();
+    await generatePersonalExpenses();
+
+    // Helpers:
+
+    // hide all unrelated forms
+    function hideForms() {
+      main_forms.forEach((f) => {
+        f.hidden = true;
+      });
     }
-  };
 
-  function hideForms() {
-    main_forms.forEach((f) => {
-      f.hidden = true;
-    });
+    // generate the earnings on page as radio buttons
+    async function generatePersonalEarnings() {
+      await getEarnings();
+
+      for (let i = 0; i < earningTitles.length; i++) {
+        const div = document.createElement("div");
+        div.classList.add("form-check");
+        div.innerHTML = `
+        <input
+          class="form-check-input"
+          type="radio"
+          name="flexRadioDefault"
+          id="earnings${i}"
+          data-id="${earningIds[i]}"
+        />
+        <label class="form-check-label" for="earnings${i}">
+          <h5>${earningTitles[i]}</h5>
+        </label>
+    `;
+        earnings_collection.appendChild(div.cloneNode(true));
+        del_earnings_collection.appendChild(div.cloneNode(true));
+      }
+    }
+
+    // generate the expenses on page as radio buttons
+    async function generatePersonalExpenses() {
+      await getExpenses();
+
+      for (let i = 0; i < expenseTitles.length; i++) {
+        const div = document.createElement("div");
+        div.classList.add("form-check");
+        div.innerHTML = `
+        <input
+          class="form-check-input"
+          type="radio"
+          name="flexRadioDefault"
+          id="expenses${i}"
+          data-id="${expenseIds[i]}"
+        />
+        <label class="form-check-label" for="expenses${i}">
+          <h5>${expenseTitles[i]}</h5>
+        </label>
+    `;
+        expenses_collection.appendChild(div.cloneNode(true));
+        del_expenses_collection.appendChild(div.cloneNode(true));
+      }
+    }
+
+    // get current earnings
+    async function getEarnings() {
+      let response = await fetch(
+        `../../tracker/families/${localStorage.getItem(
+          "family_id"
+        )}/members/${localStorage.getItem("member_id")}/earnings/`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `JWT ${localStorage.getItem("access_token")}`,
+          },
+        }
+      );
+
+      const responseJson = await response.json();
+      const responseData = responseJson.results;
+
+      for (let item of responseData) {
+        earningIds.push(item.id);
+        earningTitles.push(item.title);
+      }
+    }
+
+    // get current expenses
+    async function getExpenses() {
+      let response = await fetch(
+        `../../tracker/families/${localStorage.getItem(
+          "family_id"
+        )}/members/${localStorage.getItem("member_id")}/expenses/`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `JWT ${localStorage.getItem("access_token")}`,
+          },
+        }
+      );
+
+      const responseJson = await response.json();
+      const responseData = responseJson.results;
+
+      for (let item of responseData) {
+        expenseIds.push(item.id);
+        expenseTitles.push(item.title);
+      }
+    }
   }
-
-  setInterval(checkRadioButtonState, 10);
 
   // Upload Profile Image Config with Amazon S3
   async function uploadProfileImage(event) {
@@ -1349,8 +1486,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     const date = new Date();
     let currentMonth = date.getMonth() + 1;
     let currentYear = date.getFullYear();
-    console.log(currentMonth);
-    console.log(currentYear);
 
     for (let i = 1; i <= currentMonth; i++) {
       queryStringForCurrentYearIncome.push(
