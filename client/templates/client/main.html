@@ -68,7 +68,10 @@
                 </a>
               </li>
               <li class="nav-item py-2 py-sm-1">
-                <a class="nav-link text-white family">
+                <a
+                  class="nav-link text-white family"
+                  data-page="right-screen-members"
+                >
                   <i class="fa fas fa-house-user fs-5">
                     <span class="fs-4 ms-3 d-none d-sm-inline">Members</span>
                   </i>
@@ -641,7 +644,7 @@
                     <!-- Pick by users -->
                     <div class="container ps-0 expenses-collection">
                       <h4 style="color: rgb(23, 34, 164)">
-                        Select Item to Delete:
+                        Select Item to Modify:
                       </h4>
                     </div>
                     <!-- Remember to delete novalidate -->
@@ -811,6 +814,10 @@
             </div>
           </div>
         </div>
+        <div
+          id="right-screen-members"
+          class="right-screen col-sm-10 col-lg-10 p-0 gap-2"
+        ></div>
       </div>
     </div>
     <script src="{% static 'client/script.js' %}" defer></script>

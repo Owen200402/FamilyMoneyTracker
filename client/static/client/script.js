@@ -344,7 +344,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     showPage(activeSection);
   } else {
     collective_report_button.style.backgroundColor = "rgb(0, 170, 255)";
-    showPage(this.dataset.page);
   }
 
   family_button.addEventListener("click", function () {
@@ -408,6 +407,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   await setForm();
   await setProfileInfo();
   await getImage();
+  await makeMemberCards();
 
   await chartIncome();
   await chartExpenses();
@@ -471,6 +471,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       await setProfileInfo();
 
       await getImage();
+      await makeMemberCards();
 
       await chartIncome();
       await chartExpenses();
@@ -1900,6 +1901,73 @@ document.addEventListener("DOMContentLoaded", async function () {
 
       for (const item of responseData) {
         currentYearExpenses += item.monetary_value;
+      }
+    }
+  }
+
+  // ------- Family Page --------
+
+  async function makeMemberCards() {
+    let nameArray = [];
+    let generationArray = [];
+    let imageUrlArray = [];
+
+    await retrieveMemberInfo(nameArray, generationArray, imageUrlArray);
+
+    const cards_for_members = document.querySelector("#right-screen-members");
+
+    for (let i = 0; i < nameArray.length; i++) {
+      let container = document.createElement("div");
+      container.innerHTML = `<div class="card" style="width: 250px;">
+            <img
+              src=${imageUrlArray[i]}
+              style="height: 250px; object-fit: cover;";
+              class="card-image-top"
+            />
+            <div class="card-body">
+              <h2 class="card-title member-name">${nameArray[i]}</h2>
+              <h4 class="card-subtitle member-generation">${generationArray[i]}</h4>
+              <div class="card-text">
+                <div><button class="btn btn-primary">Unlink</button></div>
+              </div>
+            </div>
+          </div>`;
+      cards_for_members.appendChild(container);
+    }
+  }
+
+  async function retrieveMemberInfo(nameArray, generationArray, imageUrlArray) {
+    let response = await fetch(
+      `../../tracker/families/${localStorage.getItem("family_id")}/members/`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `JWT ${localStorage.getItem("access_token")}`,
+        },
+      }
+    );
+
+    const responseData = await response.json();
+    const responseResult = responseData.results;
+
+    for (let item of responseResult) {
+      nameArray.push([`${item.first_name} ${item.last_name}`]);
+
+      if (item.generation === "P") {
+        generationArray.push("Parent");
+      } else if (item.generation === "C") {
+        generationArray.push("Child");
+      } else {
+        generationArray.push("Grand Parent");
+      }
+
+      if (item.images.length === 0) {
+        imageUrlArray.push(
+          "https://www.fluidsecure.com/wp-content/uploads/2023/02/Blank-Headshot.jpg"
+        );
+      } else {
+        let lastImage = item.images[item.images.length - 1].image;
+        imageUrlArray.push(lastImage);
       }
     }
   }
