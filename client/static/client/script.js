@@ -1906,17 +1906,59 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
 
   // ------- Family Page --------
+  unlink_btn = document.querySelectorAll(".unlink-btn");
+  unlink_members();
+
+  async function unlink_members() {
+    unlink_btn.forEach((e) => {
+      e.addEventListener("click", async function () {
+        let response = await fetch(
+          `../../tracker/families/${localStorage.getItem(
+            "family_id"
+          )}/members/${e.getAttribute("data-id")}/unlink-member/`,
+          {
+            method: "PUT",
+            headers: {
+              Authorization: `JWT ${localStorage.getItem("access_token")}`,
+            },
+          }
+        );
+        if (e.getAttribute("data-id") === localStorage.getItem("member_id")) {
+          window.location.assign("../../client/");
+        }
+        if (response.status === 200) {
+          await makeMemberCards();
+          location.reload();
+        }
+      });
+    });
+  }
 
   async function makeMemberCards() {
     let nameArray = [];
     let generationArray = [];
     let imageUrlArray = [];
+    let idArray = [];
 
-    await retrieveMemberInfo(nameArray, generationArray, imageUrlArray);
+    await retrieveMemberInfo(
+      nameArray,
+      generationArray,
+      imageUrlArray,
+      idArray
+    );
 
     const cards_for_members = document.querySelector("#right-screen-members");
 
     for (let i = 0; i < nameArray.length; i++) {
+      let message = "";
+      if (String(idArray[i]) === localStorage.getItem("member_id")) {
+        message =
+          nameArray[i] + `<p style="color: green; display: inline"> (Me) </p>`;
+        console.log(message);
+      } else {
+        message = nameArray[i];
+      }
+
       let container = document.createElement("div");
       container.innerHTML = `<div class="card" style="width: 250px;">
             <img
@@ -1925,10 +1967,10 @@ document.addEventListener("DOMContentLoaded", async function () {
               class="card-image-top"
             />
             <div class="card-body">
-              <h2 class="card-title member-name">${nameArray[i]}</h2>
+              <h2 class="card-title member-name">${message}</h2>
               <h4 class="card-subtitle member-generation">${generationArray[i]}</h4>
               <div class="card-text">
-                <div><button class="btn btn-primary">Unlink</button></div>
+                <div><button class="btn btn-sm btn-danger unlink-btn" data-id=${idArray[i]}>Unlink</button></div>
               </div>
             </div>
           </div>`;
@@ -1936,7 +1978,12 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
   }
 
-  async function retrieveMemberInfo(nameArray, generationArray, imageUrlArray) {
+  async function retrieveMemberInfo(
+    nameArray,
+    generationArray,
+    imageUrlArray,
+    idArray
+  ) {
     let response = await fetch(
       `../../tracker/families/${localStorage.getItem("family_id")}/members/`,
       {
@@ -1952,6 +1999,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     for (let item of responseResult) {
       nameArray.push([`${item.first_name} ${item.last_name}`]);
+      idArray.push(item.member_id);
 
       if (item.generation === "P") {
         generationArray.push("Parent");
