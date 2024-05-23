@@ -24,10 +24,6 @@ permitted to view, change, or update any records and a user cannot view other fa
 toolbars which enabled developer to use ORM to reduce the SQL queries sent to the server to increase browser's running speed. A
 longside with Python's performance test (Locust), its performance is ensured flawless when hundreds or thousands of people use it simultaneously.
 
-## Usage:
-
-_Note: It is designed mostly for front-end developers who wish to request for data from various API endpoints._
-
 ### URL:
 
 https://moneytracker-prod-9941b1d428c3.herokuapp.com/client
