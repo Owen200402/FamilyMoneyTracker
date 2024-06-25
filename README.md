@@ -30,7 +30,7 @@ https://moneytracker-prod-c5946e6a479e.herokuapp.com/client
 
 ### Base URL For Developers Accessing Endpoints
 
-Ensure that when sending HTTP requests, you refer to the base URL. For reference, the base URL is the same as the home page's URL: https://moneytracker-prod-9941b1d428c3.herokuapp.com
+Ensure that when sending HTTP requests, you refer to the base URL. For reference, the base URL is the same as the home page's URL: https://moneytracker-prod-c5946e6a479e.herokuapp.com
 
 ### User Login and Authentication
 
