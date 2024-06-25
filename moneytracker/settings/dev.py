@@ -7,8 +7,7 @@ DEBUG = True
 SECRET_KEY = 'django-insecure-20oi6k5$g)j#+pr$saao4xjs1b7l89ki0qiq*p=nee(sn!!3^j'
 
 ALLOWED_HOSTS = [
-    'moneytracker-prod-9941b1d428c3.herokuapp.com',
-    'rocky-peak-74345-1c6f54be2db2.herokuapp.com',
+    "https://moneytracker-prod-c5946e6a479e.herokuapp.com/"
 ]
 
 DATABASES = {
