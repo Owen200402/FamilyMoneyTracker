@@ -9,7 +9,9 @@ SECRET_KEY = os.environ['SECRET_KEY']
 ALLOWED_HOSTS = ['moneytracker-prod-9941b1d428c3.herokuapp.com']
 
 DATABASES = {
-    'default': dj_database_url.config()
+    'default': dj_database_url.config(
+        default=os.environ.get('JAWSDB_URL')
+    )
 }
 
 AWS_ACCESS_KEY_ID = os.environ['AWS_ACCESS_KEY_ID']
