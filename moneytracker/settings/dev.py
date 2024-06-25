@@ -12,12 +12,6 @@ ALLOWED_HOSTS = [
 ]
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.mysql',
-    #     'NAME': 'moneykeeper',
-    #     'HOST': 'localhost',
-    #     'USER': 'root'
-    # }
     'default': dj_database_url.config(
         default=os.environ.get('JAWSDB_URL')
     )
