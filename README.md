@@ -26,7 +26,7 @@ longside with Python's performance test (Locust), its performance is ensured fla
 
 ### URL:
 
-https://moneytracker-prod-9941b1d428c3.herokuapp.com/client
+https://moneytracker-prod-c5946e6a479e.herokuapp.com/client
 
 ### Base URL For Developers Accessing Endpoints
 
